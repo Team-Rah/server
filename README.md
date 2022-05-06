@@ -7,7 +7,6 @@
 ### /user
 
 | PATH | METHOD | HEADER | REQ | RES | USE CASE |
-| --- | --- | --- | --- | --- | --- |
-| / | GET |  |  | {data: [ {username} ]} | GET ALL USERS |
-| / | POST |  | {username: string, no longer than 20,email: string, password: string, no longer than 15, img: URL for user profile pic} |  | CREATE A SINGLE USER |
-| / | PUT |  |  |  | EDIT A SINGLE USERS |
+|---|---|---|---|---|---|
+| / | GET | NONE | NONE | { users:[{ username: "test", email: "test@gmail.com", img: "https://test.com/profilepic.jpg", friends:[{username:"test", email: "test@gmail.com"}] }] } | GET ALL USERS |
+| / | POST | Authorization: "Bearer TOKEN" | { username: string no longer than 15, password: string no longer than 15. email: string, img: URL string } | { _id: user ID (unque) user: username token: a token for validation message: a string IE "USER CREATED" \|\| "USER EXIST" } | CREATE A SINGLE USER |
