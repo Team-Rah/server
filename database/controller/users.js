@@ -3,16 +3,20 @@ module.exports = {
         const users = await Users.find();
         return users;
     },
-    getSingleUser: async() => {
-        
+    getSingleUser: async(id) => {
+      const getUser = await Users.findbyid(id);
+      return user
     },
-    editUser: async() => {
-
+    editUser: async(id, user) => {
+      const editUser = await Users.findByIdAndUpdate(id, update);
+      return editUser
     },
-    deleteUser: async() => {
-
+    deleteUser: async(id) => {
+      const deleteUser = await Users.findByIdAndRemove();
+      return user
     },
-    createUser: async() => {
-
-    },
+    createUser: async(info) => {
+        const createUser = new Users(info);
+        return user.save();
+    }
 };
