@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema({
-    username: {
+    userName: {
         type: String,
         lowercase: true,
         required: true,
@@ -16,6 +16,10 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String,
+    },
+    score: {
+        type: Number,
+        default: 0
     },
     friends: [
         {
@@ -30,7 +34,7 @@ const UserSchema = new mongoose.Schema({
     img: {
         type: String,
     },
-    timestamp: {
+    createdAt: {
         type: String,
         default: () => Date.now(),
     },

@@ -1,3 +1,17 @@
+# INSTRUCTIONS:
+1. ## GIT CLONE REPO
+### git clone <repo name>
+2. ## INSTALL DEPENDENCIES
+### npm install
+
+
+
+# SCRIPT COMMANDS
+1. ## SEED DATABASE WITH 50 USERS
+### npm run seed
+2. ## RUN IN DEV MODE WITH NODEMON
+### npm run dev
+
 
 
 
