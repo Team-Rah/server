@@ -12,14 +12,17 @@ module.exports = {
         }
 
     },
-    getSingleUser: async() => {
-        
+    getSingleUser: async(id) => {
+
     },
-    editUser: async() => {
+    editUser: async(id, user) => {
 
     },
     deleteUser: async() => {
 
+    },
+    login: async(user) => {
+        
     },
     createUser: async(user) => {
         try {  
