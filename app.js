@@ -1,12 +1,23 @@
-var express = require('express');
-var logger = require('morgan');
-var indexRouter = require('./routes/index');
+const express = require('express');
+const logger = require('morgan');
+const indexRouter = require('./routes/index');
+const mongo = require('./database/index');
+const io = require('./socket.io/index');
+const cors = require("cors");
+const app = express();
 
-
-var app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors({
+    origin: [
+      "http://localhost:3000"
+    ],
+    methods: ["GET", "POST","PUT","DELETE"],
+    credentials: true,
+  }));
+
+
 app.use('/', indexRouter);
 
 
