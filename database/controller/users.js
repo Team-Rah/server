@@ -1,7 +1,16 @@
+const User = require('../models/User');
+
+
 module.exports = {
     getAllUser: async() => {
-        const users = await Users.find();
-        return users;
+        try {  
+            const users = await User.find();
+            return users;
+        }
+        catch (err) {
+            throw Error(err);
+        }
+
     },
     getSingleUser: async() => {
         
@@ -12,7 +21,14 @@ module.exports = {
     deleteUser: async() => {
 
     },
-    createUser: async() => {
-
+    createUser: async(user) => {
+        try {  
+            const createUser = await User(user);
+            const savedUser = await createUser.save();
+            return savedUser;
+        }
+        catch (err) {
+            throw Error(err);
+        }
     },
 };
