@@ -1,7 +1,7 @@
 module.exports = {
     getAllUser: async() => {
-        const users = await Users.find()
-        return users
+        const users = await Users.find();
+        return users;
     },
     getSingleUser: async() => {
         

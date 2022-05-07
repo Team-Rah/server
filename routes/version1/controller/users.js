@@ -2,7 +2,20 @@ const {getAllUser, getSingleUser, editUser, deleteUser, createUser} = require('.
 
 module.exports = {
     getAllUser: async(req, res) => {
-        res.send
+        try {
+            const users = await getAllUser();
+            res.status(200).json({
+                message: 'Success',
+                users
+            });
+        }
+        catch(err) {
+            res.status.json({
+                message: 'error',
+                err
+            });
+        }
+
     },
     getSingleUser: async(req, res) => {
 
