@@ -1,9 +1,7 @@
 var express = require('express');
 var router = express.Router();
+const version1Route = require('./version1/index')
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+router.use('/blueocean/api/v1', version1Route);
 
 module.exports = router;
