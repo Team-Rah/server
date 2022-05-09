@@ -1,27 +1,36 @@
 module.exports = {
-  "Assign Roles": async (array) => {
+  assignRoles: async (array) => {
     try {
-      const numRoles = roles.length - 1;
       const roles = ['test1', 'test2', 'test3', 'test4'];
+      const numRoles = roles.length - 1;
       const numPlayers = array.length;
-      var iterations;
-      if (numRoles > numPlayers) {
-        iterations = numPlayers - 1;
-      } else {
-        iterations = numRoles - 1;
-      }
-      while (iterations >= 0) {
+      let iterations = Math.floor(numPlayers * (4/7));
+     let count = 0;
+      while (iterations > 0) {
         var position = Math.floor(Math.random() * numPlayers);
-        if (array[position]['role'] === 'villager') {
-          array[position]['role'] = roles[iterations];
+        if (array[position]['role'] === 'villager')  {
+          array[position]['role'] = roles[count];
+          count++;
+          iterations --;
         }
-        iterations --;
-   }
+        if (count > numRoles) {
+          count = 0;
+        }
+      }
       return array;
     }
-    catch {
+    catch(err) {
       err.statusCode = 500;
       throw Error(err);
     }
+  },
+  changeStatus : async (user, array) => {
+    for (var i = 0; i < array.length; i ++) {
+      if (user.userName === array[i].userName) {
+        // change status
+        return 
+      }
+    }
+    return 'User does not exist';
   }
 }
