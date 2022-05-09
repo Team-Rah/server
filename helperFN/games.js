@@ -55,5 +55,25 @@ module.exports = {
         return {[Object.keys(result)[x]]: mostVotes};
       }
     }
+  },
+  checkIfGamesOver: (array) => {
+    var wolves = 0;
+    var villagers = 0;
+    for (var i = 0; i < array.length; i ++) {
+      if (array[i].role === 'wolf') {
+        wolves++;
+      } else {
+        villagers++
+      }
+  }
+  if (wolves === 0) {
+    return {gameover:true, winner: 'villagers'}
+  }
+  if (villagers === 0) {
+    return {gameover:true, winner: 'wolves'}
+  }
+  return {gameover:false, winner: null}
   }
 }
+
+
