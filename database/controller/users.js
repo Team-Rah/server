@@ -1,22 +1,47 @@
+const User = require('../models/User');
+const {error} = require('../../errorHandler/errorHandler')
+
+
 module.exports = {
     getAllUser: async() => {
-        const users = await Users.find();
-        return users;
+        try {  
+            const users = await User.find();
+            return users;
+        }
+        catch (err) {
+            throw err;
+        }
     },
-    getSingleUser: async(id) => {
-      const getUser = await Users.findbyid(id);
-      return user
+    getSingleUser: async(email) => {
+        try {  
+            const user = await User.findOne({email});
+            if (!user) {
+                throw error(404,'USER NOT FOUND', 'DATABASE/CONTROLLER/USER');
+            }
+            return user;
+        }
+        catch (err) {
+            throw err;
+        }
     },
     editUser: async(id, user) => {
-      const editUser = await Users.findByIdAndUpdate(id, update);
-      return editUser
+
     },
-    deleteUser: async(id) => {
-      const deleteUser = await Users.findByIdAndRemove();
-      return user
+    deleteUser: async() => {
+
     },
-    createUser: async(info) => {
-        const createUser = new Users(info);
-        return user.save();
-    }
+    login: async(user) => {
+        
+        
+    },
+    createUser: async(user) => {
+        try {  
+            const createUser = await User(user);
+            const savedUser = await createUser.save();
+            return savedUser;
+        }
+        catch (err) {
+            throw err;
+        }
+    },
 };
