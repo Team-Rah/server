@@ -1,4 +1,6 @@
 const {getAllUser, getSingleUser, editUser, deleteUser, createUser} = require('../../../database/controller/users');
+const { createJwtToken } = require('../../../middleware/jwt');
+const {comparePassword} = require('../../../middleware/passwordValidation')
 
 module.exports = {
     getAllUser: async(req, res, next) => {
@@ -14,7 +16,7 @@ module.exports = {
         }
     },
     getSingleUser: async(req, res) => {
-
+        
     },
     editUser: async(req, res) => {
 
@@ -25,8 +27,10 @@ module.exports = {
     createUser: async(req, res, next) => {
         try {
             const user = await createUser(req.body)
+            let jwtToken = await createJwtToken(user);
             res.json({
-                message: 'Success',
+                message: "Successfully signed up",
+                token: jwtToken,
                 user
             });
         }
@@ -38,35 +42,16 @@ module.exports = {
         const { email, password } = await req.body;
         try {
           let user = await getSingleUser(email);
-        //   if (!user) {
-        //     return res.status(500).json({
-        //       status: "error",
-        //       message: "User Not Found",
-        //     });
-        //   }
+          await comparePassword(password, user.password);
 
-        //   let comparedPassword = await comparePassword(password, user.password);
-        //   if (comparedPassword === 409) {
-        //     return res.status(409).json({
-        //       status: "error",
-        //       message: "Check your email and password",
-        //     });
-        //   }
-      
-        //   let jwtToken = await createJwtToken(user);
-        //   return res.status(200).json({
-        //     status: "success",
-        //     message: "Successfully logged in",
-        //     token: jwtToken,
-        //     user: user._id,
-        //     profilePic: user.profilePic,
-        //   });
+          let jwtToken = await createJwtToken(user);
+          return res.json({
+            message: "Successfully logged in",
+            token: jwtToken,
+            user,
+          });
         } catch (err) {
-        //   return res.status(500).json({
-        //     status: "error",
-        //     message: error.message,
-        //   });
-        next(err);
+            next(err);
         }
 
     },
