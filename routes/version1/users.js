@@ -1,12 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const {authenticateToken} = require('../../middleware/jwt')
 const {getAllUser, getSingleUser, editUser, deleteUser, createUser, login} = require('./controller/users');
 
 /* GET users listing. */
 router.get('/', getAllUser);
 router.post('/', createUser);
-router.put('/', editUser);
-router.delete('/', deleteUser);
+router.put('/', authenticateToken, editUser);
+router.delete('/', authenticateToken, deleteUser);
 router.post('/login', login);
 
 //might need

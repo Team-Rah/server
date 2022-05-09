@@ -19,7 +19,8 @@ module.exports = {
       }
       return array;
     }
-    catch(err) {
+
+    catch (err) {
       err.statusCode = 500;
       throw Error(err);
     }
