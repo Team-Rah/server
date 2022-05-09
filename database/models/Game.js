@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-
 const GameSchema = new mongoose.Schema({
     owner: {
         type: Schema.Types.ObjectId,
@@ -18,6 +17,22 @@ const GameSchema = new mongoose.Schema({
     phase : {
         type: String,
     },
+    startRound: {
+        type: Number,
+    },
+    endRound: {
+        type: Number,
+    },
+    voted: [
+        {
+            voter: {
+                type: Schema.Types.ObjectId, ref: "User"
+            },
+            candidate: {
+                type: Schema.Types.ObjectId, ref: "User"
+            }
+        }
+    ],
     players: [
         {
             player: {type: Schema.Types.ObjectId, ref: "User"},
@@ -34,7 +49,7 @@ const GameSchema = new mongoose.Schema({
         default: false
     },
     createdAt: {
-        type: String,
+        type: Number,
         default: () => Date.now(),
     },
 });

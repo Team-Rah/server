@@ -1,6 +1,8 @@
 module.exports = {
     errorLogger: (err, req, res, next) => {
-        console.error('\x1b[31m', err);
+        if (process.env.NODE_ENV === 'development'){ 
+            console.error('\x1b[31m', err);
+        }
         next(err);
     },
     errorResponder: (err, req, res, next) => {
