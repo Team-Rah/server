@@ -15,6 +15,9 @@ const GameSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    phase : {
+        type: String,
+    },
     players: [
         {
             player: {type: Schema.Types.ObjectId, ref: "User"},
@@ -30,7 +33,6 @@ const GameSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-
     createdAt: {
         type: String,
         default: () => Date.now(),
