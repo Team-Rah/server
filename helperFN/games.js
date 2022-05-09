@@ -1,5 +1,5 @@
-const {error} = require('../errorHandler/errorHandler')
-const at = 'helperFN/games'
+const {error} = require('../errorHandler/errorHandler');
+const at = 'helperFN/games';
 module.exports = {
   assignRoles: async (array) => {
     try {

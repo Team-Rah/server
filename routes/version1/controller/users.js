@@ -45,7 +45,7 @@ module.exports = {
           await comparePassword(password, user.password);
 
           let jwtToken = await createJwtToken(user);
-          return res.status(200).json({
+          return res.json({
             message: "Successfully logged in",
             token: jwtToken,
             user,
