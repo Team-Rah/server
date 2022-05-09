@@ -21,7 +21,7 @@ module.exports = {
       }
       return array;
     }
-
+    
     catch (err) {
       throw error(500,'DID NOT ASSIGN ROLE',at);
     }

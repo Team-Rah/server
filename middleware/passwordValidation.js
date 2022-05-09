@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const {error} = require('../errorHandler/errorHandler')
 
 module.exports = {
     comparePassword: async (incomingPassword, userPassword) => {
@@ -10,10 +11,10 @@ module.exports = {
         if (comparedPassword) {
           return comparedPassword;
         } else {
-          return 409;
+          throw error(409,'"Check your email and password"');
         }
-      } catch (error) {
-        return error;
+      } catch (err) {
+        throw err;
       }
     },
 };

@@ -8,7 +8,6 @@ module.exports = {
         res.status(err.statusCode).json(err, null, 4) // pretty print
     },
     error: (statusCode, message, at) => {
-        return {statusCode,message,at}
+        return {statusCode,message,at};
     }
-
 };
