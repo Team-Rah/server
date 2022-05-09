@@ -1,5 +1,5 @@
-const {error} = require('../errorHandler/errorHandler')
-const at = 'helperFN/games'
+const {error} = require('../errorHandler/errorHandler');
+const at = 'helperFN/games';
 module.exports = {
   assignRoles: async (array) => {
     try {
@@ -21,7 +21,7 @@ module.exports = {
       }
       return array;
     }
-
+    
     catch (err) {
       throw error(500,'DID NOT ASSIGN ROLE',at);
     }

@@ -1,6 +1,6 @@
 const User = require('../models/User');
-const {error} = require('../../errorHandler/errorHandler')
-
+const {error} = require('../../errorHandler/errorHandler');
+const at ='DATABASE/CONTROLLER/USER';
 
 module.exports = {
     getAllUser: async() => {
@@ -16,7 +16,7 @@ module.exports = {
         try {  
             const user = await User.findOne({email});
             if (!user) {
-                throw error(404,'USER NOT FOUND', 'DATABASE/CONTROLLER/USER');
+                throw error(404,'USER NOT FOUND', at);
             }
             return user;
         }
@@ -30,10 +30,7 @@ module.exports = {
     deleteUser: async() => {
 
     },
-    login: async(user) => {
-        
-        
-    },
+
     createUser: async(user) => {
         try {  
             const createUser = await User(user);
