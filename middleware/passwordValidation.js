@@ -11,7 +11,7 @@ module.exports = {
         if (comparedPassword) {
           return comparedPassword;
         } else {
-          throw error(409,'"Check your email and password"');
+          throw error(409,'Check your email and password', 'middleware/passwordValidation');
         }
       } catch (err) {
         throw err;
