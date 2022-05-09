@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const {error} = require('../../errorHandler/errorHandler')
 
 
 module.exports = {
@@ -8,12 +9,20 @@ module.exports = {
             return users;
         }
         catch (err) {
-            throw Error(err);
+            throw err;
         }
-
     },
-    getSingleUser: async(id) => {
-
+    getSingleUser: async(email) => {
+        try {  
+            const user = await User.findOne({email});
+            if (!user) {
+                throw error(404,'USER NOT FOUND', 'DATABASE/CONTROLLER/USER');
+            }
+            return user;
+        }
+        catch (err) {
+            throw err;
+        }
     },
     editUser: async(id, user) => {
 
@@ -23,6 +32,7 @@ module.exports = {
     },
     login: async(user) => {
         
+        
     },
     createUser: async(user) => {
         try {  
@@ -31,7 +41,7 @@ module.exports = {
             return savedUser;
         }
         catch (err) {
-            throw Error(err);
+            throw err;
         }
     },
 };

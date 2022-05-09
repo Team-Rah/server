@@ -5,7 +5,10 @@ module.exports = {
     },
     errorResponder: (err, req, res, next) => {
         res.header("Content-Type", 'application/json')
-        res.status(err.statusCode).send(JSON.stringify(err, null, 4)) // pretty print
+        res.status(err.statusCode).json(err, null, 4) // pretty print
     },
+    error: (statusCode, message, at) => {
+        return {statusCode,message,at}
+    }
 
 };
