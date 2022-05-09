@@ -1,3 +1,5 @@
+const {error} = require('../errorHandler/errorHandler')
+const at = 'helperFN/games'
 module.exports = {
   assignRoles: async (array) => {
     try {
@@ -21,8 +23,7 @@ module.exports = {
     }
 
     catch (err) {
-      err.statusCode = 500;
-      throw Error(err);
+      throw error(500,'DID NOT ASSIGN ROLE',at);
     }
   },
   changeStatus : async (user, array) => {
@@ -32,6 +33,6 @@ module.exports = {
         return 
       }
     }
-    return 'User does not exist';
+    throw error(404,'User does not exist', at);
   }
 }
