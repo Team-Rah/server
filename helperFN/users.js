@@ -1,3 +1,5 @@
+const { error } = require('../errorHandler/errorHandler');
+
 module.exports = {
   removeKeyFromArray: async (array, key) => {
     let removedPasswordList = [...array];
@@ -12,8 +14,6 @@ module.exports = {
       return removedPasswordList;
     }
     catch(err) {
-      err.statusCode = 500;
-      // err.message
       throw err;
     }
   },
@@ -38,8 +38,6 @@ module.exports = {
       return removedFriendList;
     }
     catch(err) {
-      err.statusCode = 500;
-      // err.message
       throw err;
     }
   },
@@ -61,8 +59,6 @@ module.exports = {
       return userList;
     }
     catch(err) {
-      err.statusCode = 500;
-      // err.message
       throw err;
     }
   },
