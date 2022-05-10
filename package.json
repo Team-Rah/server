@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "set NODE_ENV=development& nodemon ./bin/www",
-    "seed": "node ./devFolders/seedDatabase.js"
+    "seed": "node ./devFolders/seedDatabase.js",
+    "test": "jest"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -17,10 +18,12 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.2",
     "morgan": "~1.9.1",
+    "password-validator": "^5.2.1",
     "socket.io": "^4.5.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@faker-js/faker": "^6.3.1"
+    "@faker-js/faker": "^6.3.1",
+    "jest": "^28.1.0"
   }
 }

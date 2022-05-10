@@ -21,7 +21,7 @@ module.exports = {
       }
       return array;
     }
-    
+
     catch (err) {
       throw error(500,'DID NOT ASSIGN ROLE',at);
     }
@@ -30,9 +30,50 @@ module.exports = {
     for (var i = 0; i < array.length; i ++) {
       if (user.userName === array[i].userName) {
         // change status
-        return 
+        return
       }
     }
     throw error(404,'User does not exist', at);
+  },
+  tallyVotes: (array) => {
+    let result = {};
+    let mostVotes = 0;
+    let mostVotesUser = '';
+    for (var i = 0; i < array.length; i++) {
+      if (!result[array[i].candidate]) {
+        result[array[i].candidate] = 1;
+      } else {
+        result[array[i].candidate] ++;
+      }
+      if (result[array[i].candidate] > mostVotes) {
+        mostVotes = result[array[i].candidate];
+        mostVotesUser = [array[i].candidate];
+      }
+    }
+    for (var x = 0; x < Object.keys(result).length; x++) {
+      if (mostVotes === result[Object.keys(result)[x]]){
+        return {[Object.keys(result)[x]]: mostVotes};
+      }
+    }
+  },
+  checkIfGamesOver: (array) => {
+    var wolves = 0;
+    var villagers = 0;
+    for (var i = 0; i < array.length; i ++) {
+      if (array[i].role === 'wolf') {
+        wolves++;
+      } else {
+        villagers++
+      }
+  }
+  if (wolves === 0) {
+    return {gameover:true, winner: 'villagers'}
+  }
+  if (villagers === 0) {
+    return {gameover:true, winner: 'wolves'}
+  }
+  return {gameover:false, winner: null}
   }
 }
+
+
