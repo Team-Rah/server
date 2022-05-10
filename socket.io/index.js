@@ -40,13 +40,14 @@ const assignRoom = (socket, room) => {
 }
 
 io.on('connection', socket => {
-    // console.log('socket');
+    console.log('socket');
     socket.on('join-room', async(user,room) => {
         try {
             assignUserName(socket, user);
             assignRoom(socket, room);
             const users = await getUserInRoom(room);
-            socket.emit(`send-${room}`, users);
+            console.log('hit')
+            io.emit(`receive-${room}`, users);
         }
         catch (err) {
             socket.emit('error', err);
