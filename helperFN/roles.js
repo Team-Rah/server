@@ -43,26 +43,22 @@ module.exports = {
           healedCandidate.push(voter.candidate);
         }
       })
-    })
+    });
 
     healedCandidate.forEach((heal) => {
       players.forEach(player => {
-        if (player.player === heal) {
+        if (userThatDies === heal && player.player === userThatDies) {
           healedCandidateWithStatus.push(player);
         }
       })
-    })
-
-    console.log(currentDoctor, healedCandidate, healedCandidateWithStatus);
+    });
 
     healedCandidateWithStatus.forEach((healed,i, arr) => {
       if (healed.status === false) {
         healed.status = true;
-        healed.message = `Player ${healed.player} has been healed.`
+        healed.message = `Player ${healed.player} has been healed.`;
       }
     });
-
-    console.log(currentDoctor, healedCandidate, healedCandidateWithStatus);
 
     return healedCandidateWithStatus;
   }
@@ -102,6 +98,5 @@ let samplePlayers = [
 ];
 
 let testOne = module.exports.wolfCheck(sampleVoters, samplePlayers);
-console.log(testOne);
 
-let testTwo = module.exports.doctorCheck(sampleVoters, samplePlayers);
+let testTwo = module.exports.doctorCheck(sampleVoters, samplePlayers, 'david');
