@@ -1,5 +1,6 @@
 var passwordValidator = require('password-validator');
-
+const {error} = require ('../errorHandler/errorHandler');
+const at = 'MIDDLEWARE/SIGNUPVALIDATION'
 var schema = new passwordValidator();
 var userNameCheck = new passwordValidator();
 
@@ -22,21 +23,21 @@ module.exports = {
     try{
 
       if(!userNameCheck.validate(user.userName)) {
-        throw error();
+        throw error(400, 'USERNAME INVALID', at);
       }
 
       if(!schema.validate(user.password)) {
-        throw error();
+        throw error(400, 'PASSWORD INVALID', at);
       }
 
       if(!user.email.includes('@')) {
-        throw error();
+        throw error(400, 'EMAIL INVALID', at);
       }
 
     }
-    
+
     catch(err){
-      throw error();
+      throw error(400, '', at);
     }
   }
 }
