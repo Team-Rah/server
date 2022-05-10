@@ -44,21 +44,23 @@ io.on('connection', socket => {
         try {
             assignUserName(socket, user);
             assignRoom(socket, room);
+            const users = await getUserInRoom(room);
+            socket.emit(`send-${room}`, users);
         }
         catch (err) {
             socket.emit('error', err);
         }
     });
 
-    socket.on('get-users', async(room) => {
-        try {
-           const users = await getUserInRoom(room);
-           socket.emit(`send-${room}`, users);
-        }
-        catch (err) {
-            socket.emit('error', err);
-        }
-    })
+    // socket.on('get-users', async(room) => {
+    //     try {
+    //        const users = await getUserInRoom(room);
+    //        socket.emit(`send-${room}`, users);
+    //     }
+    //     catch (err) {
+    //         socket.emit('error', err);
+    //     }
+    // })
 
 
   
