@@ -3,6 +3,7 @@ const io = require('socket.io')(process.env.PORT2, {
         origin: ["http://localhost:3000"]
     }
 });
+
 const getAllUsersFromRoom = (socket) => {
     const users = [];
     for(let i = 0; i< socket.length;i++) {
@@ -43,7 +44,7 @@ io.on('connection', socket => {
     });
 
 
-  
+
 });
 
 module.exports = io;

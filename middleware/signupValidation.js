@@ -40,4 +40,4 @@ module.exports = {
       throw error(400, '', at);
     }
   }
-}
+};
