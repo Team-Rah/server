@@ -13,34 +13,52 @@ const getAllUsersFromRoom = (socket) => {
     return users;
 };
 
-const emitRoom = async(room) => {
+const getUserInRoom = async(room) => {
     const getAllConnectedSocket = await io.in(room).fetchSockets();
     const users = getAllUsersFromRoom(getAllConnectedSocket);
-    io.to(room).emit('receive-lobby', users);
-};
-const joinRoom = async(room, user) => {
-    try {
-        await socket.join(room);
-        socket.username = user.userName;
-        socket.roomID = room;
-    }
-    catch (err) {
-        throw(err);
-    }
+    return users;
 };
 
+// const joinRoom = async(room, user) => {
+//     try {
+//         await socket.join(room);
+//         socket.username = user.userName;
+//         socket.roomID = room;
+//     }
+//     catch (err) {
+//         throw(err);
+//     }
+// };
+
+const assignUserName = (socket , user) => {
+    socket.username = user.userName;
+}
+const assignRoom = (socket, room) => {
+    socket.join(room);
+    socket.roomID = room;
+}
+
 io.on('connection', socket => {
-    console.log('socket');
-    socket.on('join-lobby', async(user) => {
+    // console.log('socket');
+    socket.on('join-room', async(user,room) => {
         try {
-            joinRoom('lobby', user);
-            emitLobby('lobby');
-            io.to('lobby').emit('joined-lobby', user);
+            assignUserName(socket, user);
+            assignRoom(socket, room);
         }
         catch (err) {
             socket.emit('error', err);
         }
     });
+
+    socket.on('get-users', async(room) => {
+        try {
+           const users = await getUserInRoom(room);
+           socket.emit(`send-${room}`, users);
+        }
+        catch (err) {
+            socket.emit('error', err);
+        }
+    })
 
 
   
