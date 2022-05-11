@@ -5,6 +5,8 @@ const io = require('socket.io')(process.env.PORT2, {
 });
 
 const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/socket.io')
+const {getSingleGame} = require('../database/controller/games')
+const {getPlayer} = require('../helperFN/games')
 
 const getSocketInRoom = async(room) => {
     const getAllConnectedSocket = await io.in(room).fetchSockets();
@@ -12,6 +14,32 @@ const getSocketInRoom = async(room) => {
     return users;
 };
 
+
+
+const calculateNight = async() => {
+    try {
+
+    }
+    catch (err) {
+        throw(err)
+    }
+};
+const calculateDay2 = async() => {
+    try {
+
+    }
+    catch (err) {
+        throw(err)
+    }
+};
+const calculateDay3 = async() => {
+    try {
+
+    }
+    catch (err) {
+        throw(err)
+    }
+};
 
 
 
@@ -136,6 +164,22 @@ io.on('connection', socket => {
     socket.on('send-message', (user, message, room) => {
         io.emit(`receive-message-${room}`, user, message);
     });
+
+    socket.on('player-vote', async(user, candidate, room) => {
+        try {
+            const game = await getSingleGame(room);
+            const player = await getPlayer(game.players, user);
+            if (game.endRound > Date.now() && player.status) {
+                game.voted.push({voter:user.user_id, candidate:candidate.user_id});
+            }
+        }
+        catch (err) {
+            console.log(err)
+            socket.emit('error', err);
+        }
+    });4
+
+
 
     socket.on('start-test', async (user, room, timer) => {
         const game = {

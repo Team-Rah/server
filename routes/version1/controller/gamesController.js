@@ -5,8 +5,15 @@ const { createJwtToken } = require('../../../middleware/jwt');
 
 module.exports = {
     createGame: async(req, res, next) => {
+        console.log(req.user.id)
         try {
-            const game = req.body;
+            const {gameName, players} = req.body;
+            const game = {
+                owner: req.user.id,
+                gameName,
+                playerAllowed: players,
+                phase: 'pregame'
+            }
             const newGame = await createGame(game);
             res.json({
                 message: 'Successfully Created Game',
