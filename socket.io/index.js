@@ -137,7 +137,7 @@ io.on('connection', socket => {
         io.emit(`receive-message-${room}`, user, message);
     });
 
-    socket.on('start-game', async (user, room, timer) => {
+    socket.on('start-test', async (user, room, timer) => {
         const game = {
             owner: '1',
             gameName:'test game',
