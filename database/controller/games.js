@@ -3,7 +3,7 @@ const {error} = require('../../errorHandler/errorHandler');
 const at ='DATABASE/CONTROLLER/GAME';
 module.exports = {
     getAllGames: async() => {
-        try {  
+        try {
             const games = await Game.find();
             return games;
         }
@@ -12,7 +12,7 @@ module.exports = {
         }
     },
     getSingleGame: async(id) => {
-        try {  
+        try {
             const game = await Game.findById(id);
             if (!game) {
                 throw error(404,'GAME NOT FOUND', at);
@@ -24,7 +24,7 @@ module.exports = {
         }
     },
     createGame: async(game) => {
-        try {  
+        try {
             const createGame = await Game(game);
             const savedGame = await createGame.save();
             return savedGame;
@@ -33,4 +33,15 @@ module.exports = {
             throw err;
         }
     },
+    editGame: async(game) => {
+      try {
+        const dataUpdated = await User.findByIdAndUpdate(game._id, game);
+        return dataUpdated;
+      }
+      catch{
+        catch (err) {
+            throw err;
+      }
+    }
+   }
 };
