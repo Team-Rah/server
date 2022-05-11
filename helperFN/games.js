@@ -7,9 +7,7 @@ module.exports = {
       const numRoles = roles.length - 1;
       const numPlayers = array.length;
       let iterations = Math.floor(numPlayers * (4/7));
-     let count = 0;
-
-
+      let count = 0;
       while (iterations > 0) {
         var position = Math.floor(Math.random() * numPlayers);
         if (array[position]['role'] === 'villager')  {
@@ -37,7 +35,7 @@ module.exports = {
   },
   changeStatus : async (user, array) => {
     for (var i = 0; i < array.length; i ++) {
-      if (user.userName === array[i].userName) {
+      if (user.userName === array[i].player.userName) {
         // change status
         return
       }
@@ -85,7 +83,7 @@ module.exports = {
   },
   getPlayer : async (array, userid) => {
     for (var i = 0; i < array.length; i ++) {
-      if (userid === array[i].id) {
+      if (userid === array[i].player.user_id) {
         return array[i];
       }
     }
