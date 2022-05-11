@@ -33,17 +33,16 @@ module.exports = {
             throw err;
         }
     },
-    editGame: async(game) => {
-      try {
-        const dataUpdated = await User.findByIdAndUpdate(game._id, game);
-        return dataUpdated;
-      }
-      catch{
-        catch (err) {
-            throw err;
-      }
-    }
-   }
+    editGame: async (game) => {
+        try {
+          const dataUpdated = await User.findByIdAndUpdate(game._id, game, {new: true});
+          return dataUpdated;
+        }
+
+          catch (err) {
+              throw err;
+        }
+      },
     updateGame: async (gameId, updatedObj) => {
         try {
             const updatedGame = await Game.updateOne({gameName: gameId}, updatedObj);
@@ -52,5 +51,5 @@ module.exports = {
         catch (err) {
             throw err;
         }
-    },
+    }
 };
