@@ -6,7 +6,8 @@ const io = require('socket.io')(process.env.PORT2, {
 
 const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/socket.io')
 const {getSingleGame, getAllGames} = require('../database/controller/games');
-const {getPlayer} = require('../helperFN/games');
+const {getPlayer, assignRoles} = require('../helperFN/games');
+
 
 const getSocketInRoom = async(room) => {
     const getAllConnectedSocket = await io.in(room).fetchSockets();
@@ -41,8 +42,106 @@ const calculateDay3 = async() => {
     }
 };
 
+const emitGame2 = (socket, room , data, timer ) => {
+    const user = {
+        user_id : 'announcement',
+        userName: 'announcement',
+    }
+    const user2 = {
+        user_id : 'dave',
+        userName: 'dave',
+    }
 
+    if (data.phase === 'night') {
+        io.to(room).emit('game-send',data)
+        data.phase = 'day1'
+        data.endRound = Date.now() + 1000 + timer
+        io.emit(`receive-message-${room}`, user, 'start night phase');
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user2, 'im scared');
+        }, 1500);
 
+         test = setTimeout(() => {
+            emitGame(socket,room, data, timer)
+        }, timer + 1000);
+        return
+    }
+    if (data.phase === 'day1') {
+        io.to(room).emit('game-send',data)
+        data.phase = 'day2'
+        data.endRound = Date.now() + 1000 + timer
+        io.emit(`receive-message-${room}`, user, 'start day1 phase');
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 1 killed by a wolf');
+        }, 500);
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 6 killed by a wolf');
+        }, 1500);
+        test = setTimeout(() => {
+            emitGame(socket,room, data, timer )
+        }, timer + 3000);
+        return
+    }
+    if (data.phase === 'day2') {
+        io.to(room).emit('game-send',data)
+        data.phase = 'day3'
+        data.endRound = Date.now() + 1000 + timer
+        io.emit(`receive-message-${room}`, user, 'start day2 phase');
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 3 voted player 2 to stand trial');
+        }, 1000);
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 4 voted player 2 to stand trial');
+        }, 1100);
+
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user2, 'i like the sunny day');
+        }, 1000);
+        test = setTimeout(() => {
+            emitGame(socket,room, data, timer)
+        }, timer + 3000);
+        return
+    }
+    if (data.phase === 'day3') {
+        io.to(room).emit('game-send',data)
+        data.phase = 'day4'
+        data.endRound = Date.now() + 1000 + timer
+        io.emit(`receive-message-${room}`, user, 'start day3 phase');
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 4 voted player 2 guilty');
+        }, 700);
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 8 voted player 2 guilty');
+        }, 1000);
+        test = setTimeout(() => {
+            emitGame(socket,room, data, timer )
+        }, timer + 3000);
+        return
+    }
+    if (data.phase === 'day4') {
+        io.to(room).emit('game-send',data)
+        data.phase = 'end'
+        data.endRound = Date.now() + 1000 + timer
+        io.emit(`receive-message-${room}`, user, 'start day4 phase');
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 2 is hung for being a wolf his role was seer');
+        }, 1000);
+        test = setTimeout(() => {
+            emitGame(socket,room, data, timer )
+        }, timer + 1000);
+        return
+    }
+    if (data.phase === 'end') {
+        io.to(room).emit('game-send',data)
+        data.phase = 'night'
+        data.endRound = Date.now() + 1000 + timer
+        io.emit(`receive-message-${room}`, user, 'game ended');
+        test = setTimeout(() => {
+            emitGame(socket,room, data, timer )
+        }, timer + 5000);
+        return
+    }
+}
 
 let test;
 const emitGame = (socket, room , data, timer ) => {
@@ -178,7 +277,18 @@ io.on('connection', socket => {
         }
     });
 
+    socket.on('start-game', async (user, room) => {
+        try {
+            //room name = gameid
+            // const game = await getSingleGame(room);
 
+            // socket.emit('placeholder', game);
+            const users = await getSocketInRoom(room);
+        }
+        catch(err) {
+
+        }
+    })
 
     socket.on('start-test', async (user, room, timer) => {
         const game = {
@@ -264,3 +374,24 @@ module.exports = io;
 //     socket.join(room);
 //     socket.rooms = room;
 // };
+
+
+
+
+
+//Input
+// [
+//     {
+//         player: {userName: "dave1", user_id: 1}
+//     }
+// ]
+
+//output
+// [
+    //     {
+    //         player: {userName: "dave1", user_id: 1},
+    //         status: true,
+    //         role: "villager",
+    //         abilityCount: 0
+    //     }
+// ]
