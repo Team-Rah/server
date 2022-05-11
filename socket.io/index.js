@@ -45,7 +45,7 @@ const calculateDay3 = async() => {
 
 
 let test;
-const emitGame = (socket, room , data, timer ) => {
+const emitGame = (socket, room , data, timer ) => { az
     const user = {
         user_id : 'announcement',
         userName: 'announcement',
