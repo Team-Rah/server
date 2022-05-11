@@ -6,6 +6,9 @@ const GameSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: "User",
       },
+      ownerName: {
+        type: String,
+      },
     gameName: {
         type: String,
         required: true,
@@ -17,6 +20,7 @@ const GameSchema = new mongoose.Schema({
     phase : {
         type: String,
     },
+
     endRound: {
         type: Number,
     },
