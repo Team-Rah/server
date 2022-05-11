@@ -3,17 +3,26 @@ const at = 'helperFN/games';
 module.exports = {
   assignRoles: async (array) => {
     try {
-      const roles = ['test1', 'test2', 'test3', 'test4'];
+      const roles = ['Wolf', 'Doctor', 'Seer'];
       const numRoles = roles.length - 1;
       const numPlayers = array.length;
       let iterations = Math.floor(numPlayers * (4/7));
      let count = 0;
+
+
       while (iterations > 0) {
         var position = Math.floor(Math.random() * numPlayers);
         if (array[position]['role'] === 'villager')  {
-          array[position]['role'] = roles[count];
-          count++;
-          iterations --;
+          if (roles[count] === 'Seer'){
+            array[position]['role'] = roles[count];
+            array[position]['abilityCount'] = 1;
+            count++;
+            iterations --;
+          } else {
+            array[position]['role'] = roles[count];
+            count++;
+            iterations --;
+          }
         }
         if (count > numRoles) {
           count = 0;
@@ -67,12 +76,20 @@ module.exports = {
       }
   }
   if (wolves === 0) {
-    return {gameover:true, winner: 'villagers'}
+    return ({gameover:true, winner: 'villagers'}, array)
   }
   if (villagers === 0) {
-    return {gameover:true, winner: 'wolves'}
+    return ({gameover:true, winner: 'wolves'}, array)
   }
   return {gameover:false, winner: null}
+  },
+  getPlayer : async (array, userid) => {
+    for (var i = 0; i < array.length; i ++) {
+      if (userid === array[i].id) {
+        return array[i];
+      }
+    }
+    throw error(404,'User does not exist', at);
   }
 }
 
