@@ -19,8 +19,8 @@ const getSocketInRoom = async(room) => {
 let test;
 const emitGame = (socket, room , data, timer ) => {
     const user = {
-        user_id : 'server',
-        userName: 'server',
+        user_id : 'announcement',
+        userName: 'announcement',
     }
     const user2 = {
         user_id : 'dave',
