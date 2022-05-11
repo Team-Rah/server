@@ -177,7 +177,7 @@ io.on('connection', socket => {
             console.log(err)
             socket.emit('error', err);
         }
-    });4
+    });
 
 
 
@@ -186,7 +186,6 @@ io.on('connection', socket => {
             owner: '1',
             gameName:'test game',
             playerAllowed: 20,
-            startRound: Date.now(),
             endRound: Date.now(),
             players : [
                 {player: {user_id: '1',userName:'dave'}, status: true, role:'villager'},

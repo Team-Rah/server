@@ -38,7 +38,6 @@ module.exports = {
           const dataUpdated = await User.findByIdAndUpdate(game._id, game, {new: true});
           return dataUpdated;
         }
-
           catch (err) {
               throw err;
         }

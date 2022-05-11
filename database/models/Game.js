@@ -17,9 +17,6 @@ const GameSchema = new mongoose.Schema({
     phase : {
         type: String,
     },
-    startRound: {
-        type: Number,
-    },
     endRound: {
         type: Number,
     },
