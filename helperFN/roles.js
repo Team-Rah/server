@@ -26,6 +26,7 @@ module.exports = {
 
     return isValidVoting;
   },
+
   doctorCheck: (voters, players, userThatDies) => {
     //return an object with the modified array of players and array of messages
     let currentDoctor = [];
@@ -61,5 +62,41 @@ module.exports = {
     });
 
     return healedCandidateWithStatus;
+  },
+  seerCheck: (voters, players) => {
+    let currentSeer = [];
+    let currentWolf = [];
+    let seerCandidate = [];
+    let caughtAWolf = [];
+
+    players.forEach(player => {
+      if (player.role === "seer") {
+        currentSeer.push(player.player);
+      }
+      if (player.role === 'wolf') {
+        currentWolf.push(player.player);
+      }
+    });
+
+    voters.forEach(voter => {
+      currentSeer.forEach(seer => {
+        if (voter.voter === seer) {
+          seerCandidate.push(voter.candidate);
+        }
+      });
+    });
+
+    players.forEach(player => {
+      seerCandidate.forEach(user => {
+        if (player.player === user) {
+          if (player.role === 'wolf') {
+            caughtAWolf.push(player);
+          }
+        }
+      });
+    });
+
+    return caughtAWolf;
   }
+
 };

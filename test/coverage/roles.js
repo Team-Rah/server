@@ -1,4 +1,4 @@
-const {wolfCheck, doctorCheck} = require('../../helperFN/roles');
+const {wolfCheck, doctorCheck, seerCheck} = require('../../helperFN/roles');
 
 
 describe('Checks the validity of roles with night actions', () => {
@@ -121,4 +121,72 @@ describe('Checks the validity of roles with night actions', () => {
       expect(doctorCheck(sampleVotersUnsaved, samplePlayers, 'tony').length).toBe(0);
       // expect(doctorCheck(sampleVotersUnsaved, samplePlayers, 'tony').message).toBe('No one has been healed.')
     });
-})
+
+    test('Checks to see if seer saw any wolves', () => {
+      let sampleVotersFalse = [
+        {
+          voter: 'cihad',
+          candidate: 'david'
+        },
+        {
+          voter: 'tony',
+          candidate: 'david'
+        },
+        {
+          voter: 'david',
+          candidate: 'tony'
+        }
+      ];
+      let samplePlayersFalse = [
+        {
+          player: 'tony',
+          status: true,
+          role: 'doctor',
+        },
+        {
+          player: 'cihad',
+          status: true,
+          role: 'wolf',
+        },
+        {
+          player: 'david',
+          status: false,
+          role: 'wolf'
+        },
+      ];
+      let sampleVotersTrue = [
+        {
+          voter: 'cihad',
+          candidate: 'tony'
+        },
+        {
+          voter: 'tony',
+          candidate: 'david'
+        },
+        {
+          voter: 'david',
+          candidate: 'tony'
+        }
+      ];
+      let samplePlayersTrue = [
+        {
+          player: 'tony',
+          status: true,
+          role: 'seer',
+        },
+        {
+          player: 'cihad',
+          status: true,
+          role: 'wolf',
+        },
+        {
+          player: 'david',
+          status: false,
+          role: 'wolf'
+        },
+      ];
+
+      expect(seerCheck(sampleVotersFalse, samplePlayersFalse).length).toBe(0);
+      expect(seerCheck(sampleVotersTrue, samplePlayersTrue).length).toBe(1);
+    });
+});

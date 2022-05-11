@@ -42,9 +42,6 @@ io.on('connection', socket => {
             socket.emit('error', err);
         }
     });
-
-
-
 });
 
 module.exports = io;
