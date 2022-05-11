@@ -71,16 +71,16 @@ module.exports = {
 
     players.forEach(player => {
       if (player.role === "seer") {
-        currentSeer.push(player.player);
+        currentSeer.push(player);
       }
       if (player.role === 'wolf') {
-        currentWolf.push(player.player);
+        currentWolf.push(player);
       }
     });
 
     voters.forEach(voter => {
       currentSeer.forEach(seer => {
-        if (voter.voter === seer) {
+        if (voter.voter === seer.player.userName) {
           seerCandidate.push(voter.candidate);
         }
       });
@@ -88,7 +88,7 @@ module.exports = {
 
     players.forEach(player => {
       seerCandidate.forEach(user => {
-        if (player.player === user) {
+        if (player.player.userName === user) {
           if (player.role === 'wolf') {
             caughtAWolf.push(player);
           }
