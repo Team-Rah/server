@@ -44,4 +44,13 @@ module.exports = {
       }
     }
    }
+    updateGame: async (gameId, updatedObj) => {
+        try {
+            const updatedGame = await Game.updateOne({gameName: gameId}, updatedObj);
+            return updatedGame;
+        }
+        catch (err) {
+            throw err;
+        }
+    },
 };

@@ -5,6 +5,8 @@ const io = require('socket.io')(process.env.PORT2, {
 });
 
 const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/socket.io')
+const {getSingleGame} = require('../database/controller/games')
+const {getPlayer} = require('../helperFN/games')
 
 const getSocketInRoom = async(room) => {
     const getAllConnectedSocket = await io.in(room).fetchSockets();
@@ -12,6 +14,32 @@ const getSocketInRoom = async(room) => {
     return users;
 };
 
+
+
+const calculateNight = async() => {
+    try {
+
+    }
+    catch (err) {
+        throw(err)
+    }
+};
+const calculateDay2 = async() => {
+    try {
+
+    }
+    catch (err) {
+        throw(err)
+    }
+};
+const calculateDay3 = async() => {
+    try {
+
+    }
+    catch (err) {
+        throw(err)
+    }
+};
 
 
 
@@ -137,6 +165,22 @@ io.on('connection', socket => {
         io.emit(`receive-message-${room}`, user, message);
     });
 
+    socket.on('player-vote', async(user, candidate, room) => {
+        try {
+            const game = await getSingleGame(room);
+            const player = await getPlayer(game.players, user);
+            if (game.endRound > Date.now() && player.status) {
+                game.voted.push({voter:user.user_id, candidate:candidate.user_id});
+            }
+        }
+        catch (err) {
+            console.log(err)
+            socket.emit('error', err);
+        }
+    });4
+
+
+
     socket.on('start-test', async (user, room, timer) => {
         const game = {
             owner: '1',
@@ -145,14 +189,14 @@ io.on('connection', socket => {
             startRound: Date.now(),
             endRound: Date.now(),
             players : [
-                {player: {userID: '1',userName:'dave'}, status: true, role:'villager'},
-                {player: {userID: '2',userName:'dave2'}, status: false, role:'villager'},
-                {player: {userID: '3',userName:'dave3'}, status: true, role:'doctor'},
-                {player: {userID: '4',userName:'dave4'}, status: false, role:'doctor'},
-                {player: {userID: '5',userName:'dave5'}, status: true, role:'seer', abilityCount: 1},
-                {player: {userID: '6',userName:'dave6'}, status: false, role:'seer', abilityCount: 0},
-                {player: {userID: '7',userName:'dave7'}, status: true, role:'wolf'},
-                {player: {userID: '8',userName:'dave8'}, status: false, role:'wolf'},
+                {player: {user_id: '1',userName:'dave'}, status: true, role:'villager'},
+                {player: {user_id: '2',userName:'dave2'}, status: false, role:'villager'},
+                {player: {user_id: '3',userName:'dave3'}, status: true, role:'doctor'},
+                {player: {user_id: '4',userName:'dave4'}, status: false, role:'doctor'},
+                {player: {user_id: '5',userName:'dave5'}, status: true, role:'seer', abilityCount: 1},
+                {player: {user_id: '6',userName:'dave6'}, status: false, role:'seer', abilityCount: 0},
+                {player: {user_id: '7',userName:'dave7'}, status: true, role:'wolf'},
+                {player: {user_id: '8',userName:'dave8'}, status: false, role:'wolf'},
             ],
             phase: 'night',
         }
