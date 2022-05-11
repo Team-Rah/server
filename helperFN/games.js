@@ -81,9 +81,9 @@ module.exports = {
   }
   return {gameover:false, winner: null}
   },
-  getPlayer : async (array, userid) => {
+  getPlayer : async (array, user) => {
     for (var i = 0; i < array.length; i ++) {
-      if (userid === array[i].player.user_id) {
+      if (user.user_id === array[i].player.user_id) {
         return array[i];
       }
     }
