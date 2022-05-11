@@ -2,9 +2,9 @@ const Game = require('../models/Game');
 const {error} = require('../../errorHandler/errorHandler');
 const at ='DATABASE/CONTROLLER/GAME';
 module.exports = {
-    getAllGames: async() => {
+    getAllGames: async(filter) => {
         try {
-            const games = await Game.find();
+            const games = await Game.find(filter);
             return games;
         }
         catch (err) {
@@ -36,6 +36,7 @@ module.exports = {
     editGame: async (game) => {
         try {
           const dataUpdated = await User.findByIdAndUpdate(game._id, game, {new: true});
+          if (!dataUpdated)
           return dataUpdated;
         }
           catch (err) {
@@ -50,5 +51,6 @@ module.exports = {
         catch (err) {
             throw err;
         }
-    }
+    },
+
 };

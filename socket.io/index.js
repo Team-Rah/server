@@ -5,8 +5,8 @@ const io = require('socket.io')(process.env.PORT2, {
 });
 
 const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/socket.io')
-const {getSingleGame} = require('../database/controller/games')
-const {getPlayer} = require('../helperFN/games')
+const {getSingleGame, getAllGames} = require('../database/controller/games');
+const {getPlayer} = require('../helperFN/games');
 
 const getSocketInRoom = async(room) => {
     const getAllConnectedSocket = await io.in(room).fetchSockets();
@@ -63,11 +63,11 @@ const emitGame = (socket, room , data, timer ) => { az
         setTimeout(() => {
             io.emit(`receive-message-${room}`, user2, 'im scared');
         }, 1500);
-        
+
          test = setTimeout(() => {
             emitGame(socket,room, data, timer)
         }, timer + 1000);
-        return 
+        return
     }
     if (data.phase === 'day1') {
         io.to(room).emit('game-send',data)
@@ -149,6 +149,7 @@ const emitGame = (socket, room , data, timer ) => { az
 
 
 io.on('connection', socket => {
+    console.log(socket.id, 'has connected')
     socket.on('join-room', async(user,room) => {
         try {
             assignUserName(socket, user);
@@ -157,7 +158,6 @@ io.on('connection', socket => {
             io.to(room).emit(`receive-${room}`, users);
         }
         catch (err) {
-            console.log(err)
             socket.emit('error', err);
         }
     });
@@ -174,7 +174,6 @@ io.on('connection', socket => {
             }
         }
         catch (err) {
-            console.log(err)
             socket.emit('error', err);
         }
     });
@@ -210,6 +209,15 @@ io.on('connection', socket => {
         clearTimeout(test);
     });
 
+    socket.on('get-games', async() => {
+        try {
+            const games = await getAllGames({started: false});
+            io.emit('receive-games', games);
+        }
+        catch(cihadsWork) {
+            socket.emit('error', cihadsWork);
+        }
+    });
 
     socket.on("disconnecting", async () => {
         try {
@@ -249,7 +257,7 @@ module.exports = io;
 //     if (user.user_id) {
 //         socket.user_id = user.user_id
 //     }
-    
+
 // };
 
 // const assignRoom = (socket, room) => {
