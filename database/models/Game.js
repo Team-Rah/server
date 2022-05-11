@@ -35,7 +35,10 @@ const GameSchema = new mongoose.Schema({
     ],
     players: [
         {
-            player: {type: Schema.Types.ObjectId, ref: "User"},
+            player: {
+                user_id : {type: Schema.Types.ObjectId, ref: "User"},
+                userName: {type: String}
+            },
             status: {type: Boolean, default: true},
             role: {type: String, default: 'villager'},
             abilityCount: {type: Number}
