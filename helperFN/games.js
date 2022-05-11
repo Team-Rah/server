@@ -3,14 +3,14 @@ const at = 'helperFN/games';
 module.exports = {
   assignRoles: async (array) => {
     try {
-      const roles = ['Wolf', 'Doctor', 'Seer'];
+      const roles = ['Wolf', 'Doctor', 'Seer', 'villager'];
       const numRoles = roles.length - 1;
       const numPlayers = array.length;
       let iterations = Math.floor(numPlayers * (4/7));
       let count = 0;
       while (iterations > 0) {
         var position = Math.floor(Math.random() * numPlayers);
-        if (array[position]['role'] === 'villager')  {
+        if (!array[position]['role'])  {
           if (roles[count] === 'Seer'){
             array[position]['role'] = roles[count];
             array[position]['abilityCount'] = 1;
@@ -26,7 +26,7 @@ module.exports = {
           count = 0;
         }
       }
-      return array;
+      return array
     }
 
     catch (err) {
