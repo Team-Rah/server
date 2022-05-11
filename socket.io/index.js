@@ -144,7 +144,7 @@ const emitGame2 = (socket, room , data, timer ) => {
 }
 
 let test;
-const emitGame = (socket, room , data, timer ) => {
+const emitGame = (socket, room , data, timer ) => { az
     const user = {
         user_id : 'announcement',
         userName: 'announcement',

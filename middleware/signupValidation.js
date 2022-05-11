@@ -19,21 +19,21 @@ userNameCheck
 
 
 module.exports = {
-  signupValidation: async(user) => {
+  signupValidation: async(req, res, next) => {
     try{
 
-      if(!userNameCheck.validate(user.userName)) {
+      if(!userNameCheck.validate(req.body.userName)) {
         throw error(400, 'USERNAME INVALID', at);
       }
 
-      if(!schema.validate(user.password)) {
+      if(!schema.validate(req.body.password)) {
         throw error(400, 'PASSWORD INVALID', at);
       }
 
-      if(!user.email.includes('@')) {
+      if(!req.body.email.includes('@')) {
         throw error(400, 'EMAIL INVALID', at);
       }
-
+      next();
     }
 
     catch(err){
