@@ -36,6 +36,7 @@ module.exports = {
     editGame: async (game) => {
         try {
           const dataUpdated = await User.findByIdAndUpdate(game._id, game, {new: true});
+          if (!dataUpdated)
           return dataUpdated;
         }
 
