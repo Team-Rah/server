@@ -5,7 +5,6 @@ const { createJwtToken } = require('../../../middleware/jwt');
 
 module.exports = {
     createGame: async(req, res, next) => {
-        console.log(req.user.id)
         try {
             const {gameName, players} = req.body;
             const game = {
