@@ -25,15 +25,26 @@ module.exports = {
         }
     },
     editUser: async(id, user) => {
-
+        try {
+            // takes key value pairs as user to be updated
+          const dataUpdated = await User.findByIdAndUpdate(id, user);
+        }
+        catch (err) {
+            throw err;
+        }
     },
-    deleteUser: async() => {
-
+    deleteUser: async(id) => {
+      try {
+        const deletedUser = await User.findByIdAndRemove(id);
+        return 'deleted User';
+      }
+      catch (err) {
+          throw err;
+      }
     },
-
     createUser: async(user) => {
         try {
-            const createUser = await User(user);
+            const createUser = new User(user);
             const savedUser = await createUser.save();
             return savedUser;
         }

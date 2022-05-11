@@ -4,7 +4,7 @@ const io = require('socket.io')(process.env.PORT2, {
     }
 });
 
-const getAllUsersFromRoom = (socket) => {
+const getUsersFromSocket = (socket) => {
     const users = [];
     for(let i = 0; i< socket.length;i++) {
         if (!users.includes(socket[i].username)) {
@@ -13,35 +13,53 @@ const getAllUsersFromRoom = (socket) => {
     }
     return users;
 };
-
-const emitRoom = async(room) => {
+const getSocketInRoom = async(room) => {
     const getAllConnectedSocket = await io.in(room).fetchSockets();
-    const users = getAllUsersFromRoom(getAllConnectedSocket);
-    io.to(room).emit('receive-lobby', users);
+    const users = getUsersFromSocket(getAllConnectedSocket);
+    return users;
 };
-const joinRoom = async(room, user) => {
-    try {
-        await socket.join(room);
-        socket.username = user.userName;
-        socket.roomID = room;
-    }
-    catch (err) {
-        throw(err);
-    }
+
+
+const assignUserName = (socket , user) => {
+    socket.username = user.userName;
+};
+
+const assignRoom = (socket, room) => {
+    socket.join(room);
+    socket.rooms = room;
 };
 
 io.on('connection', socket => {
-    console.log('socket');
-    socket.on('join-lobby', async(user) => {
+    socket.on('join-room', async(user,room) => {
         try {
-            joinRoom('lobby', user);
-            emitLobby('lobby');
-            io.to('lobby').emit('joined-lobby', user);
+            assignUserName(socket, user);
+            assignRoom(socket, room);
+            console.log('socket', io)
+            const users = await getSocketInRoom(room);
+            io.to(room).emit(`receive-${room}`, users);
         }
         catch (err) {
             socket.emit('error', err);
         }
     });
+    socket.on('send-message', (user, message, room) => {
+        io.emit(`receive-message-${room}`, user, message);
+    });
+
+
+    socket.on("disconnecting", async () => {
+        try {
+            const rooms = Array.from(socket.rooms);
+            for (let i = 1; i < rooms.length;i++) {
+                const users = await getSocketInRoom(rooms[i]);
+                users.splice(users.indexOf(socket.userName),1);
+                io.emit(`receive-${rooms[i]}`, users);
+            }
+        }
+        catch (err) {
+            socket.emit('error', err);
+        }
+      });
 });
 
 module.exports = io;

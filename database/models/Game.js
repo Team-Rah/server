@@ -38,6 +38,7 @@ const GameSchema = new mongoose.Schema({
             player: {type: Schema.Types.ObjectId, ref: "User"},
             status: {type: Boolean, default: true},
             role: {type: String, default: 'villager'},
+            abilityCount: {type: Number}
         }
     ],
     winner: {
