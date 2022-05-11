@@ -1,6 +1,6 @@
 const User = require('../models/User');
 const {error} = require('../../errorHandler/errorHandler');
-const at ='DATABASE/CONTROLLER/USER';
+const at = 'DATABASE/CONTROLLER/USER';
 
 module.exports = {
     getAllUser: async() => {

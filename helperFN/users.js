@@ -53,10 +53,9 @@ module.exports = {
           } else {
             player.score += score;
           }
+          return userList;
         }
       });
-
-      return userList;
     }
     catch(err) {
       throw err;
