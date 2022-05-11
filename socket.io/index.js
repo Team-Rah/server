@@ -47,12 +47,14 @@ const emitGame = (socket, room , data, timer ) => {
         data.endRound = Date.now() + 1000 + timer
         io.emit(`receive-message-${room}`, user, 'start day1 phase');
         setTimeout(() => {
-            io.emit(`receive-message-${room}`, user2, 'i like the sunny day');
+            io.emit(`receive-message-${room}`, user, 'player 1 killed by a wolf');
+        }, 500);
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 6 killed by a wolf');
         }, 1500);
-        
         test = setTimeout(() => {
             emitGame(socket,room, data, timer )
-        }, timer + 1000);
+        }, timer + 3000);
         return
     }
     if (data.phase === 'day2') {
@@ -60,16 +62,45 @@ const emitGame = (socket, room , data, timer ) => {
         data.phase = 'day3'
         data.endRound = Date.now() + 1000 + timer
         io.emit(`receive-message-${room}`, user, 'start day2 phase');
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 3 voted player 2 to stand trial');
+        }, 1000);
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 4 voted player 2 to stand trial');
+        }, 1100);
+
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user2, 'i like the sunny day');
+        }, 1000);
         test = setTimeout(() => {
             emitGame(socket,room, data, timer)
-        }, timer + 1000);
+        }, timer + 3000);
         return
     }
     if (data.phase === 'day3') {
         io.to(room).emit('game-send',data)
-        data.phase = 'end'
+        data.phase = 'day4'
         data.endRound = Date.now() + 1000 + timer
         io.emit(`receive-message-${room}`, user, 'start day3 phase');
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 4 voted player 2 guilty');
+        }, 700);
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 8 voted player 2 guilty');
+        }, 1000);
+        test = setTimeout(() => {
+            emitGame(socket,room, data, timer )
+        }, timer + 3000);
+        return
+    }
+    if (data.phase === 'day4') {
+        io.to(room).emit('game-send',data)
+        data.phase = 'end'
+        data.endRound = Date.now() + 1000 + timer
+        io.emit(`receive-message-${room}`, user, 'start day4 phase');
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, user, 'player 2 is hung for being a wolf his role was seer');
+        }, 1000);
         test = setTimeout(() => {
             emitGame(socket,room, data, timer )
         }, timer + 1000);
