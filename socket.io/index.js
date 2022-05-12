@@ -5,7 +5,7 @@ const io = require('socket.io')(process.env.PORT2, {
 });
 
 const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/socket.io')
-const {getSingleGame, getAllGames} = require('../database/controller/games');
+const {getSingleGame, getAllGames, editGame} = require('../database/controller/games');
 const {getPlayer} = require('../helperFN/games');
 
 const getSocketInRoom = async(room) => {
@@ -81,7 +81,7 @@ const emitGame = (socket, room , data, timer ) => { az
             io.emit(`receive-message-${room}`, user, 'player 6 killed by a wolf');
         }, 1500);
         test = setTimeout(() => {
-            emitGame(socket,room, data, timer )
+            emitGame(socket,room, data, timer)
         }, timer + 3000);
         return
     }
@@ -117,7 +117,7 @@ const emitGame = (socket, room , data, timer ) => { az
             io.emit(`receive-message-${room}`, user, 'player 8 voted player 2 guilty');
         }, 1000);
         test = setTimeout(() => {
-            emitGame(socket,room, data, timer )
+            emitGame(socket,room, data, timer)
         }, timer + 3000);
         return
     }
@@ -130,7 +130,7 @@ const emitGame = (socket, room , data, timer ) => { az
             io.emit(`receive-message-${room}`, user, 'player 2 is hung for being a wolf his role was seer');
         }, 1000);
         test = setTimeout(() => {
-            emitGame(socket,room, data, timer )
+            emitGame(socket,room, data, timer);
         }, timer + 1000);
         return
     }
@@ -140,12 +140,11 @@ const emitGame = (socket, room , data, timer ) => { az
         data.endRound = Date.now() + 1000 + timer
         io.emit(`receive-message-${room}`, user, 'game ended');
         test = setTimeout(() => {
-            emitGame(socket,room, data, timer )
+            emitGame(socket,room, data, timer);
         }, timer + 5000);
         return
     }
 }
-
 
 
 io.on('connection', socket => {
@@ -169,8 +168,10 @@ io.on('connection', socket => {
         try {
             const game = await getSingleGame(room);
             const player = await getPlayer(game.players, user);
-            if (game.endRound > Date.now() && player.status) {
+            const target = await getPlayer(game.players, candidate);
+            if (game.endRound > Date.now() && player.status && target.status) {
                 game.voted.push({voter:user.user_id, candidate:candidate.user_id});
+                await editGame(game);
             }
         }
         catch (err) {

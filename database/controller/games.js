@@ -35,8 +35,10 @@ module.exports = {
     },
     editGame: async (game) => {
         try {
-          const dataUpdated = await User.findByIdAndUpdate(game._id, game, {new: true});
-          if (!dataUpdated)
+          const dataUpdated = await Game.findByIdAndUpdate(game._id, game, {new: true});
+          if (!dataUpdated) {
+              throw error(404, 'GAME CANT BE FOUND','/DATABASE/CONTROLLER/GAMES')
+          }
           return dataUpdated;
         }
           catch (err) {
