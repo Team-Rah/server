@@ -39,7 +39,11 @@ module.exports = {
     editUser: async(id, user) => {
         try {
             // takes key value pairs as user to be updated
-          const dataUpdated = await User.findByIdAndUpdate(id, user);
+          const dataUpdated = await User.findByIdAndUpdate(id, user, {new: true});
+          if (!dataUpdated) {
+            throw error(404, 'USER CANT BE FOUND','/DATABASE/CONTROLLER/GAMES')
+        }
+        return dataUpdated
         }
         catch (err) {
             throw err;
