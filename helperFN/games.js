@@ -63,6 +63,7 @@ module.exports = {
       }
     }
   },
+
   checkIfGamesOver: (array) => {
     var wolves = 0;
     var villagers = 0;
@@ -85,6 +86,7 @@ module.exports = {
 
   return {gameOver:false, winner: null}
   },
+
   getPlayer : (array, user) => {
     for (var i = 0; i < array.length; i ++) {
       if (user.user_id === array[i].player.user_id) {
@@ -93,6 +95,7 @@ module.exports = {
     }
     throw error(404,'User does not exist', at);
   },
+  
   votesVsUsers : (votesArray, userArray) => {
     const numVotes = votesArray.length;
     let count = 0;

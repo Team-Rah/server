@@ -24,6 +24,18 @@ module.exports = {
             throw err;
         }
     },
+    getSingleUserById: async(id) => {
+        try {
+            const user = await User.findById(id);
+            if (!user) {
+                throw error(404,'USER NOT FOUND', at);
+            }
+            return user;
+        }
+        catch (err) {
+            throw err;
+        }
+    },
     editUser: async(id, user) => {
         try {
             // takes key value pairs as user to be updated
