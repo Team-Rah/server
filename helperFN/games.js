@@ -63,24 +63,30 @@ module.exports = {
       }
     }
   },
+
   checkIfGamesOver: (array) => {
     var wolves = 0;
     var villagers = 0;
     for (var i = 0; i < array.length; i ++) {
-      if (array[i].role === 'wolf') {
-        wolves++;
-      } else {
-        villagers++
+      if (array[i].status) {
+        if (array[i].role === 'wolf') {
+          wolves++;
+        } else {
+          villagers++
+        }
       }
-  }
+    }
   if (wolves === 0) {
-    return ({gameover:true, winner: 'villagers'}, array)
+    return {gameOver:true, winner: 'villagers'}
   }
+
   if (villagers === 0) {
-    return ({gameover:true, winner: 'wolves'}, array)
+    return {gameOver:true, winner: 'wolves'}
   }
-  return {gameover:false, winner: null}
+
+  return {gameOver:false, winner: null}
   },
+
   getPlayer : (array, user) => {
     for (var i = 0; i < array.length; i ++) {
       if (user.user_id === array[i].player.user_id) {
@@ -89,6 +95,7 @@ module.exports = {
     }
     throw error(404,'User does not exist', at);
   },
+  
   votesVsUsers : (votesArray, userArray) => {
     const numVotes = votesArray.length;
     let count = 0;
