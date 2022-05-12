@@ -57,17 +57,20 @@ module.exports = {
         mostVotesUser = [array[i].candidate];
       }
     }
+    let tieBreaker = [];
     for (var x = 0; x < Object.keys(result).length; x++) {
       if (mostVotes === result[Object.keys(result)[x]]){
-        return {[Object.keys(result)[x]]: mostVotes};
+        tieBreaker.push({userName:Object.keys(result)[x], votes: mostVotes})
       }
     }
+    let randomIndex = Math.floor(Math.random() * tieBreaker.length)
+    return tieBreaker[randomIndex];
   },
 
   checkIfGamesOver: (array) => {
     var wolves = 0;
     var villagers = 0;
-    for (var i = 0; i < array.length; i ++) {
+    for (let i = 0; i < array.length; i ++) {
       if (array[i].status) {
         if (array[i].role === 'wolf') {
           wolves++;
@@ -77,11 +80,23 @@ module.exports = {
       }
     }
   if (wolves === 0) {
-    return {gameOver:true, winner: 'villagers'}
+    let result = [];
+    for (let x = 0; x < array.length; x++) {
+      if ((array[x].status) && (array[x].role !== 'wolf')) {
+        result.push(array[x]);
+      }
+    }
+    return {gameOver:true, winner: 'villagers', players: result}
   }
 
   if (villagers === 0) {
-    return {gameOver:true, winner: 'wolves'}
+    let result = [];
+    for (let x = 0; x < array.length; x++) {
+      if ((array[x].status) && (array[x].role === 'wolf')) {
+        result.push(array[x]);
+      }
+    }
+    return {gameOver:true, winner: 'wolves', players: result}
   }
 
   return {gameOver:false, winner: null}
