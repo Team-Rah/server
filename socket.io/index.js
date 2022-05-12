@@ -31,24 +31,49 @@ const calculateNight = async(room) => {
 
         const wolf = wolfKills(game.voted, game.players);
 
-        // if (wolf.deaths.length !== 0) {
-        //     wolf.deaths.forEach(death => {
-
-        //     })
-        // }
+        if (wolf.deaths.length !== 0) {
+            wolf.deaths.forEach(death => {
+                let {player, role, status} = death;
+                messages.push({message: `${player.userName} was gravely injured during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
+            });
+        }
 
         const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
         //update doctorCheck third parameter...needs to accept an array
         //check if doctor is alive before performing action
 
+        if (doctor.deaths.length !== 0) {
+            doctor.deaths.forEach(death => {
+                let {player, role, status} = death;
+                messages.push({message: `${player.userName} was saved by a stranger with tremendous healing abilities during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
+            });
+        }
+
         const seer = seerCheck(game.voted, doctor.players);
         //update seer chek to return the updated player array
         //update to check player status
+
+        if (seer.length !== 0) {
+            seer.forEach(user => {
+                let {seer, target} = user;
+                messages.push({message: `${seer.player.userName} was a peeping tom during the night and saw that ${target.player.userName} is a ${target.role}.`, userName: seer.player.userName, role: seer.role})
+
+            });
+        }
+
+        game.voted = [];
+        game.endRound = addTimeFromNow(1);
+        game.players = doctor.players;
+        game.phase = 'day1';
+        await editGame(game);
+
+        emitGame2(room, messages);
     }
     catch (err) {
         throw(err)
     }
 };
+
 const calculateDay2 = async() => {
     try {
 
