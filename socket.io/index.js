@@ -5,8 +5,10 @@ const io = require('socket.io')(process.env.PORT2, {
 });
 
 const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/socket.io')
-const {getSingleGame, getAllGames} = require('../database/controller/games');
-const {getPlayer, assignRoles} = require('../helperFN/games');
+const {getSingleGame, getAllGames, updateGame} = require('../database/controller/games');
+const {getPlayer, assignRoles, tallyVotes} = require('../helperFN/games');
+const {wolfKills} = require('../helperFN/roles');
+const {addTimeFromNow} = require('../helperFN/addTime');
 
 
 const getSocketInRoom = async(room) => {
@@ -17,9 +19,28 @@ const getSocketInRoom = async(room) => {
 
 
 
-const calculateNight = async() => {
-    try {
+const calculateNight = async(room) => {
 
+    try {
+        const messages = [];
+
+        const game = getSingleGame(room);
+
+        const wolf = wolfKills(game.voted, game.players);
+
+        // if (wolf.deaths.length !== 0) {
+        //     wolf.deaths.forEach(death => {
+
+        //     })
+        // }
+
+        const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
+        //update doctorCheck third parameter...needs to accept an array
+        //check if doctor is alive before performing action
+
+        const seer = seerCheck(game.voted, doctor.players);
+        //update seer chek to return the updated player array
+        //update to check player status
     }
     catch (err) {
         throw(err)
@@ -42,32 +63,23 @@ const calculateDay3 = async() => {
     }
 };
 
-const emitGame2 = (socket, room , data, timer ) => {
-    const user = {
+const emitGame2 = async (room) => {
+    const game = await getSingleGame(room);
+
+    const gameMaster = {
         user_id : 'announcement',
         userName: 'announcement',
-    }
-    const user2 = {
-        user_id : 'dave',
-        userName: 'dave',
-    }
+    };
 
-    if (data.phase === 'night') {
-        io.to(room).emit('game-send',data)
-        data.phase = 'day1'
-        data.endRound = Date.now() + 1000 + timer
-        io.emit(`receive-message-${room}`, user, 'start night phase');
+    if (game.phase === 'night') {
+        io.to(room).emit('game-send', game);
         setTimeout(() => {
-            io.emit(`receive-message-${room}`, user2, 'im scared');
-        }, 1500);
-
-         test = setTimeout(() => {
-            emitGame(socket,room, data, timer)
-        }, timer + 1000);
-        return
+            calculateNight(room);
+        }, game.endRound - Date.now() + 1000);
     }
+
     if (data.phase === 'day1') {
-        io.to(room).emit('game-send',data)
+        io.to(room).emit('game-send',data);
         data.phase = 'day2'
         data.endRound = Date.now() + 1000 + timer
         io.emit(`receive-message-${room}`, user, 'start day1 phase');
@@ -279,14 +291,24 @@ io.on('connection', socket => {
 
     socket.on('start-game', async (user, room) => {
         try {
-            //room name = gameid
-            // const game = await getSingleGame(room);
+            const game = await getSingleGame(room);
 
             // socket.emit('placeholder', game);
-            const users = await getSocketInRoom(room);
+            if (game.owner === user.user_id) {
+                const users = await getSocketInRoom(room);
+                const players = await assignRoles(users);
+
+                game.players = players;
+                game.phase = 'night';
+                game.endRound = addTimeFromNow(2);
+
+                const updatedGame = await updateGame(room, game);
+
+                emitGame2(room);
+            }
         }
         catch(err) {
-
+            socket.emit('error', err);
         }
     })
 
