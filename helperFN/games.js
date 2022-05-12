@@ -3,7 +3,7 @@ const at = 'helperFN/games';
 module.exports = {
   assignRoles: async (array) => {
     try {
-      const roles = ['Wolf', 'Doctor', 'Seer', 'villager'];
+      const roles = ['wolf', 'doctor', 'seer', 'villager'];
       const numRoles = roles.length - 1;
       const numPlayers = array.length;
       let iterations = Math.floor(numPlayers * (4/7));

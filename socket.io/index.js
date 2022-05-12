@@ -387,18 +387,22 @@ io.on('connection', socket => {
     socket.on('start-game', async (user, room) => {
         try {
             const game = await getSingleGame(room);
-
-            // socket.emit('placeholder', game);
             if (game.owner === user.user_id) {
-                const users = await getSocketInRoom(room);
-                const players = await assignRoles(users);
+                const getUsers = await getSocketInRoom(room);
 
+                let users = [];
+                getUsers.forEach(user => {
+                    users.push({player: {
+                        userName: user.userName,
+                        user_id: user.user_id,  
+                        }
+                    });
+                });
+                const players = await assignRoles(test2);
                 game.players = players;
                 game.phase = 'night';
                 game.endRound = addTimeFromNow(2);
-
-                const updatedGame = await updateGame(room, game);
-
+                await editGame(game);
                 emitGame2(room);
             }
         }
