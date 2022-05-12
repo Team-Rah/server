@@ -24,12 +24,21 @@ const GameSchema = new mongoose.Schema({
     endRound: {
         type: Number,
     },
+    playerVoted: {
+        type: String
+    },
     voted: [
         {
             voter: {
                 type: String
             },
+            voterUserName: {
+                type: String
+            },
             candidate: {
+                type: String
+            },
+            candidateUserName: {
                 type: String
             }
         }

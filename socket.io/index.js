@@ -281,7 +281,7 @@ io.on('connection', socket => {
             const player = await getPlayer(game.players, user);
             const target = await getPlayer(game.players, candidate);
             if (game.endRound > Date.now() && player.status && target.status) {
-                game.voted.push({voter:user.user_id, candidate:candidate.user_id});
+                game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.user_id, candidateUserName:candidate.userName});
                 await editGame(game);
             }
         }
