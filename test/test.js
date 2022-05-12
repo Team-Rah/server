@@ -1,1 +1,1 @@
-const testRoles = require('./coverage/roles');
+const testRoles = require('./coverage/games.js');
