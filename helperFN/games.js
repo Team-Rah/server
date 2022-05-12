@@ -3,14 +3,14 @@ const at = 'helperFN/games';
 module.exports = {
   assignRoles: async (array) => {
     try {
-      const roles = ['Wolf', 'Doctor', 'Seer'];
+      const roles = ['Wolf', 'Doctor', 'Seer', 'villager'];
       const numRoles = roles.length - 1;
       const numPlayers = array.length;
       let iterations = Math.floor(numPlayers * (4/7));
       let count = 0;
       while (iterations > 0) {
         var position = Math.floor(Math.random() * numPlayers);
-        if (array[position]['role'] === 'villager')  {
+        if (!array[position]['role'])  {
           if (roles[count] === 'Seer'){
             array[position]['role'] = roles[count];
             array[position]['abilityCount'] = 1;
@@ -26,14 +26,14 @@ module.exports = {
           count = 0;
         }
       }
-      return array;
+      return array
     }
 
     catch (err) {
       throw error(500,'DID NOT ASSIGN ROLE',at);
     }
   },
-  changeStatus : async (user, array) => {
+  changeStatus : (user, array) => {
     for (var i = 0; i < array.length; i ++) {
       if (user.userName === array[i].player.userName) {
         // change status
@@ -81,14 +81,47 @@ module.exports = {
   }
   return {gameover:false, winner: null}
   },
-  getPlayer : async (array, user) => {
+  getPlayer : (array, user) => {
     for (var i = 0; i < array.length; i ++) {
       if (user.user_id === array[i].player.user_id) {
         return array[i];
       }
     }
     throw error(404,'User does not exist', at);
+  },
+  votesVsUsers : (votesArray, userArray) => {
+    const numVotes = votesArray.length;
+    let count = 0;
+    let VotedForIndex;
+    for (var i = 0; i < userArray.length; i++) {
+      if (votesArray[0].candidate === userArray[i].userName) {
+        VotedForIndex = i;
+      }
+      if (userArray[i].status === true) {
+        count ++;
+      }
+    }
+    if (count/2 === numVotes) {
+      return {players: userArray, deaths:[]};
+    }
+    else if (count/2 < numVotes){
+      userArray[VotedForIndex].status = false;
+      return {players: userArray, deaths:[userArray[VotedForIndex]]};
+    }
+    else {
+      return {players: userArray, deaths:[]};
+    }
   }
 }
+
+// vote array, user array
+// phase 4 return person with the highest vote
+// set user status to false
+// default to no if no input
+// status is true--
+// go through how many have voted
+//
+//
+//
 
 
