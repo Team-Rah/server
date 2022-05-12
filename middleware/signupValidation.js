@@ -5,7 +5,7 @@ var schema = new passwordValidator();
 var userNameCheck = new passwordValidator();
 
 schema
-.is().min(5, 'idiot')                                    // Minimum length 8
+.is().min(5)                                    // Minimum length 8
 .is().max(100)                                  // Maximum length 100
 .has().uppercase()                              // Must have uppercase letters
 .has().lowercase()                              // Must have lowercase letters
@@ -14,12 +14,12 @@ schema
 .has().symbols();                              // has symbols
 
 userNameCheck
-.is().min(5, 'idiot');
+.is().min(5);
 
 
 
 module.exports = {
-  signupValidation: async(req, res, next) => {
+  signupValidation: (req, res) => {
     try{
 
       if(!userNameCheck.validate(req.body.userName)) {
@@ -35,9 +35,9 @@ module.exports = {
       }
       next();
     }
-
     catch(err){
       throw error(400, '', at);
     }
   }
 };
+
