@@ -19,7 +19,7 @@ userNameCheck
 
 
 module.exports = {
-  signupValidation: (req, res) => {
+  signupValidation: (req, res, next) => {
     try{
 
       if(!userNameCheck.validate(req.body.userName)) {
@@ -33,10 +33,11 @@ module.exports = {
       if(!req.body.email.includes('@')) {
         throw error(400, 'EMAIL INVALID', at);
       }
+      
       next();
     }
     catch(err){
-      throw error(400, '', at);
+      throw err;
     }
   }
 };
