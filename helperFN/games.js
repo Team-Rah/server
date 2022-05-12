@@ -88,7 +88,40 @@ module.exports = {
       }
     }
     throw error(404,'User does not exist', at);
+  },
+  votesVsUsers : async (votesArray, userArray) => {
+    const numVotes = votesArray.length;
+    let count = 0;
+    let VotedForIndex;
+    for (var i = 0; i < userArray.length; i++) {
+      if (votesArray[1].candidate === userArray[i].player.user_id) {
+        VotedForIndex = i;
+      }
+      if (userArray[i].status === true) {
+        count ++;
+      }
+    }
+    if (count/2 === numVotes) {
+      return {players: userArray, deaths:[]};
+    }
+    else if (count/2 < numVotes){
+      userArray[VotedForIndex].status = false;
+      return {players: userArray, deaths:[userArray[VotedForIndex]]};
+    }
+    else {
+      return {players: userArray, deaths:[]};
+    }
   }
 }
+
+// vote array, user array
+// phase 4 return person with the highest vote
+// set user status to false
+// default to no if no input
+// status is true--
+// go through how many have voted
+//
+//
+//
 
 
