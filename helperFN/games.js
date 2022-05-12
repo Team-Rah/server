@@ -33,7 +33,7 @@ module.exports = {
       throw error(500,'DID NOT ASSIGN ROLE',at);
     }
   },
-  changeStatus : async (user, array) => {
+  changeStatus : (user, array) => {
     for (var i = 0; i < array.length; i ++) {
       if (user.userName === array[i].player.userName) {
         // change status
@@ -81,7 +81,7 @@ module.exports = {
   }
   return {gameover:false, winner: null}
   },
-  getPlayer : async (array, user) => {
+  getPlayer : (array, user) => {
     for (var i = 0; i < array.length; i ++) {
       if (user.user_id === array[i].player.user_id) {
         return array[i];
@@ -89,12 +89,12 @@ module.exports = {
     }
     throw error(404,'User does not exist', at);
   },
-  votesVsUsers : async (votesArray, userArray) => {
+  votesVsUsers : (votesArray, userArray) => {
     const numVotes = votesArray.length;
     let count = 0;
     let VotedForIndex;
     for (var i = 0; i < userArray.length; i++) {
-      if (votesArray[1].candidate === userArray[i].player.user_id) {
+      if (votesArray[0].candidate === userArray[i].userName) {
         VotedForIndex = i;
       }
       if (userArray[i].status === true) {
