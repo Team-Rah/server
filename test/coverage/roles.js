@@ -42,7 +42,7 @@ describe('Checks the validity of roles with night actions', () => {
         },
       ];
 
-      expect(wolfKills(sampleVoters, samplePlayers).death.length).toBe(2);
+      expect(wolfKills(sampleVoters, samplePlayers).deaths.length).toBe(2);
       expect(wolfKills(sampleVoters, samplePlayers).players.length).toBe(samplePlayers.length);
     });
 
@@ -133,7 +133,7 @@ describe('Checks the validity of roles with night actions', () => {
       let samplePlayersSaved = [
         {
           player: {user_id:'tony', userName: 'tony'},
-          status: false,
+          status: true,
           role: 'doctor',
         },
         {
@@ -160,7 +160,7 @@ describe('Checks the validity of roles with night actions', () => {
         },
         {
           voter: 'tony',
-          candidate: 'tony'
+          candidate: 'random'
         },
         {
           voter: 'david',
@@ -189,6 +189,11 @@ describe('Checks the validity of roles with night actions', () => {
           status: true,
           role: 'villager',
         },
+        {
+          player: {user_id: 'random', userName:'random'},
+          status: true,
+          role: 'villager',
+        },
       ];
 
       let wolfAttack = [
@@ -202,11 +207,11 @@ describe('Checks the validity of roles with night actions', () => {
             status: true,
             role: 'villager',
           },
-      ]
+      ];
 
-      expect(doctorCheck(sampleVotersSaved, samplePlayersSaved, wolfAttack).message.length).toBe(1);
-      expect(doctorCheck(sampleVotersSaved, samplePlayersSaved, wolfAttack).message[0]).toBe('No players were saved because all the doctors have been mauled.');
-      expect(doctorCheck(sampleVotersUnsaved, samplePlayersUnsaved, wolfAttack).message.length).toBe(2);
+      expect(doctorCheck(sampleVotersSaved, samplePlayersSaved, wolfAttack).deaths[0].player.user_id).toBe('josh');
+
+      expect(doctorCheck(sampleVotersUnsaved, samplePlayersUnsaved, wolfAttack).deaths.length).toBe(0);
     });
 
     test('Checks to see who the seer saw', () => {
@@ -240,6 +245,11 @@ describe('Checks the validity of roles with night actions', () => {
           status: true,
           role: 'wolf'
         },
+        {
+          player: {user_id: 'random', userName: 'random'},
+          status: true,
+          role: 'villager'
+        },
       ];
       let sampleVoters2 = [
         {
@@ -252,6 +262,10 @@ describe('Checks the validity of roles with night actions', () => {
         },
         {
           voter: 'david',
+          candidate: 'tony'
+        },
+        {
+          voter: 'random',
           candidate: 'tony'
         }
       ];
@@ -271,9 +285,15 @@ describe('Checks the validity of roles with night actions', () => {
           status: true,
           role: 'wolf'
         },
+        {
+          player: {user_id: 'random', userName: 'random'},
+          status: true,
+          role: 'seer'
+        },
       ];
 
-      expect(seerCheck(sampleVotersFalse, samplePlayersFalse).length).toBe(0);
-      expect(seerCheck(sampleVotersTrue, samplePlayersTrue).length).toBe(1);
+      expect(seerCheck(sampleVoters1, samplePlayers1)[0].target.player.user_id).toBe('random');
+      expect(seerCheck(sampleVoters2, samplePlayers2)[0].target.role).toBe('seer');
+      expect(seerCheck(sampleVoters2, samplePlayers2)[1].target.role).toBe('wolf');
     });
 });
