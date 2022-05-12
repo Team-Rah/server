@@ -92,7 +92,7 @@ module.exports = {
         });
       });
 
-      return {players: players, message: ['No players were saved because all the doctors have been mauled.']};
+      return {players, deaths: victimsSaved};
     }
 
     //grabs who the doctors chose to save
@@ -132,16 +132,12 @@ module.exports = {
       })
     })
 
-    console.log({players, deaths: victimsSaved});
-
     return {players, deaths: victimsSaved};
   },
 
   seerCheck: (voters, players) => {
     let currentSeer = [];
-    // let currentWolf = [];
     let seerCandidate = [];
-    // let caughtAWolf = [];
     let seerRole = [];
 
     //Grab the wolf and seer roles
@@ -149,125 +145,41 @@ module.exports = {
       if (player.role === "seer" && player.status) {
         currentSeer.push(player);
       }
-      // if (player.role === 'wolf') {
-      //   currentWolf.push(player);
-      // }
     });
 
-    if(currentSeer.length === 0) {
+    if (currentSeer.length === 0) {
       return [];
     }
 
     voters.forEach(voter => {
       currentSeer.forEach(seer => {
         if (voter.voter === seer.player.user_id) {
-          seerCandidate.push(voter.candidate);
+          seerCandidate.push(voter);
         }
       });
     });
 
     players.forEach(player => {
       seerCandidate.forEach(user => {
-        if (player.player.user_id === user) {
-          seerRole.push(player);
+        if (player.player.user_id === user.candidate) {
+          seerRole.push({seer: user, target: player});
+        }
       });
     });
 
-    return seerRole; //array of objects user_id & userName of seer, target: seerRole
+    currentSeer.forEach(seer => {
+      seerRole.forEach(saw => {
+        if (seer.player.user_id === saw.seer.voter) {
+          saw.seer = seer;
+        }
+      })
+    })
+
+    return seerRole;
   },
 
 };
 
-let sampleVotersSaved = [
-  {
-    voter: 'cihad',
-    candidate: 'josh'
-  },
-  {
-    voter: 'tony',
-    candidate: 'josh'
-  },
-  {
-    voter: 'david',
-    candidate: 'tony'
-  },
-];
 
-let samplePlayersSaved = [
-  {
-    player: {user_id:'tony', userName: 'tony'},
-    status: true,
-    role: 'doctor',
-  },
-  {
-    player: {user_id: 'cihad', userName: 'cihad'},
-    status: true,
-    role: 'wolf',
-  },
-  {
-    player: {user_id: 'david', userName:'david'},
-    status: true,
-    role: 'wolf',
-  },
-  {
-    player: {user_id: 'josh', userName:'josh'},
-    status: true,
-    role: 'villager',
-  },
-];
 
-let sampleVotersUnsaved = [
-  {
-    voter: 'cihad',
-    candidate: 'josh'
-  },
-  {
-    voter: 'tony',
-    candidate: 'tony'
-  },
-  {
-    voter: 'david',
-    candidate: 'tony'
-  }
-];
-
-let samplePlayersUnsaved = [
-  {
-    player: {user_id:'tony', userName: 'tony'},
-    status: true,
-    role: 'doctor',
-  },
-  {
-    player: {user_id: 'cihad', userName: 'cihad'},
-    status: true,
-    role: 'wolf',
-  },
-  {
-    player: {user_id: 'david', userName:'david'},
-    status: true,
-    role: 'wolf',
-  },
-  {
-    player: {user_id: 'josh', userName:'josh'},
-    status: true,
-    role: 'villager',
-  },
-];
-
-let wolfAttack = [
-    {
-      player: {user_id:'tony', userName: 'tony'},
-      status: true,
-      role: 'doctor',
-    },
-    {
-      player: {user_id:'josh', userName: 'josh'},
-      status: true,
-      role: 'villager',
-    },
-];
-
-// let test1 = module.exports.doctorCheck(sampleVotersSaved, samplePlayersSaved, wolfAttack);
-
-let test2 = module.exports.wolfKills(sampleVotersSaved, samplePlayersSaved);
 
