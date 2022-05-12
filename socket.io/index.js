@@ -9,7 +9,10 @@ const {getSingleGame, getAllGames, updateGame} = require('../database/controller
 const {getPlayer, assignRoles, tallyVotes} = require('../helperFN/games');
 const {wolfKills} = require('../helperFN/roles');
 const {addTimeFromNow} = require('../helperFN/addTime');
-
+const gameMaster = {
+    user_id : 'announcement',
+    userName: 'announcement',
+};
 
 const getSocketInRoom = async(room) => {
     const getAllConnectedSocket = await io.in(room).fetchSockets();
@@ -63,13 +66,10 @@ const calculateDay3 = async() => {
     }
 };
 
-const emitGame2 = async (room) => {
+const emitGame2 = async (room, messages) => {
     const game = await getSingleGame(room);
 
-    const gameMaster = {
-        user_id : 'announcement',
-        userName: 'announcement',
-    };
+
 
     if (game.phase === 'night') {
         io.to(room).emit('game-send', game);
@@ -79,20 +79,26 @@ const emitGame2 = async (room) => {
     }
 
     if (data.phase === 'day1') {
-        io.to(room).emit('game-send',data);
-        data.phase = 'day2'
-        data.endRound = Date.now() + 1000 + timer
-        io.emit(`receive-message-${room}`, user, 'start day1 phase');
-        setTimeout(() => {
-            io.emit(`receive-message-${room}`, user, 'player 1 killed by a wolf');
-        }, 500);
-        setTimeout(() => {
-            io.emit(`receive-message-${room}`, user, 'player 6 killed by a wolf');
-        }, 1500);
-        test = setTimeout(() => {
-            emitGame(socket,room, data, timer )
-        }, timer + 3000);
-        return
+        io.to(room).emit('game-send', game);
+        for (let i = 0; i < messages.length; i ++) {
+            if (messages[i].role === 'seer') {
+                let sockets = await io.in(room).fetchSockets();
+                let socket;
+                for (let i = 0; i < sockets.length; i ++) {
+                    if (sockets[i].userName === messages[i].userName) {
+                      socket = sockets[i]
+                      break;
+                    }
+                }
+                setTimeout(() => {
+                    io.to(socket.id).emit(`receive-message-${room}`, gameMaster, messages[i].message)
+                })
+            } else {
+                setTimeout(() => {
+                    io.emit(`receive-message-${room}`, gameMaster, messages[i].message);
+                }, 1000*i);
+            }
+        }
     }
     if (data.phase === 'day2') {
         io.to(room).emit('game-send',data)
