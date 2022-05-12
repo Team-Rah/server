@@ -37,7 +37,7 @@ const GameSchema = new mongoose.Schema({
     players: [
         {
             player: {
-                user_id : {type: Schema.Types.ObjectId, ref: "User"},
+                user_id : {type:String},
                 userName: {type: String}
             },
             status: {type: Boolean, default: true},
