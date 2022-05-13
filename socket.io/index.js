@@ -8,7 +8,7 @@ const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/so
 const {getSingleGame, getAllGames, editGame} = require('../database/controller/games');
 const {getPlayer, assignRoles, tallyVotes} = require('../helperFN/games');
 const {getSingleUserById} = require('../database/controller/users');
-const {wolfKills} = require('../helperFN/roles');
+const {wolfKills , doctorCheck} = require('../helperFN/roles');
 const {addTimeFromNow} = require('../helperFN/addTime');
 const gameMaster = {
     user_id : 'announcement',
@@ -40,8 +40,6 @@ const calculateNight = async(room) => {
         }
 
         const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
-        //update doctorCheck third parameter...needs to accept an array
-        //check if doctor is alive before performing action
 
         if (doctor.deaths.length !== 0) {
             doctor.deaths.forEach(death => {
@@ -51,8 +49,6 @@ const calculateNight = async(room) => {
         }
 
         const seer = seerCheck(game.voted, doctor.players);
-        //update seer chek to return the updated player array
-        //update to check player status
 
         if (seer.length !== 0) {
             seer.forEach(user => {
@@ -152,7 +148,6 @@ const emitGame2 = async (room, messages) => {
     if (game.phase === 'day1') {
         io.to(room).emit('game-send', game);
 
-
         for (let i = 0; i < messages.length; i ++) {
             if (messages[i].role === 'seer') {
                 let sockets = await io.in(room).fetchSockets();
@@ -181,7 +176,7 @@ const emitGame2 = async (room, messages) => {
             await game.editGame(game);
             setTimeout(() => {
                 gameEnd(room, gameOver.players);
-            }, game.endRound + 1000);
+            }, game.endRound - Date.now() + 1000);
         }
 
         game.phase = 'day2';
@@ -189,7 +184,7 @@ const emitGame2 = async (room, messages) => {
 
         setTimeout(() => {
             emitGame2(room);
-        }, game.endRound + 1000);
+        }, game.endRound - Date.now() + 1000);
     }
 
     if (game.phase === 'day2') {
@@ -201,11 +196,12 @@ const emitGame2 = async (room, messages) => {
 
         setTimeout(() => {
             calculateDay2(room);
-        }, game.endRound + 1000);
+        }, game.endRound - Date.now() + 1000);
 
     }
 
     if (game.phase === 'day3') {
+
         io.to(room).emit('game-send', game);
 
         for (let i = 0; i < messages.length; i ++) {
@@ -227,8 +223,6 @@ const emitGame2 = async (room, messages) => {
                 }, 1000*i);
             }
         }
-
-
 
         await editGame(game);
 
@@ -259,6 +253,7 @@ const emitGame2 = async (room, messages) => {
                 }, 1000*i);
             }
         }
+        let endRound = game.endRound;
         game.voted = [];
         game.endRound = addTimeFromNow(2);
         const gameOver = await checkIfGamesOver(game.players);
@@ -269,13 +264,13 @@ const emitGame2 = async (room, messages) => {
             await editGame(game);
             setTimeout(() => {
                 emitGame2(room, gameOver.players);
-            }, game.endRound + 1000);
+            },endRound - Date.now() + 1000);
         }
         game.phase = 'night';
         await editGame(game);
         setTimeout(() => {
             calculateNight(room)
-        }, game.endRound + 1000);
+        },endRound - Date.now() + 1000);
     }
 
     if (game.phase === 'end') {
@@ -284,7 +279,6 @@ const emitGame2 = async (room, messages) => {
             setTimeout(() => {
                 io.emit(`receive-message-${room}`, gameMaster, `congratulations ${messages[i].userName} you have won`);
             }, i*2000)
-
         }
     }
 }
