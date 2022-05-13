@@ -21,8 +21,6 @@ const getSocketInRoom = async(room) => {
     return users;
 };
 
-
-
 const calculateNight = async(room) => {
 
     try {
@@ -250,7 +248,7 @@ const emitGame2 = async (room, messages) => {
 }
 
 let test;
-const emitGame = (socket, room , data, timer ) => { az
+const emitGame = (socket, room , data, timer ) => {
     const user = {
         user_id : 'announcement',
         userName: 'announcement',
