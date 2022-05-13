@@ -15,4 +15,6 @@ router.put('/togglefriend', authenticateToken, toggleFriend);
 router.get('/friend', authenticateToken, getSingleUser);
 
 
+
 module.exports = router;
+
