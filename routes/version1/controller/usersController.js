@@ -1,4 +1,4 @@
-const {getAllUser, getSingleUser, editUser, deleteUser, createUser} = require('../../../database/controller/users');
+const {getAllUser, getSingleUser, editUser, deleteUser, createUser, getSingleUserById} = require('../../../database/controller/users');
 const { createJwtToken } = require('../../../middleware/jwt');
 const {comparePassword} = require('../../../middleware/passwordValidation')
 
@@ -54,5 +54,31 @@ module.exports = {
             next(err);
         }
 
+    },
+    toggleFriend: async(req, res, next) => {
+        const {user_id} = req.body;
+        try {
+            let user = await getSingleUserById(req.user.id);
+            let friends = [...user.friends];
+            if (!friends.includes(user_id)) {
+                friends.push(user_id);
+                user.friends = friends;
+                let savedUser = await editUser(user)
+                return res.json({
+                    message: "Successfully add",
+                    friends : savedUser.friends
+                    });
+            } else {
+                friends.splice(friends.indexOf(user_id),1);
+                user.friends = friends;
+                let savedUser = await editUser(user)
+                return res.json({
+                    message: "Successfully removed",
+                    friends : savedUser.friends
+                    });
+            }
+        } catch (err) {
+            next(err);
+        }
     },
 };

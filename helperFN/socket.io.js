@@ -3,7 +3,7 @@ module.exports = {
         const users = [];
         for(let i = 0; i< socket.length;i++) {
             if (!users.includes(socket[i].userName)) {
-                users.push(socket[i].userName);
+                users.push({userName:socket[i].userName, user_id: socket[i].user_id});
             }
         }
         return users;
