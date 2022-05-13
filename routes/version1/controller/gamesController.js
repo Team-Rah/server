@@ -34,8 +34,8 @@ module.exports = {
     },
     getSingleGame: async(req, res, next) => {
         try {
-            const {id} = req.body;
-            const game = await getSingleGame(id)
+            const {id} = req.query; //updated from req.body
+            const game = await getSingleGame(id);
             if (!id) {
                throw error(400, 'MISSING GAME ID', 'routes/version1/controller/gameController');
             }
