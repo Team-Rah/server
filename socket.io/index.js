@@ -457,8 +457,8 @@ io.on('connection', socket => {
             const rooms = Array.from(socket.rooms);
             for (let i = 1; i < rooms.length;i++) {
                 const users = await getSocketInRoom(rooms[i]);
-                users.splice(users.indexOf(socket.userName),1);
-                io.emit(`receive-${rooms[i]}`, users);
+                const editUsers = users.filter(user => user.userName !== socket.user.userName);
+                io.emit(`receive-${rooms[i]}`, editUsers);
             }
         }
         catch (err) {
