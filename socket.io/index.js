@@ -5,7 +5,7 @@ const io = require('socket.io')(process.env.PORT2, {
 });
 
 const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/socket.io')
-const {getSingleGame, getAllGames, updateGame} = require('../database/controller/games');
+const {getSingleGame, getAllGames, editGame} = require('../database/controller/games');
 const {getPlayer, assignRoles, tallyVotes} = require('../helperFN/games');
 const {getSingleUserById} = require('../database/controller/users');
 const {wolfKills} = require('../helperFN/roles');
