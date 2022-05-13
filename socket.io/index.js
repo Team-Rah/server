@@ -21,8 +21,6 @@ const getSocketInRoom = async(room) => {
     return users;
 };
 
-
-
 const calculateNight = async(room) => {
 
     try {
