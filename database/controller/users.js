@@ -14,7 +14,7 @@ module.exports = {
     },
     getSingleUser: async(email) => {
         try {
-            const user = await User.findOne({email});
+            const user = await User.findOne({email}).populate("friends").lean();
             if (!user) {
                 throw error(404,'USER NOT FOUND', at);
             }
@@ -24,9 +24,9 @@ module.exports = {
             throw err;
         }
     },
-    getSingleUserById: async(id) => {
+    getSingleUserById: async(id,boolean) => {
         try {
-            const user = await User.findById(id);
+            const user = await User.findById(id).populate(boolean? "friends" : '').lean();
             if (!user) {
                 throw error(404,'USER NOT FOUND', at);
             }
@@ -36,10 +36,11 @@ module.exports = {
             throw err;
         }
     },
-    editUser: async(id, user) => {
+    editUser: async(user) => {
         try {
             // takes key value pairs as user to be updated
-          const dataUpdated = await User.findByIdAndUpdate(id, user);
+          const editUser = await User.findByIdAndUpdate(user._id, user, {new: true}).populate("friends");
+          return editUser
         }
         catch (err) {
             throw err;

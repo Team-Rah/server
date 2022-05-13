@@ -24,8 +24,8 @@ const UserSchema = new mongoose.Schema({
     },
     friends: [
         {
-            type: Schema.Types.ObjectId,
-            ref: "User",
+            type: String,
+            ref: 'User'
         }
     ],
     validated: {

@@ -30,23 +30,25 @@ const GameSchema = new mongoose.Schema({
     voted: [
         {
             voter: {
-                type: String
+                type: String,
+                ref: 'User'
             },
             voterUserName: {
                 type: String
             },
             candidate: {
-                type: String
+                type: String,
+                ref: 'User'
             },
             candidateUserName: {
-                type: String
+                type: String,
             }
         }
     ],
     players: [
         {
             player: {
-                user_id : {type:String},
+                user_id : {type:String,ref: 'User'},
                 userName: {type: String}
             },
             status: {type: Boolean, default: true},
