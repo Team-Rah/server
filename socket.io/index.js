@@ -228,7 +228,7 @@ const emitGame2 = async (room, messages) => {
             }
         }
 
-        game.endRound = addTimeFromNow(2);
+
 
         await editGame(game);
 
@@ -240,17 +240,57 @@ const emitGame2 = async (room, messages) => {
 
     if (game.phase === 'day4') {
         io.to(room).emit('game-send', game)
+        for (let i = 0; i < messages.length; i ++) {
+            if (messages[i].role === 'seer') {
+                let sockets = await io.in(room).fetchSockets();
+                let socket;
+                for (let i = 0; i < sockets.length; i ++) {
+                    if (sockets[i].userName === messages[i].userName) {
+                      socket = sockets[i]
+                      break;
+                    }
+                }
+                setTimeout(() => {
+                    io.to(socket.id).emit(`receive-message-${room}`, gameMaster, messages[i].message)
+                })
+            } else {
+                setTimeout(() => {
+                    io.emit(`receive-message-${room}`, gameMaster, messages[i].message);
+                }, 1000*i);
+            }
+        }
+        game.voted = [];
+        game.endRound = addTimeFromNow(2);
+        const gameOver = await checkIfGamesOver(game.players);
 
+        if (gameOver.gameOver) {
+            game.winner = gameOver.winner;
+            game.phase = 'end';
+            await editGame(game);
+            setTimeout(() => {
+                emitGame2(room, gameOver.players);
+            }, game.endRound + 1000);
+        }
+        game.phase = 'night';
+        await editGame(game);
+        setTimeout(() => {
+            calculateNight(room)
+        }, game.endRound + 1000);
     }
 
     if (game.phase === 'end') {
         io.to(room).emit('game-send', game)
+        for (let i = 0; i < messages.length; i++) {
+            setTimeout(() => {
+                io.emit(`receive-message-${room}`, gameMaster, `congratulations ${messages[i].userName} you have won`);
+            }, i*2000)
 
+        }
     }
 }
 
 let test;
-const emitGame = (socket, room , data, timer ) => { az
+const emitGame = (socket, room , data, timer ) => {
     const user = {
         user_id : 'announcement',
         userName: 'announcement',
@@ -394,7 +434,7 @@ io.on('connection', socket => {
                 getUsers.forEach(user => {
                     users.push({player: {
                         userName: user.userName,
-                        user_id: user.user_id,  
+                        user_id: user.user_id,
                         }
                     });
                 });
