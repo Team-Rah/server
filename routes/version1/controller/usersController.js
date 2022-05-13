@@ -15,8 +15,18 @@ module.exports = {
             next(err);
         }
     },
-    getSingleUser: async(req, res) => {
-        
+    getSingleUser: async(req, res, next) => {
+        try {
+            const user = await getSingleUserById(req.user.id)
+            let jwtToken = await createJwtToken(user);
+            res.json({
+                message: "Successfull",
+                user
+            });
+        }
+        catch(err) {
+            next(err);
+        }
     },
     editUser: async(req, res) => {
 
