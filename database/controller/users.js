@@ -38,7 +38,6 @@ module.exports = {
     },
     editUser: async(user) => {
         try {
-            // takes key value pairs as user to be updated
           const editUser = await User.findByIdAndUpdate(user._id, user, {new: true}).populate("friends");
           return editUser
         }
