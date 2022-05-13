@@ -12,7 +12,7 @@ router.post('/login', login);
 router.put('/togglefriend', authenticateToken, toggleFriend);
 
 //might need
-router.get('/:id', getSingleUser);
+router.get('/friend', authenticateToken, getSingleUser);
 
 
 module.exports = router;

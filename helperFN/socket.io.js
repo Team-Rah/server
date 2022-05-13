@@ -1,18 +1,18 @@
 module.exports = {
     getUsersFromSocket: (socket) => {
+        const userNames = [];
         const users = [];
         for(let i = 0; i< socket.length;i++) {
-            if (!users.includes(socket[i].userName)) {
-                users.push({userName:socket[i].userName, user_id: socket[i].user_id});
+            if (!userNames.includes(socket[i].user.userName)) {
+                users.push(socket[i].user);
+                userNames.push(socket[i].user.userName);
+                // users.push({userName:socket[i].userName, user_id: socket[i].user_id});
             }
         }
         return users;
     },
     assignUserName: (socket , user) => {
-        socket.userName = user.userName;
-        if (user.user_id) {
-            socket.user_id = user.user_id
-        }
+        socket.user= user;
     },
     assignRoom: (socket, room) => {
         socket.join(room);
