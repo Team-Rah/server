@@ -412,9 +412,9 @@ io.on('connection', socket => {
         console.log('hit vote')
         try {
             const game = await getSingleGame(room);
-            console.log('game phase in vote', gane.phase)
+            console.log('game phase in vote', game.phase)
             const voteNumber = game.players.filter(obj => obj.status && obj.role !== 'villager')
-            const wolfVoteNumber = game.players.filter(obj => obj.status && obj.role === 'wolf')
+            const wolfVoteNumber = game.players.filter(obj => (obj.status && obj.role === 'wolf') || (obj.status && obj.role === 'doctor'))
             const aliveVote = game.players.filter(obj => obj.status )
             const player = await getPlayer(game.players, user);
             const target = await getPlayer(game.players, {user_id:candidate.player.user_id, userName: candidate.player.userName});
@@ -431,7 +431,7 @@ io.on('connection', socket => {
             // if (voteNumber.length - 1 === game.voted.length) {
                 console.log('hit vote limit')
                 if (game.phase === 'night') {
-                    if (wolfVoteNumber === game.voted.length) {
+                    if (wolfVoteNumber-1 === game.voted.length) {
                         game.phase = 'nightcalc'
                         await editGame(game);
                         emitGame2(room, game)
