@@ -154,7 +154,7 @@ const emitGame2 = async (room, gamemessages) => {
         }
 
         const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
-
+        console.log('doctor', doctor.players)
         if (doctor.deaths.length !== 0) {
             doctor.deaths.forEach(death => {
                 let {player, role, status} = death;
