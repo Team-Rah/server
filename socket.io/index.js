@@ -405,7 +405,9 @@ io.on('connection', socket => {
     });
 
     socket.on('player-vote', async(user, candidate, room) => {
-        console.log('vote got hit', user, candidate, room)
+        console.log('vote got hit', user, room)
+        console.log('voter candi', candidate)
+        console.log('destructor ',{user_id:candidate.player.user_id, userName: candidate.player.userName})
         
         try {
             const game = await getSingleGame(room);
