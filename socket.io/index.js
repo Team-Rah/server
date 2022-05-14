@@ -276,8 +276,10 @@ io.on('connection', socket => {
                     }
 
                 }
-
+                console.log('phase' , game.phase)
                 if (game.phase === 'day2') {
+                    console.log('aliveVote.length' ,aliveVote.length)
+                    console.log('game.voted.length' ,game.voted.length)
                     if (aliveVote.length === game.voted.length) {
                         // if ( 1 === game.voted.length) {
                         console.log('hit day 2 vote phase')
