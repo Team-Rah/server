@@ -58,8 +58,7 @@ const calculateNight = async(room) => {
         }
 
         game.voted = [];
-        // game.endRound = addTimeFromNow(1);
-        game.endRound =  30000;
+        game.endRound = addTimeFromNow(1);
         game.players = doctor.players;
         game.phase = 'day1';
         await editGame(game);
@@ -86,8 +85,7 @@ const calculateDay2 = async(room) => {
 
         game.playerVoted = user.userName;
 
-        // game.endRound = addTimeFromNow(1);
-        game.endRound = 25000
+        game.endRound = addTimeFromNow(1);
 
         game.voted = [];
 
@@ -126,8 +124,7 @@ const calculateDay3 = async(room) => {
 
         game.phase = 'day4';
 
-        // game.endRound = addTimeFromNow(1);
-        game.endRound = 25000
+        game.endRound = addTimeFromNow(1);
 
         await editGame(game);
 
@@ -143,9 +140,12 @@ const emitGame2 = async (room, messages) => {
 
     if (game.phase === 'night') {
         io.to(room).emit('game-send', game);
+        // setTimeout(() => {
+        //     calculateNight(room);
+        // }, game.endRound - Date.now() + 1000);
         setTimeout(() => {
             calculateNight(room);
-        }, game.endRound - Date.now() + 1000);
+        }, 20000);
     }
 
     if (game.phase === 'day1') {
@@ -189,17 +189,23 @@ const emitGame2 = async (room, messages) => {
               }
 
             await editGame(game);
+            // setTimeout(() => {
+            //     emitGame2(room, gameOver.Winningplayers);
+            // }, game.endRound - Date.now() + 1000);
             setTimeout(() => {
                 emitGame2(room, gameOver.Winningplayers);
-            }, game.endRound - Date.now() + 1000);
+            }, 20000);
         }
 
         game.phase = 'day2';
         await editGame(game);
 
+        // setTimeout(() => {
+        //     emitGame2(room);
+        // }, game.endRound - Date.now() + 1000);
         setTimeout(() => {
             emitGame2(room);
-        }, game.endRound - Date.now() + 1000);
+        }, 20000);
     }
 
     if (game.phase === 'day2') {
@@ -227,9 +233,12 @@ const emitGame2 = async (room, messages) => {
 
         await editGame(game);
 
+        // setTimeout(() => {
+        //     calculateDay3(room);
+        // }, game.endRound + 1000);
         setTimeout(() => {
             calculateDay3(room);
-        }, game.endRound + 1000);
+        }, 20000);
 
     }
 
