@@ -7,9 +7,10 @@ const io = require('socket.io')(process.env.PORT2, {
 const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/socket.io')
 const {getSingleGame, getAllGames, editGame} = require('../database/controller/games');
 const {getPlayer, assignRoles, tallyVotes} = require('../helperFN/games');
-const {getSingleUserById} = require('../database/controller/users');
+const {getSingleUserById, addToPlayerScore} = require('../database/controller/users');
 const {wolfKills , doctorCheck} = require('../helperFN/roles');
 const {addTimeFromNow} = require('../helperFN/addTime');
+const User = require('../database/models/User.js')
 const gameMaster = {
     user_id : 'announcement',
     userName: 'announcement',
@@ -169,9 +170,23 @@ const emitGame2 = async (room, messages) => {
         if (gameOver.gameOver) {
             game.winner = gameOver.winner;
             game.phase = 'end';
-            await game.editGame(game);
+            for (let i = 0; i < gameOver.Winningplayers.length; i++){
+                let findUser = await User.findById(gameOver.Winningplayers[i].user_id);
+                findUser.score += 30;
+                await findUser.save();
+              }
+              for (let x = 0; x < gameOver.losingPlayers.length; x++) {
+                  let findUser = await User.findById(gameOver.losingPlayers[x].user_id);
+                  if (findUser.score >= 25) {
+                      findUser.score -= 25;
+                      await findUser.save();
+                  }
+
+              }
+
+            await editGame(game);
             setTimeout(() => {
-                gameEnd(room, gameOver.players);
+                emitGame2(room, gameOver.Winningplayers);
             }, game.endRound - Date.now() + 1000);
         }
 
@@ -229,9 +244,22 @@ const emitGame2 = async (room, messages) => {
         if (gameOver.gameOver) {
             game.winner = gameOver.winner;
             game.phase = 'end';
+            for (let i = 0; i < gameOver.Winningplayers.length; i++){
+              let findUser = await User.findById(gameOver.Winningplayers[i].user_id);
+              findUser.score += 30;
+              await findUser.save();
+            }
+            for (let x = 0; x < gameOver.losingPlayers.length; x++) {
+                let findUser = await User.findById(gameOver.losingPlayers[x].user_id);
+                if (findUser.score >= 25) {
+                    findUser.score -= 25;
+                    await findUser.save();
+                }
+
+            }
             await editGame(game);
             setTimeout(() => {
-                emitGame2(room, gameOver.players);
+                emitGame2(room, gameOver.Winningplayers);
             },endRound - Date.now() + 1000);
         }
         game.phase = 'night';
@@ -248,6 +276,7 @@ const emitGame2 = async (room, messages) => {
                 io.emit(`receive-message-${room}`, gameMaster, `congratulations ${messages[i].userName} you have won`);
             }, i * 2000)
         }
+
     }
 }
 
