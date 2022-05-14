@@ -143,12 +143,12 @@ const emitGame2 = async (room, messages) => {
 
     if (game.phase === 'night') {
         io.to(room).emit('game-send', game);
-        // setTimeout(() => {
-        //     calculateNight(room);
-        // }, game.endRound - Date.now() + 1000);
         setTimeout(() => {
             calculateNight(room);
-        }, 20000);
+        }, game.endRound - Date.now() + 1000);
+        // setTimeout(() => {
+        //     calculateNight(room);
+        // }, 20000);
     }
 
     if (game.phase === 'day1') {
@@ -192,23 +192,23 @@ const emitGame2 = async (room, messages) => {
               }
 
             await editGame(game);
-            // setTimeout(() => {
-            //     emitGame2(room, gameOver.Winningplayers);
-            // }, game.endRound - Date.now() + 1000);
             setTimeout(() => {
                 emitGame2(room, gameOver.Winningplayers);
-            }, 20000);
+            }, game.endRound - Date.now() + 1000);
+            // setTimeout(() => {
+            //     emitGame2(room, gameOver.Winningplayers);
+            // }, 20000);
         }
 
         game.phase = 'day2';
         await editGame(game);
 
-        // setTimeout(() => {
-        //     emitGame2(room);
-        // }, game.endRound - Date.now() + 1000);
         setTimeout(() => {
             emitGame2(room);
-        }, 20000);
+        }, game.endRound - Date.now() + 1000);
+        // setTimeout(() => {
+        //     emitGame2(room);
+        // }, 20000);
     }
 
     if (game.phase === 'day2') {
@@ -218,12 +218,12 @@ const emitGame2 = async (room, messages) => {
 
         await editGame(game);
 
-        // setTimeout(() => {
-        //     calculateDay2(room);
-        // }, game.endRound - Date.now() + 1000);
         setTimeout(() => {
             calculateDay2(room);
-        }, 20000);
+        }, game.endRound - Date.now() + 1000);
+        // setTimeout(() => {
+        //     calculateDay2(room);
+        // }, 20000);
 
     }
 
@@ -239,12 +239,12 @@ const emitGame2 = async (room, messages) => {
 
         await editGame(game);
 
-        // setTimeout(() => {
-        //     calculateDay3(room);
-        // }, game.endRound + 1000);
         setTimeout(() => {
             calculateDay3(room);
-        }, 20000);
+        }, game.endRound + 1000);
+        // setTimeout(() => {
+        //     calculateDay3(room);
+        // }, 20000);
 
     }
 
@@ -435,6 +435,7 @@ io.on('connection', socket => {
             if (game.endRound > Date.now() && player.status && target.status) {
                 console.log('hit on saved database')
                 game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
+                console.log('after vote push', game.phase, game.voted)
                 await editGame(game);
             }
         }
@@ -465,8 +466,8 @@ io.on('connection', socket => {
                 game.players = players;
                 game.phase = 'night';
                 game.started = true;
-                // game.endRound = addTimeFromNow(1);
-                game.endRound = 30000;
+                game.endRound = addTimeFromNow(1);
+                // game.endRound = 30000;
                 await editGame(game);
                 emitGame2(room);
             }
