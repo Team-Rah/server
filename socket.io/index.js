@@ -202,7 +202,8 @@ const emitGame2 = async (room, game, gamemessages) => {
         }else {
             game.phase = 'day4';
             messages.push({message: 'No One was Accused this day!! You are lucky', userName: "announcement", user_id: "announcement", role: "gameMaster"});
-            // await editGame(game);
+            game.voted = [];
+            await editGame(game);
             emitGame2(room, game, messages);
         }
     }
@@ -321,9 +322,9 @@ const emitGame2 = async (room, game, gamemessages) => {
         }
         // let newEndRound = game.endRound
         // game.endRound = Date.now() + 30000;
-        game.voted = [];
+        // game.voted = [];
         // game.phase = 'day3calc'
-        await editGame(game);
+        // await editGame(game);
         // setTimeout(async () => {
         //     await emitGame2(room);
         // }, newEndRound - Date.now());
@@ -333,7 +334,7 @@ const emitGame2 = async (room, game, gamemessages) => {
         io.to(room).emit('game-send', game)
         if (gamemessages) {
             for (let i = 0; i < gamemessages.length; i ++) {
-                setTimeout(() => {
+                setTimeout(() => {``
                     io.emit(`receive-message-${room}`, gameMaster, gamemessages[i].message);
                 }, 1000 * i);
             }
