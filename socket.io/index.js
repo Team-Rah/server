@@ -67,21 +67,22 @@ const day3calc = (room, game) => {
         let messages = [];
         let {players, deaths} = votesVsUsers(game.voted, game.players);
         if (players) {
+            console.log('game.voted', game.voted)
             console.log('day3calc death', deaths)
             game.voted.forEach(vote => {
                 messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
             });
 
-        foundGame.players = players;
+            game.players = players;
         }
         if (deaths) {
-            messages.push({message: `${foundGame.playerVoted} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            messages.push({message: `${game.playerVoted} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
         }else {
             messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
         }
         game.voted = [];
         game.phase = 'day4';
-        emitGame2(room, foundGame , messages)
+        emitGame2(room, game , messages)
     // })
 
 }
@@ -114,6 +115,7 @@ const emitGame2 = async (room, game, gamemessages) => {
         console.log('accuse voted calc', votes)
         if (votes) {
             let user = await getSingleUserById(votes.userName);
+            console.log('aucser user' ,user)
             messages.push({message: `${user.userName} was accused of first degree murder and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
             game.playerVoted = user.userName;
             game.phase = 'day3';
