@@ -45,6 +45,26 @@ const GameSchema = new mongoose.Schema({
             }
         }
     ],
+    guiltyVoted: [
+        {
+            voter: {
+                type: String,
+                ref: 'User'
+            },
+            voterUserName: {
+                type: String
+            },
+            candidate: {
+                type: String,
+                ref: 'User'
+            },
+            candidateUserName: {
+                type: String,
+            }
+        }
+    ],
+
+
     players: [
         {
             player: {

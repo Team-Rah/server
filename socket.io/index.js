@@ -112,7 +112,7 @@ const calculateDay3 = async(room) => {
 
         const messages = [];
         console.log('voted aray to be put to death', game.voted)
-        const {players, deaths} = await votesVsUsers(game.voted, game.players);
+        const {players, deaths} = await votesVsUsers(game.guiltyVoted, game.players);
 
         game.voted.forEach(vote => {
             messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
@@ -229,9 +229,7 @@ const emitGame2 = async (room, messages) => {
         }
         let newEndRound = game.endRound
         game.endRound = Date.now() + 30000;
-        console.log('vote array should be full', game.voted)
         game.voted = [];
-        console.log('vote array should be empty', game.voted)
         await editGame(game);
         setTimeout(() => {
             calculateDay3(room);
@@ -247,6 +245,7 @@ const emitGame2 = async (room, messages) => {
         }
         let endRound = game.endRound;
         game.voted = [];
+        game.guiltyVoted = [];
         // game.endRound = addTimeFromNow(2);
         game.endRound = Date.now() + 30000;
         const gameOver = await checkIfGamesOver(game.players);
@@ -425,7 +424,11 @@ io.on('connection', socket => {
             const target = await getPlayer(game.players, {user_id:candidate.player.user_id, userName: candidate.player.userName});
             if (game.endRound > Date.now() && player.status && target.status) {
                 console.log('hit on saved database')
-                game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
+                if (game.phase === 'day3') {
+                    game.guiltyVoted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
+                } else {
+                    game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
+                }
                 console.log('after vote push', game.phase, game.voted)
                 await editGame(game);
             }
