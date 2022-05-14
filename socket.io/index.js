@@ -195,7 +195,7 @@ const emitGame2 = async (room, game, gamemessages) => {
     }
 
     if (game.phase === 'end') {
-        console.log('gameover', gamemessages)
+        console.log('gameover end day', gamemessages)
         io.to(room).emit('game-send', gamemessages)
         for (let i = 0; i < gamemessages.length; i++) {
             setTimeout(() => {
