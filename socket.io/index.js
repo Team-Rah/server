@@ -190,7 +190,7 @@ const day3calc = (room, game) => {
         let messages = [];
         let {players, deaths} = votesVsUsers(game.voted, game.players);
         if (players) {
-            console.log('day3calc death', death)
+            console.log('day3calc death', deaths)
             foundGame.voted.forEach(vote => {
                 messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
             });
@@ -399,7 +399,7 @@ const emitGame2 = async (room, game, gamemessages) => {
         // }, 30000);
         setTimeout( () => {
             day3calc(room, game);
-        }, 30000);
+        }, 10000);
 
     }
 
