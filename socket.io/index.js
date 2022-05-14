@@ -86,7 +86,8 @@ const calculateDay2 = async(room) => {
 
         game.playerVoted = user.userName;
 
-        game.endRound = addTimeFromNow(1);
+        // game.endRound = addTimeFromNow(1);
+        game.endRound = Date.now() + 25000
 
         game.voted = [];
 
@@ -125,7 +126,8 @@ const calculateDay3 = async(room) => {
 
         game.phase = 'day4';
 
-        game.endRound = addTimeFromNow(1);
+        // game.endRound = addTimeFromNow(1);
+        game.endRound = Date.now() + 25000
 
         await editGame(game);
 
