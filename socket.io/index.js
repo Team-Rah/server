@@ -180,51 +180,75 @@ const nightcal = async(room, game) => {
         game.players = doctor.players;
         game.phase = 'day1';
         await editGame(game);
-        // console.log('night messages', messages)
         emitGame2(room, game, messages);
- 
+}
+
+const day3calc = (room, game) => {
+    let messages = [];
+    let {players, deaths} = votesVsUsers(game.guiltyVoted, game.players);
+    if (players) {
+        game.guiltyVoted.forEach(vote => {
+            messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+        });
+        if (deaths) {
+            messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+        }
+        game.players = players;
+    }
+    messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+
+    game.voted = [];
+    game.guiltyVoted = []
+    game.phase = 'day4';
+
+    // game.endRound = addTimeFromNow(1);
+    // game.endRound = Date.now() + 30000;
+
+    editGame(game).then(game => emitGame2(room, game, messages))
+
+    // emitGame2(room, game, messages);
 }
 
 const emitGame2 = async (room, game, gamemessages) => {
     // const game = await getSingleGame(room);
     let messages = [];
 
-    if (game.phase === 'nightcalc') {
-        const wolf = await wolfKills(game.voted, game.players);
-        if (wolf.deaths.length !== 0) {
-            wolf.deaths.forEach(death => {
-                let {player, role, status} = death;
-                messages.push({message: `${player.userName} was gravely injured during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
-            });
-        }
+    // if (game.phase === 'nightcalc') {
+    //     const wolf = await wolfKills(game.voted, game.players);
+    //     if (wolf.deaths.length !== 0) {
+    //         wolf.deaths.forEach(death => {
+    //             let {player, role, status} = death;
+    //             messages.push({message: `${player.userName} was gravely injured during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
+    //         });
+    //     }
 
-        const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
-        console.log('doctor', doctor.players)
-        if (doctor.deaths.length !== 0) {
-            doctor.deaths.forEach(death => {
-                let {player, role, status} = death;
-                messages.push({message: `${player.userName} was saved by a stranger with tremendous healing abilities during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
-            });
-        }
+    //     const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
+    //     console.log('doctor', doctor.players)
+    //     if (doctor.deaths.length !== 0) {
+    //         doctor.deaths.forEach(death => {
+    //             let {player, role, status} = death;
+    //             messages.push({message: `${player.userName} was saved by a stranger with tremendous healing abilities during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
+    //         });
+    //     }
 
-        // const seer = seerCheck(game.voted, doctor.players);
+    //     // const seer = seerCheck(game.voted, doctor.players);
 
-        // if (seer.length !== 0) {
-        //     seer.forEach(user => {
-        //         let {seer, target} = user;
-        //         messages.push({message: `${seer.player.userName} was a peeping tom during the night and saw that ${target.player.userName} is a ${target.role}.`, userName: seer.player.userName, role: seer.role})
+    //     // if (seer.length !== 0) {
+    //     //     seer.forEach(user => {
+    //     //         let {seer, target} = user;
+    //     //         messages.push({message: `${seer.player.userName} was a peeping tom during the night and saw that ${target.player.userName} is a ${target.role}.`, userName: seer.player.userName, role: seer.role})
 
-        //     });
-        // }
-        game.voted = [];
-        // game.endRound = addTimeFromNow(1);
-        // game.endRound = Date.now() + 30000;
-        game.players = doctor.players;
-        game.phase = 'day1';
-        await editGame(game);
-        // console.log('night messages', messages)
-        emitGame2(room, game, messages);
-    }
+    //     //     });
+    //     // }
+    //     game.voted = [];
+    //     // game.endRound = addTimeFromNow(1);
+    //     // game.endRound = Date.now() + 30000;
+    //     game.players = doctor.players;
+    //     game.phase = 'day1';
+    //     await editGame(game);
+    //     // console.log('night messages', messages)
+    //     emitGame2(room, game, messages);
+    // }
 
     if (game.phase === 'day2calc') {
         let votes = await tallyVotes(game.voted);
@@ -247,31 +271,31 @@ const emitGame2 = async (room, game, gamemessages) => {
         }
     }
 
-    if (game.phase === 'day3calc') {
-        // console.log('voted aray to be put to death', game.voted)
-        let {players, deaths} = await votesVsUsers(game.guiltyVoted, game.players);
-        if (players) {
-            game.guiltyVoted.forEach(vote => {
-                messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-            });
-            if (deaths) {
-                messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-            }
-            game.players = players;
-        }
-        messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+    // if (game.phase === 'day3calc') {
+    //     // console.log('voted aray to be put to death', game.voted)
+    //     let {players, deaths} = await votesVsUsers(game.guiltyVoted, game.players);
+    //     if (players) {
+    //         game.guiltyVoted.forEach(vote => {
+    //             messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+    //         });
+    //         if (deaths) {
+    //             messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+    //         }
+    //         game.players = players;
+    //     }
+    //     messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
 
-        game.voted = [];
-        game.guiltyVoted = []
-        game.phase = 'day4';
+    //     game.voted = [];
+    //     game.guiltyVoted = []
+    //     game.phase = 'day4';
 
-        // game.endRound = addTimeFromNow(1);
-        // game.endRound = Date.now() + 30000;
+    //     // game.endRound = addTimeFromNow(1);
+    //     // game.endRound = Date.now() + 30000;
 
-        await editGame(game);
+    //     await editGame(game);
 
-        emitGame2(room, game, messages);
-    }
+    //     emitGame2(room, game, messages);
+    // }
 
     // if (game.phase === 'night') {
     //     io.to(room).emit('game-send', game);
@@ -362,11 +386,15 @@ const emitGame2 = async (room, game, gamemessages) => {
         // let newEndRound = game.endRound
         // game.endRound = Date.now() + 30000;
         // game.voted = [];
-        game.phase = 'day3calc'
-        await editGame(game);
+        // game.phase = 'day3calc'
+        // await editGame(game);
+        // setTimeout( () => {
+            // emitGame2(room);
+        // }, 30000);
         setTimeout( () => {
-            emitGame2(room);
+            day3calc(room. game);
         }, 30000);
+
     }
 
     if (game.phase === 'day4') {
