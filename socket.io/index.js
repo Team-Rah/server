@@ -140,6 +140,12 @@ const getSocketInRoom = async(room) => {
 //     }
 // };
 
+    const day2 = (game, messages) => {
+        io.to(room).emit('game-send',game);
+    }
+        
+
+
 const emitGame2 = async (room, game, gamemessages) => {
     // const game = await getSingleGame(room);
     let messages = [];
@@ -288,22 +294,21 @@ const emitGame2 = async (room, game, gamemessages) => {
         // await editGame(game);
 
         setTimeout(() => {
-            console.log('im time out')
-            // emitGame2(room, game);
-        }, 10000);
+            day2(room, game);
+        }, 30000);
     }
 
-    if (game.phase === 'day2') {
-        io.to(room).emit('game-send',game);
+    // if (game.phase === 'day2') {
+    //     io.to(room).emit('game-send',game);
 
-        // game.endRound = addTimeFromNow(1);
-        // game.phase = 'day2calc'
-        // await editGame(game);
+    //     // game.endRound = addTimeFromNow(1);
+    //     // game.phase = 'day2calc'
+    //     // await editGame(game);
 
-        // setTimeout(async () => {
-        //     await emitGame2(room);
-        // }, game.endRound - Date.now());
-    }
+    //     // setTimeout(async () => {
+    //     //     await emitGame2(room);
+    //     // }, game.endRound - Date.now());
+    // }
 
     if (game.phase === 'day3') {
 
