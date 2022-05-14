@@ -146,7 +146,7 @@ const day2 = (room, game, messages) => {
 const night = (room, game, messages) => {
     io.to(room).emit('game-send', game);
 }
-const nightcal = async(room, game, messages) => {
+const nightcal = async(room, game) => {
         let messages = [];
         const wolf = await wolfKills(game.voted, game.players);
         if (wolf.deaths.length !== 0) {
