@@ -10,13 +10,13 @@ const {errorLogger, errorResponder} = require('./errorHandler/errorHandler');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(cors({
-//     origin: [
-//       "*"
-//     ],
-//     methods: ["GET", "POST","PUT","DELETE"],
-//     // credentials: true,
-//   }));
+app.use(cors({
+    origin: [
+      '*','http:localhost:3000'
+    ],
+    methods: ["GET", "POST","PUT","DELETE"],
+    // credentials: true,
+  }));
 
 app.use('/', indexRouter);
 
