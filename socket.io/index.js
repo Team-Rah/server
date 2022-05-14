@@ -164,13 +164,13 @@ const emitGame2 = async (room, gamemessages) => {
 
         const seer = seerCheck(game.voted, doctor.players);
 
-        if (seer.length !== 0) {
-            seer.forEach(user => {
-                let {seer, target} = user;
-                messages.push({message: `${seer.player.userName} was a peeping tom during the night and saw that ${target.player.userName} is a ${target.role}.`, userName: seer.player.userName, role: seer.role})
+        // if (seer.length !== 0) {
+        //     seer.forEach(user => {
+        //         let {seer, target} = user;
+        //         messages.push({message: `${seer.player.userName} was a peeping tom during the night and saw that ${target.player.userName} is a ${target.role}.`, userName: seer.player.userName, role: seer.role})
 
-            });
-        }
+        //     });
+        // }
         game.voted = [];
         // game.endRound = addTimeFromNow(1);
         game.endRound = Date.now() + 30000;
