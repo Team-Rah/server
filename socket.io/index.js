@@ -140,8 +140,8 @@ const getSocketInRoom = async(room) => {
 //     }
 // };
 
-const emitGame2 = async (room, gamemessages) => {
-    const game = await getSingleGame(room);
+const emitGame2 = async (room, game, gamemessages) => {
+    // const game = await getSingleGame(room);
     let messages = [];
 
     if (game.phase === 'nightcalc') {
@@ -173,12 +173,12 @@ const emitGame2 = async (room, gamemessages) => {
         // }
         game.voted = [];
         // game.endRound = addTimeFromNow(1);
-        game.endRound = Date.now() + 30000;
+        // game.endRound = Date.now() + 30000;
         game.players = doctor.players;
         game.phase = 'day1';
         await editGame(game);
-        console.log('night messages', messages)
-        emitGame2(room, messages);
+        // console.log('night messages', messages)
+        emitGame2(room, game, messages);
     }
 
     if (game.phase === 'day2calc') {
@@ -189,20 +189,15 @@ const emitGame2 = async (room, gamemessages) => {
             messages.push({message: `${user.userName} was accused of first degree murder and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
             game.playerVoted = user.userName;
             game.phase = 'day3';
-            // game.endRound = addTimeFromNow(1);
-            // game.endRound = Date.now() + 30000;
-            // game.voted = [];
-            await editGame(game);
-            emitGame2(room, messages);
+            // await editGame(game);
+
+            emitGame2(room, game, messages);
             
         }else {
-            // game.endRound = addTimeFromNow(1);
-            // game.endRound = Date.now() + 30000;
-            // game.voted = [];
             game.phase = 'day4';
             messages.push({message: 'No One was Accused this day!! You are lucky', userName: "announcement", user_id: "announcement", role: "gameMaster"});
             await editGame(game);
-            emitGame2(room, messages);
+            emitGame2(room, game, messages);
         }
     }
 
@@ -228,24 +223,22 @@ const emitGame2 = async (room, gamemessages) => {
         // game.endRound = addTimeFromNow(1);
         game.endRound = Date.now() + 30000;
 
-        await editGame(game);
+        // await editGame(game);
 
-        emitGame2(room, messages);
+        emitGame2(room, game, messages);
     }
 
     if (game.phase === 'night') {
         io.to(room).emit('game-send', game);
-        game.phase = 'nightcalc'
-        await editGame(game);
+        // game.phase = 'nightcalc'
+        // await editGame(game);
 
-        
-        setTimeout( async() => {
-            await emitGame2(room);
-        }, game.endRound - Date.now());
+        // setTimeout( async() => {
+        //     await emitGame2(room);
+        // }, game.endRound - Date.now());
     }
 
     if (game.phase === 'day1') {
-        console.log("gamemessages", gamemessages)
         io.to(room).emit('game-send', game);
         if (gamemessages) {
             for (let i = 0; i < gamemessages.length; i ++) {
@@ -288,8 +281,8 @@ const emitGame2 = async (room, gamemessages) => {
               }
 
             await editGame(game);
-            setTimeout(async () => {
-                await emitGame2(room, gameOver.Winningplayers);
+            setTimeout(() => {
+            emitGame2(room, game, gameOver.Winningplayers);
             }, game.endRound - Date.now());
         }
 
@@ -297,20 +290,20 @@ const emitGame2 = async (room, gamemessages) => {
         await editGame(game);
 
         setTimeout(() => {
-            emitGame2(room);
+            emitGame2(room, game);
         }, game.endRound - Date.now());
     }
 
     if (game.phase === 'day2') {
         io.to(room).emit('game-send',game);
 
-        game.endRound = addTimeFromNow(2);
-        game.phase = 'day2calc'
+        game.endRound = addTimeFromNow(1);
+        // game.phase = 'day2calc'
         await editGame(game);
 
-        setTimeout(async () => {
-            await emitGame2(room);
-        }, game.endRound - Date.now());
+        // setTimeout(async () => {
+        //     await emitGame2(room);
+        // }, game.endRound - Date.now());
     }
 
     if (game.phase === 'day3') {
@@ -324,14 +317,14 @@ const emitGame2 = async (room, gamemessages) => {
                 }, 2000 * i);
             }
         }
-        let newEndRound = game.endRound
+        // let newEndRound = game.endRound
         game.endRound = Date.now() + 30000;
         game.voted = [];
-        game.phase = 'day3calc'
+        // game.phase = 'day3calc'
         await editGame(game);
-        setTimeout(async () => {
-            await emitGame2(room);
-        }, newEndRound - Date.now());
+        // setTimeout(async () => {
+        //     await emitGame2(room);
+        // }, newEndRound - Date.now());
     }
 
     if (game.phase === 'day4') {
@@ -344,7 +337,6 @@ const emitGame2 = async (room, gamemessages) => {
             }
         }
 
-        let endRound = game.endRound;
         game.voted = [];
         game.guiltyVoted = []
         // game.endRound = addTimeFromNow(2);
@@ -367,16 +359,16 @@ const emitGame2 = async (room, gamemessages) => {
                 }
 
             }
-            await editGame(game);
+            // await editGame(game);
             setTimeout(() => {
-                emitGame2(room, gameOver.Winningplayers);
-            },endRound - Date.now() + 1000);
+                emitGame2(room, game, gameOver.Winningplayers);
+            },endRound - Date.now());
         }
         game.phase = 'night';
-        await editGame(game);
+        // await editGame(game);
         setTimeout(() => {
-            emitGame2(room)
-        },endRound - Date.now() + 1000);
+            emitGame2(room, game)
+        },30000);
     }
 
     if (game.phase === 'end') {
@@ -386,7 +378,6 @@ const emitGame2 = async (room, gamemessages) => {
                 io.emit(`receive-message-${room}`, gameMaster, `congratulations ${gamemessages[i].userName} you have won`);
             }, i * 2000)
         }
-
     }
 }
 
@@ -414,24 +405,43 @@ io.on('connection', socket => {
     });
 
     socket.on('player-vote', async(user, candidate, room) => {
-        console.log('vote got hit', user, room)
-        console.log('voter candi', candidate)
-        console.log('destructor ',{user_id:candidate.player.user_id, userName: candidate.player.userName})
-        
+
         try {
             const game = await getSingleGame(room);
+            const voteNumber = game.players.filter(obj => obj.status && obj.role !== 'villager')
             const player = await getPlayer(game.players, user);
             const target = await getPlayer(game.players, {user_id:candidate.player.user_id, userName: candidate.player.userName});
-            if (game.endRound > Date.now() && player.status && target.status) {
-                console.log('hit on saved database')
+            if (player.status && target.status) {
                 if (game.phase === 'day3') {
                     game.guiltyVoted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
                 } else {
                     game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
                 }
-                console.log('after vote push', game.phase, game.voted)
+            }
+            if (voteNumber === game.voted.length) {
+                if (game.phase === 'night') {
+                    game.phase = 'nightcalc'
+                    await editGame(game);
+                    emitGame2(room, game)
+                }
+
+                if (game.phase === 'day2') {
+                    game.phase = 'day2calc'
+                    await editGame(game);
+                    emitGame2(room, game)
+                }
+                if (game.phase === 'day3') {
+                    game.phase = 'day3calc'
+                    await editGame(game);
+                    emitGame2(room, game)
+                }
+            } else {
                 await editGame(game);
             }
+
+            
+
+
         }
         catch (err) {
             socket.emit('error', err);
@@ -442,8 +452,6 @@ io.on('connection', socket => {
         console.log('start game')
         try {
             const game = await getSingleGame(room);
-            console.log('game owner',game.owner )
-            console.log('game owner2',user.user_id )
             if (game.owner === user.user_id) {
                 const getUsers = await getSocketInRoom(room);
                 console.log(getUsers, "getUser")
@@ -455,16 +463,57 @@ io.on('connection', socket => {
                         }
                     });
                 });
-                console.log('users', users)
-                const players = await assignRoles(users);
-                console.log('player',players)
+                // const players = await assignRoles(users);
+                const players = [
+                    {
+                        player: {
+                            userName: 'david',
+                            user_id: '627f09ccc6a3d29f3692e7d4'
+                        },
+                        role: 'wolf'
+                    },
+                    {
+                        player: {
+                            userName: 'david2',
+                            user_id: '627f0b1bc6a3d29f3692e7f5'
+                        },
+                        role: 'doctor'
+                    },
+                    {
+                        player: {
+                            userName: 'david3',
+                            user_id: '627f0ba3c6a3d29f3692e815'
+                        },
+                        role: 'seer'
+                    },
+                    {
+                        player: {
+                            userName: 'ab1212',
+                            user_id: '627f01a391b79ed151e03f97'
+                        },
+                        role: 'villager'
+                    },
+                    {
+                        player: {
+                            userName: 'cihad',
+                            user_id: '627f07bfc6a3d29f3692e7bd'
+                        },
+                        role: 'villager'
+                    },
+                    {
+                        player: {
+                            userName: 'joshson',
+                            user_id: '627f0924c6a3d29f3692e7ca'
+                        },
+                        role: 'villager'
+                    },
+                ]
                 game.players = players;
                 game.phase = 'night';
                 game.started = true;
-                game.endRound = addTimeFromNow(1);
-                // game.endRound = 30000;
+                // game.endRound = addTimeFromNow(1);
                 await editGame(game);
-                emitGame2(room);
+                emitGame2(room, game);
             }
         }
         catch(err) {
@@ -501,52 +550,3 @@ io.on('connection', socket => {
 
 module.exports = io;
 
-
-
-
-
-
-
-
-// const getUsersFromSocket = (socket) => {
-//     const users = [];
-//     for(let i = 0; i< socket.length;i++) {
-//         if (!users.includes(socket[i].username)) {
-//             users.push(socket[i].username);
-//         }
-//     }
-//     return users;
-// };
-// const assignUserName = (socket , user) => {
-//     socket.username = user.userName;
-//     if (user.user_id) {
-//         socket.user_id = user.user_id
-//     }
-
-// };
-
-// const assignRoom = (socket, room) => {
-//     socket.join(room);
-//     socket.rooms = room;
-// };
-
-
-
-
-
-//Input
-// [
-//     {
-//         player: {userName: "dave1", user_id: 1}
-//     }
-// ]
-
-//output
-// [
-    //     {
-    //         player: {userName: "dave1", user_id: 1},
-    //         status: true,
-    //         role: "villager",
-    //         abilityCount: 0
-    //     }
-// ]
