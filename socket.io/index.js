@@ -69,6 +69,7 @@ const day3calc = (room, game) => {
         if (players) {
             console.log('game.voted', game.voted)
             console.log('day3calc death', deaths)
+            console.log("game.playerVoted",game.playerVoted)
             game.voted.forEach(vote => {
                 messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
             });
@@ -208,6 +209,7 @@ const emitGame2 = async (room, game, gamemessages) => {
             },15000);
         } else {
             game.phase = 'night';
+            game.playerVoted = ''
             await editGame(game);
             setTimeout(() => {
                 night(room, game)
