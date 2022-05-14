@@ -140,7 +140,7 @@ const getSocketInRoom = async(room) => {
 //     }
 // };
 
-    const day2 = (game, messages) => {
+    const day2 = (room, game, messages) => {
         io.to(room).emit('game-send',game);
     }
         
