@@ -540,7 +540,7 @@ io.on('connection', socket => {
                 game.started = true;
                 // game.endRound = addTimeFromNow(1);
                 await editGame(game);
-                emitGame2(room, game);
+                night(room, game);
             }
         }
         catch(err) {
