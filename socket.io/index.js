@@ -11,6 +11,7 @@ const {getSingleUserById, addToPlayerScore} = require('../database/controller/us
 const {wolfKills , doctorCheck, seerCheck} = require('../helperFN/roles');
 const {addTimeFromNow} = require('../helperFN/addTime');
 const User = require('../database/models/User.js')
+const Game = require('../database/models/Game')
 const gameMaster = {
     user_id : 'announcement',
     userName: 'announcement',
@@ -157,7 +158,6 @@ const nightcal = async(room, game) => {
         }
 
         const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
-        console.log('doctor', doctor.players)
         if (doctor.deaths.length !== 0) {
             doctor.deaths.forEach(death => {
                 let {player, role, status} = death;
@@ -184,29 +184,29 @@ const nightcal = async(room, game) => {
 }
 
 const day3calc = (room, game) => {
-    let messages = [];
-    let {players, deaths} = votesVsUsers(game.guiltyVoted, game.players);
-    if (players) {
-        game.guiltyVoted.forEach(vote => {
-            messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-        });
-        if (deaths) {
-            messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+    Game.findById(room).then(foundGame => {
+        let messages = [];
+        let {players, deaths} = votesVsUsers(game.guiltyVoted, game.players);
+        if (players) {
+            foundGame.guiltyVoted.forEach(vote => {
+                messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            });
+            if (deaths) {
+                messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            }
+            game.players = players;
         }
-        game.players = players;
-    }
-    messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+        messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+    
+        foundGame.voted = [];
+        foundGame.guiltyVoted = []
+        foundGame.phase = 'day4';
+        // game.endRound = addTimeFromNow(1);
+        // game.endRound = Date.now() + 30000;
+        editGame(game).then(game => emitGame2(room, game, messages))
+        // emitGame2(room, game, messages)
+    })
 
-    game.voted = [];
-    game.guiltyVoted = []
-    game.phase = 'day4';
-
-    // game.endRound = addTimeFromNow(1);
-    // game.endRound = Date.now() + 30000;
-
-    editGame(game).then(game => emitGame2(room, game, messages))
-
-    // emitGame2(room, game, messages);
 }
 
 const emitGame2 = async (room, game, gamemessages) => {
