@@ -306,7 +306,7 @@ const endGame = (room, game, messages) => {
 // }
 
 const emitGame2 = async (room, gamemessages) => {
-    const game = Game.findById(room);
+    const game = await Game.findById(room);
 
     let messages = [];
     if (game.phase === 'night') {
