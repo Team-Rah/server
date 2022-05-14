@@ -405,7 +405,7 @@ io.on('connection', socket => {
     });
 
     socket.on('player-vote', async(user, candidate, room) => {
-
+        console.log('hit vote')
         try {
             const game = await getSingleGame(room);
             const voteNumber = game.players.filter(obj => obj.status && obj.role !== 'villager')
@@ -418,7 +418,9 @@ io.on('connection', socket => {
                     game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
                 }
             }
-            if (voteNumber === game.voted.length) {
+            console.log(game.voted.length)
+            if (voteNumber - 1 === game.voted.length) {
+                console.log('hit vote limit')
                 if (game.phase === 'night') {
                     game.phase = 'nightcalc'
                     await editGame(game);
