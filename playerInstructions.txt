@@ -1,0 +1,22 @@
+Roles:
+
+Wolf
+  Night Phase:
+    The moderator says, "Werewolves, open your eyes" The Werewolves do so, and look around to recognize one another. The moderator should also note who the Werewolves are.
+
+    The Moderator says "Werewolves, choose someone to kill" The Werewolves silently choose a person by clicking the "kill" button that will appear on each player's card.
+
+Seer
+  Night Phase:
+    The Moderator says "Seer, open your eyes. Seer, pick someone to ask about." The Seer opens their eyes and silently chooses a player by clicking the "Reveal" button that will appear on each player's card.
+    The moderator will notify the seer what that player's role is.
+
+Doctor
+  Night Phase:
+    The Moderator awakens the Doctor and says, "Doctor, who would you like to heal?" The Doctor can select anyone they'd like to keep alive, hopefully not wasting their ability on a Werewolf.
+    The Doctor chooses who they'd like to heal by clicking the "heal" button that will appear on each player's card. The person chosen, which could not be themself, will survive if a werewolf chose that player to kill.
+    After the Doctor chooses the player, the Doctor goes back to sleep. If someone was killed, and then saved by the Doctor, the Moderator will let the Village know by saying, "Someone has been saved", at the beginning of the Day.
+
+Villager
+  Night Phase:
+    No action is needed from a villager.
