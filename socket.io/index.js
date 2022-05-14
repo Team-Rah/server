@@ -113,18 +113,16 @@ const calculateDay3 = async(room) => {
         const messages = [];
         console.log('voted aray to be put to death', game.voted)
         const {players, deaths} = await votesVsUsers(game.guiltyVoted, game.players);
-
-        game.voted.forEach(vote => {
-            messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-        });
-
-        if (deaths.length !== 0) {
-            messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-        } else {
-            messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+        if (players) {
+            game.guiltyVoted.forEach(vote => {
+                messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            });
+            if (deaths) {
+                messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            }
+            game.players = players;
         }
-
-        game.players = players;
+        messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
 
         game.voted = [];
 
@@ -245,7 +243,7 @@ const emitGame2 = async (room, messages) => {
         }
         let endRound = game.endRound;
         game.voted = [];
-        game.guiltyVoted = [];
+        game.guiltyVoted = []
         // game.endRound = addTimeFromNow(2);
         game.endRound = Date.now() + 30000;
         const gameOver = await checkIfGamesOver(game.players);

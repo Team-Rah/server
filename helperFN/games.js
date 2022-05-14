@@ -124,6 +124,9 @@ module.exports = {
   },
 
   votesVsUsers : (votesArray, userArray) => {
+    if (votesArray.length === 0) {
+      return {players: null, deaths:null}
+    }
     const numVotes = votesArray.length;
     let count = 0;
     let VotedForIndex;
