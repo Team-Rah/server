@@ -405,6 +405,7 @@ io.on('connection', socket => {
     });
 
     socket.on('player-vote', async(user, candidate, room) => {
+        console.log('vote got hit')
         try {
             const game = await getSingleGame(room);
             const player = await getPlayer(game.players, user);
