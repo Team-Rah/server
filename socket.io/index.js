@@ -143,6 +143,7 @@ const getSocketInRoom = async(room) => {
 const emitGame2 = async (room, gamemessages) => {
     const game = await getSingleGame(room);
     let messages = [];
+
     if (game.phase === 'nightcalc') {
         const wolf = await wolfKills(game.voted, game.players);
         if (wolf.deaths.length !== 0) {
@@ -176,6 +177,7 @@ const emitGame2 = async (room, gamemessages) => {
         game.players = doctor.players;
         game.phase = 'day1';
         await editGame(game);
+        console.log('night messages', messages)
         emitGame2(room, messages);
     }
 
@@ -241,6 +243,7 @@ const emitGame2 = async (room, gamemessages) => {
     }
 
     if (game.phase === 'day1') {
+        console.log("gamemessages", gamemessages)
         io.to(room).emit('game-send', game);
         if (gamemessages) {
             for (let i = 0; i < gamemessages.length; i ++) {
