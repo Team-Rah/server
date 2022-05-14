@@ -124,7 +124,7 @@ module.exports = {
     let count = 0;
     let VotedForIndex;
     for (var i = 0; i < userArray.length; i++) {
-      if (votesArray[0].candidate.userName === userArray[i].player.userName) {
+      if (votesArray[0].candidate === userArray[i].player.user_id) {
         VotedForIndex = i;
       }
       if (userArray[i].status === true) {
