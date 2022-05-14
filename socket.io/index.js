@@ -85,6 +85,7 @@ const day3calc = (room, game) => {
 }
 
 const endGame = (room, game, messages) => {
+    console.log('end game message', messages)
     io.to(room).emit('game-send', game)
     for (let i = 0; i < messages.length; i++) {
         setTimeout(() => {
@@ -202,7 +203,6 @@ const emitGame2 = async (room, game, gamemessages) => {
         if (gameOver.gameOver) {
             game.winner = gameOver.winner;
             game.phase = 'end';
-
             setTimeout(() => {
                 emitGame2(room, game, gameOver.Winningplayers);
             },15000);
