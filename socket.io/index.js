@@ -421,10 +421,10 @@ io.on('connection', socket => {
                     game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
                 }
             }
-            console.log('voteNumber', voteNumber)
+            console.log('voteNumber', voteNumber.length)
             console.log('game.voted.length',game.voted.length)
-            console.log(voteNumber - 1 === game.voted.length)
-            if (voteNumber.length - 1 >= game.voted.length) {
+            console.log(voteNumber.length - 1 === game.voted.length)
+            if (voteNumber.length - 1 === game.voted.length) {
                 console.log('hit vote limit')
                 console.lof('phase vote', game.phase)
                 if (game.phase === 'night') {
