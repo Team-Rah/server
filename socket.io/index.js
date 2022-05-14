@@ -195,7 +195,8 @@ const emitGame2 = async (room, game, gamemessages) => {
     }
 
     if (game.phase === 'end') {
-        io.to(room).emit('game-send', game)
+        console.log('gameover', game)
+        io.to(room).emit('game-send', gamemessages)
         for (let i = 0; i < gamemessages.length; i++) {
             setTimeout(() => {
                 io.emit(`receive-message-${room}`, gameMaster, `congratulations ${gamemessages[i].userName} you have won`);
