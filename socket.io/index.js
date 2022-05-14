@@ -387,7 +387,9 @@ io.on('connection', socket => {
     console.log(socket.id, 'has connected')
     socket.on('join-room', async(user,room) => {
         try {
+            console.log('on connect user', user)
             assignUserName(socket, user);
+            console.log('assign user', socket.user)
             assignRoom(socket, room);
             const users = await getSocketInRoom(room);
             io.to(room).emit(`receive-${room}`, users);
