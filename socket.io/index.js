@@ -133,7 +133,7 @@ const emitGame2 = async (room, game, gamemessages) => {
         }
         console.log('game players day 1',game.players);
         let gameOver = await checkIfGamesOver(game.players);
-        console.log('gameOver day 1',ggameOver);
+        console.log('gameOver day 1',gameOver);
         if (gameOver.gameOver) {
             game.winner = gameOver.winner;
             game.phase = 'end';
