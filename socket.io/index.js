@@ -190,12 +190,12 @@ const day3calc = (room, game) => {
         let messages = [];
         let {players, deaths} = votesVsUsers(game.voted, game.players);
         if (players) {
-            console.log(foundGame.voted)
+            console.log(game)
             // foundGame.voted.forEach(vote => {
             //     messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
             // });
 
-            game.players = players;
+        foundGame.players = players;
         }
         // if (deaths) {
         //     messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
@@ -206,10 +206,10 @@ const day3calc = (room, game) => {
         foundGame.phase = 'day4';
         // game.endRound = addTimeFromNow(1);
         // game.endRound = Date.now() + 30000;
-        foundGame.save(game).then(game => {
-            console.log('saved game ',game)
-            emitGame2(room, game, messages)
-        })
+        // foundGame.save(game).then(game => {
+        //     console.log('saved game ',game)
+        //     emitGame2(room, game, messages)
+        // })
         // emitGame2(room, game, messages)
     })
 
