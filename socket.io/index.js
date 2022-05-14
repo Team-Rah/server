@@ -68,9 +68,8 @@ const day3calc = (room, game) => {
 
     Game.findById(room).then(foundGame => {
         let messages = [];
-        console.log('day3calc game.voted', game.voted)
-        console.log('dayc3calc game.players', game.players)
         let {players, deaths} = votesVsUsers(foundGame.voted, foundGame.players);
+        console.log('players, deaths', players, deaths)
         if (players) {
             console.log('day3calc death', deaths)
             foundGame.voted.forEach(vote => {
@@ -79,7 +78,7 @@ const day3calc = (room, game) => {
 
         foundGame.players = players;
         }
-        if (deaths.length !== 0) {
+        if (deaths) {
             messages.push({message: `${foundGame.voted[0].voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
         }else {
             messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
