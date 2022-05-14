@@ -84,6 +84,26 @@ const day3calc = (room, game) => {
 
 }
 
+const endGame = (room, game, messages) => {
+    io.to(room).emit('game-send', game)
+    for (let i = 0; i < messages.length; i++) {
+        setTimeout(() => {
+            io.emit(`receive-message-${room}`, gameMaster, `congratulations ${messages[i].userName} you have won`);
+        }, i * 2000)
+    }
+
+}
+
+// if (game.phase === 'end') {
+//     console.log('gameover end day', gamemessages)
+//     io.to(room).emit('game-send', gamemessages)
+//     for (let i = 0; i < gamemessages.length; i++) {
+//         setTimeout(() => {
+//             io.emit(`receive-message-${room}`, gameMaster, `congratulations ${gamemessages[i].userName} you have won`);
+//         }, i * 2000)
+//     }
+// }
+
 const emitGame2 = async (room, game, gamemessages) => {
     let messages = [];
 
@@ -137,7 +157,7 @@ const emitGame2 = async (room, game, gamemessages) => {
         if (gameOver.gameOver) {
             game.winner = gameOver.winner;
             game.phase = 'end';
-            setTimeout(() => {emitGame2(room, game, gameOver.Winningplayers)}, 30000);
+            setTimeout(() => {endGame(room, game, gameOver.Winningplayers)}, 30000);
         } else {
             game.phase = 'day2';
             // await editGame(game);
@@ -194,15 +214,15 @@ const emitGame2 = async (room, game, gamemessages) => {
         },15000);
     }
 
-    if (game.phase === 'end') {
-        console.log('gameover end day', gamemessages)
-        io.to(room).emit('game-send', gamemessages)
-        for (let i = 0; i < gamemessages.length; i++) {
-            setTimeout(() => {
-                io.emit(`receive-message-${room}`, gameMaster, `congratulations ${gamemessages[i].userName} you have won`);
-            }, i * 2000)
-        }
-    }
+    // if (game.phase === 'end') {
+    //     console.log('gameover end day', gamemessages)
+    //     io.to(room).emit('game-send', gamemessages)
+    //     for (let i = 0; i < gamemessages.length; i++) {
+    //         setTimeout(() => {
+    //             io.emit(`receive-message-${room}`, gameMaster, `congratulations ${gamemessages[i].userName} you have won`);
+    //         }, i * 2000)
+    //     }
+    // }
 }
 
 io.on('connection', socket => {
