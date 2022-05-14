@@ -422,7 +422,7 @@ io.on('connection', socket => {
             console.log('game owner2',user.user_id )
             if (game.owner === user.user_id) {
                 const getUsers = await getSocketInRoom(room);
-
+                console.log(getUsers, "getUser")
                 let users = [];
                 getUsers.forEach(user => {
                     users.push({player: {
