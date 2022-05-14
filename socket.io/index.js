@@ -125,18 +125,18 @@ const emitGame2 = async (room, game, gamemessages) => {
             game.phase = 'day3';
             game.voted = [];
             await editGame(game);
-            emitGame2(room, game, messages);
-        }else {
+            return emitGame2(room, game, messages);
+        } else {
             game.phase = 'day4';
             messages.push({message: 'No One was Accused this day!! You are lucky', userName: "announcement", user_id: "announcement", role: "gameMaster"});
             game.voted = [];
             await editGame(game);
-            emitGame2(room, game, messages);
+            return emitGame2(room, game, messages);
         }
 
 
     }
-    if (game.phase === 'day1') {
+    else if (game.phase === 'day1') {
         io.to(room).emit('game-send', game);
         if (gamemessages) {
             for (let i = 0; i < gamemessages.length; i ++) {
@@ -177,7 +177,7 @@ const emitGame2 = async (room, game, gamemessages) => {
 
     }
 
-    if (game.phase === 'day3') {
+    else if (game.phase === 'day3') {
         io.to(room).emit('game-send', game);
 
         if (gamemessages) {
@@ -194,7 +194,7 @@ const emitGame2 = async (room, game, gamemessages) => {
 
     }
 
-    if (game.phase === 'day4') {
+    else if (game.phase === 'day4') {
         io.to(room).emit('game-send', game)
         if (gamemessages) {
             for (let i = 0; i < gamemessages.length; i ++) {
