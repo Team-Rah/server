@@ -432,7 +432,7 @@ io.on('connection', socket => {
             // if (voteNumber.length - 1 === game.voted.length) {
                 console.log('hit vote limit')
                 if (game.phase === 'night') {
-                    if (wolfVoteNumber-1 === game.voted.length) {
+                    if (wolfVoteNumber.length -1 === game.voted.length) {
                         game.phase = 'nightcalc'
                         await editGame(game);
                         emitGame2(room, game)
@@ -441,7 +441,7 @@ io.on('connection', socket => {
                 }
 
                 if (game.phase === 'day2') {
-                    if (aliveVote === game.voted.length) {
+                    if (aliveVote.length === game.voted.length) {
                         console.log('hit day 2 vote phase')
                         game.phase = 'day2calc'
                         await editGame(game);
