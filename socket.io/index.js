@@ -58,7 +58,8 @@ const calculateNight = async(room) => {
         }
 
         game.voted = [];
-        game.endRound = addTimeFromNow(1);
+        // game.endRound = addTimeFromNow(1);
+        game.endRound = Date.now() + 30000;
         game.players = doctor.players;
         game.phase = 'day1';
         await editGame(game);
