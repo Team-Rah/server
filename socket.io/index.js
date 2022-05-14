@@ -146,7 +146,44 @@ const day2 = (room, game, messages) => {
 const night = (room, game, messages) => {
     io.to(room).emit('game-send', game);
 }
+const nightcal = async(room, game, messages) => {
+    
+        const wolf = await wolfKills(game.voted, game.players);
+        if (wolf.deaths.length !== 0) {
+            wolf.deaths.forEach(death => {
+                let {player, role, status} = death;
+                messages.push({message: `${player.userName} was gravely injured during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
+            });
+        }
 
+        const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
+        console.log('doctor', doctor.players)
+        if (doctor.deaths.length !== 0) {
+            doctor.deaths.forEach(death => {
+                let {player, role, status} = death;
+                messages.push({message: `${player.userName} was saved by a stranger with tremendous healing abilities during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
+            });
+        }
+
+        // const seer = seerCheck(game.voted, doctor.players);
+
+        // if (seer.length !== 0) {
+        //     seer.forEach(user => {
+        //         let {seer, target} = user;
+        //         messages.push({message: `${seer.player.userName} was a peeping tom during the night and saw that ${target.player.userName} is a ${target.role}.`, userName: seer.player.userName, role: seer.role})
+
+        //     });
+        // }
+        game.voted = [];
+        // game.endRound = addTimeFromNow(1);
+        // game.endRound = Date.now() + 30000;
+        game.players = doctor.players;
+        game.phase = 'day1';
+        await editGame(game);
+        // console.log('night messages', messages)
+        emitGame2(room, game, messages);
+ 
+}
 
 const emitGame2 = async (room, game, gamemessages) => {
     // const game = await getSingleGame(room);
@@ -436,16 +473,16 @@ io.on('connection', socket => {
                 console.log('hit vote limit')
                 if (game.phase === 'night') {
                     if (wolfVoteNumber.length === game.voted.length) {
-                        game.phase = 'nightcalc'
+                        // game.phase = 'nightcalc'
                         await editGame(game);
-                        emitGame2(room, game)
+                        nightcal(room, game)
                     }
 
                 }
 
                 if (game.phase === 'day2') {
                     // if (aliveVote.length === game.voted.length) {
-                        if (aliveVote.length === game.voted.length) {
+                        if ( 1 === game.voted.length) {
                         console.log('hit day 2 vote phase')
                         game.phase = 'day2calc'
                         await editGame(game);
