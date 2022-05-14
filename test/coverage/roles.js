@@ -209,9 +209,10 @@ describe('Checks the validity of roles with night actions', () => {
           },
       ];
 
-      expect(doctorCheck(sampleVotersSaved, samplePlayersSaved, wolfAttack).deaths[0].player.user_id).toBe('josh');
+      expect(doctorCheck(sampleVotersSaved, samplePlayersSaved, wolfAttack).deaths[0].player.user_id).toBe('tony');
+      expect(doctorCheck(sampleVotersSaved, samplePlayersSaved, wolfAttack).deaths[1].player.user_id).toBe('josh');
 
-      expect(doctorCheck(sampleVotersUnsaved, samplePlayersUnsaved, wolfAttack).deaths.length).toBe(0);
+      expect(doctorCheck(sampleVotersUnsaved, samplePlayersUnsaved, wolfAttack).deaths.length).toBe(2);
     });
 
     test('Checks to see who the seer saw', () => {

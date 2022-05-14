@@ -88,6 +88,7 @@ module.exports = {
         userThatDies.forEach(dead => {
           if (player.player.user_id === dead.player.user_id) {
             player.status = false;
+            dead.status = false;
           }
         });
       });
@@ -105,12 +106,14 @@ module.exports = {
     });
 
     //filter out the users that were killed vs who was saved by the doctor
-    userThatDies.forEach((victim) => {
+    userThatDies.forEach((victim, i) => {
       healedCandidate.forEach(heal => {
         if (victim.player.user_id === heal) {
           victimsSaved.push(victim);
+          victim.status = true;
         } else {
           victimsNotSaved.push(victim);
+          victim.status = false;
         }
       });
     });
@@ -120,19 +123,19 @@ module.exports = {
       victimsNotSaved.forEach(unsaved => {
         if (unsaved.player.user_id === player.player.user_id) {
           player.status = false;
-          healedCandidateWithStatusMessage.push(`Player ${unsaved.player.userName} has been brutally mauled.`);
+          // healedCandidateWithStatusMessage.push(`Player ${unsaved.player.userName} has been brutally mauled.`);
         }
-      })
+      });
 
       victimsSaved.forEach(saved => {
         if(saved.player.user_id === player.player.user_id) {
           player.status = true;
-          healedCandidateWithStatusMessage.push(`Player ${saved.player.userName} has been healed.`);
+          // healedCandidateWithStatusMessage.push(`Player ${saved.player.userName} has been healed.`);
         }
-      })
-    })
+      });
+    });
 
-    return {players, deaths: victimsSaved};
+    return {players, deaths: userThatDies};
   },
 
   seerCheck: (voters, players) => {
