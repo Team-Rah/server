@@ -431,7 +431,7 @@ io.on('connection', socket => {
                         }
                     });
                 });
-                const players = await assignRoles(test2);
+                const players = await assignRoles(users);
                 game.players = players;
                 game.phase = 'night';
                 game.endRound = addTimeFromNow(2);
