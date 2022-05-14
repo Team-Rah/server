@@ -78,22 +78,24 @@ const calculateDay2 = async(room) => {
 
         const votes = await tallyVotes(game.voted);
         console.log('accuse voted calc', votes)
-        const user = await getSingleUserById(votes.userName);
-        console.log('accuse find from db', user)
-
-        messages.push({message: `${user.userName} was accused of first degree murder and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-
-        game.playerVoted = user.userName;
-
-        game.endRound = addTimeFromNow(1);
-
-        game.voted = [];
-
-        game.phase = 'day3';
-
-        await editGame(game);
-
-        emitGame2(room, messages);
+        if (votes) {
+            const user = await getSingleUserById(votes.userName);
+            messages.push({message: `${user.userName} was accused of first degree murder and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            game.playerVoted = user.userName;
+            game.phase = 'day3';
+            game.endRound = addTimeFromNow(1);
+            game.voted = [];
+            await editGame(game);
+            emitGame2(room, messages);
+            
+        }else {
+            game.voted = [];
+            game.phase = 'day4';
+            messages.push({message: 'No One was Accused this day!! You are lucky', userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            await editGame(game);
+            emitGame2(room, messages);
+        }
+         
     }
     catch (err) {
         throw(err)

@@ -43,6 +43,10 @@ module.exports = {
     throw error(404,'User does not exist', at);
   },
   tallyVotes: (array) => {
+    if (array.length === 0) {
+      return null;
+    }
+
     let result = {};
     let mostVotes = 0;
     let mostVotesUser = '';
