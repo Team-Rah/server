@@ -237,6 +237,8 @@ const emitGame2 = async (room, gamemessages) => {
         io.to(room).emit('game-send', game);
         game.phase = 'nightcalc'
         await editGame(game);
+
+        console.log('-----------------------------------',game.endRound - Date.now())
         setTimeout(() => {
             emitGame2(room);
         }, game.endRound - Date.now());
@@ -388,107 +390,6 @@ const emitGame2 = async (room, gamemessages) => {
     }
 }
 
-let test;
-const emitGame = (socket, room , data, timer ) => {
-    const user = {
-        user_id : 'announcement',
-        userName: 'announcement',
-    }
-    const user2 = {
-        user_id : 'dave',
-        userName: 'dave',
-    }
-
-    if (data.phase === 'night') {
-        io.to(room).emit('game-send',data)
-        data.phase = 'day1'
-        data.endRound = Date.now() + 1000 + timer
-        io.emit(`receive-message-${room}`, user, 'start night phase');
-        setTimeout(() => {
-            io.emit(`receive-message-${room}`, user2, 'im scared');
-        }, 1500);
-
-         test = setTimeout(() => {
-            emitGame(socket,room, data, timer)
-        }, timer + 1000);
-        return
-    }
-    if (data.phase === 'day1') {
-        io.to(room).emit('game-send',data)
-        data.phase = 'day2'
-        data.endRound = Date.now() + 1000 + timer
-        io.emit(`receive-message-${room}`, user, 'start day1 phase');
-        setTimeout(() => {
-            io.emit(`receive-message-${room}`, user, 'player 1 killed by a wolf');
-        }, 500);
-        setTimeout(() => {
-            io.emit(`receive-message-${room}`, user, 'player 6 killed by a wolf');
-        }, 1500);
-        test = setTimeout(() => {
-            emitGame(socket,room, data, timer)
-        }, timer + 3000);
-        return
-    }
-    if (data.phase === 'day2') {
-        io.to(room).emit('game-send',data)
-        data.phase = 'day3'
-        data.endRound = Date.now() + 1000 + timer
-        io.emit(`receive-message-${room}`, user, 'start day2 phase');
-        setTimeout(() => {
-            io.emit(`receive-message-${room}`, user, 'player 3 voted player 2 to stand trial');
-        }, 1000);
-        setTimeout(() => {
-            io.emit(`receive-message-${room}`, user, 'player 4 voted player 2 to stand trial');
-        }, 1100);
-
-        setTimeout(() => {
-            io.emit(`receive-message-${room}`, user2, 'i like the sunny day');
-        }, 1000);
-        test = setTimeout(() => {
-            emitGame(socket,room, data, timer)
-        }, timer + 3000);
-        return
-    }
-    if (data.phase === 'day3') {
-        io.to(room).emit('game-send',data)
-        data.phase = 'day4'
-        data.endRound = Date.now() + 1000 + timer
-        io.emit(`receive-message-${room}`, user, 'start day3 phase');
-        setTimeout(() => {
-            io.emit(`receive-message-${room}`, user, 'player 4 voted player 2 guilty');
-        }, 700);
-        setTimeout(() => {
-            io.emit(`receive-message-${room}`, user, 'player 8 voted player 2 guilty');
-        }, 1000);
-        test = setTimeout(() => {
-            emitGame(socket,room, data, timer)
-        }, timer + 3000);
-        return
-    }
-    if (data.phase === 'day4') {
-        io.to(room).emit('game-send',data)
-        data.phase = 'end'
-        data.endRound = Date.now() + 1000 + timer
-        io.emit(`receive-message-${room}`, user, 'start day4 phase');
-        setTimeout(() => {
-            io.emit(`receive-message-${room}`, user, 'player 2 is hung for being a wolf his role was seer');
-        }, 1000);
-        test = setTimeout(() => {
-            emitGame(socket,room, data, timer);
-        }, timer + 1000);
-        return
-    }
-    if (data.phase === 'end') {
-        io.to(room).emit('game-send',data)
-        data.phase = 'night'
-        data.endRound = Date.now() + 1000 + timer
-        io.emit(`receive-message-${room}`, user, 'game ended');
-        test = setTimeout(() => {
-            emitGame(socket,room, data, timer);
-        }, timer + 5000);
-        return
-    }
-}
 
 
 io.on('connection', socket => {
@@ -538,7 +439,7 @@ io.on('connection', socket => {
     });
 
     socket.on('start-game', async (user, room) => {
-        console.log('start game ')
+        console.log('start game')
         try {
             const game = await getSingleGame(room);
             console.log('game owner',game.owner )
@@ -571,35 +472,7 @@ io.on('connection', socket => {
         }
     })
 
-    socket.on('start-test', async (user, room, timer) => {
-        
-        const game = {
-            owner: '1',
-            gameName:'test game',
-            playerAllowed: 20,
-            endRound: Date.now(),
-            players : [
-                {player: {user_id: '1',userName:'dave'}, status: true, role:'villager'},
-                {player: {user_id: '2',userName:'dave2'}, status: false, role:'villager'},
-                {player: {user_id: '3',userName:'dave3'}, status: true, role:'doctor'},
-                {player: {user_id: '4',userName:'dave4'}, status: false, role:'doctor'},
-                {player: {user_id: '5',userName:'dave5'}, status: true, role:'seer', abilityCount: 1},
-                {player: {user_id: '6',userName:'dave6'}, status: false, role:'seer', abilityCount: 0},
-                {player: {user_id: '7',userName:'dave7'}, status: true, role:'wolf'},
-                {player: {user_id: '8',userName:'dave8'}, status: false, role:'wolf'},
-            ],
-            phase: 'night',
-        }
-
-        if (user === game.owner) {
-            test = setTimeout(() => {
-                emitGame(socket, room , game, timer)
-            }, 1);
-        }
-    });
-    socket.on('pause-test', () => {
-        clearTimeout(test);
-    });
+    
 
     socket.on('get-games', async() => {
         try {
