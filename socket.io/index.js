@@ -42,7 +42,7 @@ const nightcal = async(room, game) => {
         
         const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
         console.log('night calc vote',doctor)
-        if (doctor.deaths.length !== 0) {
+        if (doctor.deaths.length > 0) {
             doctor.deaths.forEach(death => {
                 let {player, role, status} = death;
                 messages.push({message: `${player.userName} was saved by a stranger with tremendous healing abilities during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
