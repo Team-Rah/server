@@ -101,7 +101,7 @@ const calculateDay2 = async(room) => {
     }
 };
 
-const calculateDay3 = async() => {
+const calculateDay3 = async(room) => {
     try {
         const game = await getSingleGame(room);
 
