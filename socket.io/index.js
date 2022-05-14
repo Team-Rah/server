@@ -314,6 +314,7 @@ const emitGame2 = async (room, gamemessages) => {
     }
 
     if (game.phase === 'nightCalc') {
+        console.log('hiy')
         messages = [];
         const wolf = await wolfKills(game.voted, game.players);
         if (wolf.deaths.length !== 0) {
@@ -385,7 +386,6 @@ const emitGame2 = async (room, gamemessages) => {
     if (game.Phase === 'day2') {
         io.to(room).emit('game-send',game);
     }
-
     if (game.phase === 'day2calc') {
         let votes = await tallyVotes(game.voted);
         console.log('accuse voted calc', votes)
@@ -522,7 +522,7 @@ io.on('connection', socket => {
                     if (wolfVoteNumber.length === game.voted.length) {
                         game.phase = 'nightCalc'
                         await editGame(game);
-                        emitGame2(room, game)
+                        emitGame2(room)
                     }
 
                 }
@@ -533,7 +533,7 @@ io.on('connection', socket => {
                         console.log('hit day 2 vote phase')
                         game.phase = 'day2calc'
                         await editGame(game);
-                        emitGame2(room, game)
+                        emitGame2(room)
                     }
                 }
                 if (game.phase === 'day3') {
