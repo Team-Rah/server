@@ -78,12 +78,15 @@ POST /users/
 ```
 ```
 put /users/togglefriend/
+
 ```
 | Parameter | Type     | Description               |
 | --------- | -------- | ------------------------- |
 |  Header    | Authorization | **Required**  token |
 |  user._id    | `string` | **Required**  JSON Body |
+
 + Response 200 (application/json)
+
 ```json
 {
   "message": "Successfully add",
@@ -104,15 +107,16 @@ put /users/togglefriend/
   }
   ]
 }
+
 ```
 PUT /users/login/
-```
-| Parameter | Type     | Description               |
+
+| Parameter | Type     Description              |
 | --------- | -------- | ------------------------- |
 |  Header    | Authorization | **Required**token|
 
-```
 + Response 200 (application/json)
+
 ```json
 {
   "message": "Successfully logged in",
