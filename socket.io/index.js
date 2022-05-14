@@ -184,20 +184,22 @@ const nightcal = async(room, game) => {
 }
 
 const day3calc = (room, game) => {
-    console.log('day3 calc room',room)
-    console.log('day3calc game', game)
+    // console.log('day3 calc room',room)
+    // console.log('day3calc game', game)
     Game.findById(room).then(foundGame => {
         console.log('day3 calc ', foundGame)
         let messages = [];
         let {players, deaths} = votesVsUsers(game.voted, game.players);
         if (players) {
-            foundGame.voted.forEach(vote => {
-                messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-            });
-            if (deaths) {
-                messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-            }
+            console.log(foundGame.voted)
+            // foundGame.voted.forEach(vote => {
+            //     messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            // });
+
             game.players = players;
+        }
+        if (deaths) {
+            messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
         }
         messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
     
@@ -205,7 +207,7 @@ const day3calc = (room, game) => {
         foundGame.phase = 'day4';
         // game.endRound = addTimeFromNow(1);
         // game.endRound = Date.now() + 30000;
-        editGame(game).then(game => emitGame2(room, game, messages))
+        foundGame.save(game).then(game => emitGame2(room, game, messages))
         // emitGame2(room, game, messages)
     })
 
