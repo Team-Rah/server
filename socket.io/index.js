@@ -188,26 +188,25 @@ const day3calc = (room, game) => {
     console.log('day3calc game', game)
     Game.findById(room).then(foundGame => {
         console.log('day3 calc ', foundGame)
-        // let messages = [];
-        // let {players, deaths} = votesVsUsers(game.guiltyVoted, game.players);
-        // if (players) {
-        //     foundGame.guiltyVoted.forEach(vote => {
-        //         messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-        //     });
-        //     if (deaths) {
-        //         messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-        //     }
-        //     game.players = players;
-        // }
-        // messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+        let messages = [];
+        let {players, deaths} = votesVsUsers(game.voted, game.players);
+        if (players) {
+            foundGame.voted.forEach(vote => {
+                messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            });
+            if (deaths) {
+                messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            }
+            game.players = players;
+        }
+        messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
     
-        // foundGame.voted = [];
-        // foundGame.guiltyVoted = []
-        // foundGame.phase = 'day4';
-        // // game.endRound = addTimeFromNow(1);
-        // // game.endRound = Date.now() + 30000;
-        // editGame(game).then(game => emitGame2(room, game, messages))
-        // // emitGame2(room, game, messages)
+        foundGame.voted = [];
+        foundGame.phase = 'day4';
+        // game.endRound = addTimeFromNow(1);
+        // game.endRound = Date.now() + 30000;
+        editGame(game).then(game => emitGame2(room, game, messages))
+        // emitGame2(room, game, messages)
     })
 
 }
@@ -395,7 +394,7 @@ const emitGame2 = async (room, game, gamemessages) => {
             // emitGame2(room);
         // }, 30000);
         setTimeout( () => {
-            day3calc(room. game);
+            day3calc(room, game);
         }, 30000);
 
     }
