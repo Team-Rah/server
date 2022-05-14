@@ -323,11 +323,11 @@ const emitGame2 = async (room, game, gamemessages) => {
         // let newEndRound = game.endRound
         // game.endRound = Date.now() + 30000;
         // game.voted = [];
-        // game.phase = 'day3calc'
-        // await editGame(game);
-        // setTimeout(async () => {
-        //     await emitGame2(room);
-        // }, newEndRound - Date.now());
+        game.phase = 'day3calc'
+        await editGame(game);
+        setTimeout( () => {
+            emitGame2(room);
+        }, 30000);
     }
 
     if (game.phase === 'day4') {
@@ -412,7 +412,10 @@ io.on('connection', socket => {
         console.log('hit vote')
         try {
             const game = await getSingleGame(room);
+            console.log('game phase in vote', gane.phase)
             const voteNumber = game.players.filter(obj => obj.status && obj.role !== 'villager')
+            const wolfVoteNumber = game.players.filter(obj => obj.status && obj.role === 'wolf')
+            const aliveVote = game.players.filter(obj => obj.status )
             const player = await getPlayer(game.players, user);
             const target = await getPlayer(game.players, {user_id:candidate.player.user_id, userName: candidate.player.userName});
             if (player.status && target.status) {
@@ -425,29 +428,38 @@ io.on('connection', socket => {
             console.log('voteNumber', voteNumber.length)
             console.log('game.voted.length',game.voted.length)
             console.log(voteNumber.length - 1 === game.voted.length)
-            if (voteNumber.length - 1 === game.voted.length) {
+            // if (voteNumber.length - 1 === game.voted.length) {
                 console.log('hit vote limit')
-                console.log('phase vote', game.phase)
                 if (game.phase === 'night') {
-                    game.phase = 'nightcalc'
-                    await editGame(game);
-                    emitGame2(room, game)
+                    if (wolfVoteNumber === game.voted.length) {
+                        game.phase = 'nightcalc'
+                        await editGame(game);
+                        emitGame2(room, game)
+                    }
+
                 }
 
                 if (game.phase === 'day2') {
-                    console.log('hit day 2 vote phase')
-                    game.phase = 'day2calc'
-                    await editGame(game);
-                    emitGame2(room, game)
+                    if (aliveVote === game.voted.length) {
+                        console.log('hit day 2 vote phase')
+                        game.phase = 'day2calc'
+                        await editGame(game);
+                        emitGame2(room, game)
+                    }
                 }
-                if (game.phase === 'day3') {
-                    game.phase = 'day3calc'
-                    await editGame(game);
-                    emitGame2(room, game)
-                }
-            } else {
+                // if (game.phase === 'day3') {
+                //     if (aliveVote - 1 === guiltyVoted.length) {
+                //         game.phase = 'day3calc'
+                //         await editGame(game);
+                //         emitGame2(room, game)
+                //     }
+                // }
+              if (aliveVote !== game.voted.length || wolfVoteNumber !== game.voted.length) {
                 await editGame(game);
-            }
+              }
+            // } else {
+            //     await editGame(game);
+            // }
 
             
 
