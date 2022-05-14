@@ -438,11 +438,11 @@ io.on('connection', socket => {
                 console.log('users', users)
                 const players = await assignRoles(users);
                 console.log('player',players)
-                // game.players = players;
-                // game.phase = 'night';
-                // game.endRound = addTimeFromNow(2);
-                // await editGame(game);
-                // emitGame2(room);
+                game.players = players;
+                game.phase = 'night';
+                game.endRound = addTimeFromNow(2);
+                await editGame(game);
+                emitGame2(room);
             }
         }
         catch(err) {
