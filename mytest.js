@@ -30,3 +30,16 @@ const ff = async () => {
 }
 
 ff()
+
+
+// const getUserRank = (score) => {
+//     let result
+//     if (score > 0) result = "the path to icon";
+//     if (score > 100) result = "";
+//     if (score > 200) result = "";
+//     if (score > 300) result = "";
+//     if (score > 400) result = "";
+//     return result;
+// }
+
+// <img src={getUserRank(user.score)}/>

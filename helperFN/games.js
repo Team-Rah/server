@@ -142,7 +142,7 @@ module.exports = {
 // default to no if no input
 // status is true--
 // go through how many have voted
-//
+//  
 //
 //
 
