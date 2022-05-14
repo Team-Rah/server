@@ -264,7 +264,8 @@ const emitGame2 = async (room, game, gamemessages) => {
             messages.push({message: `${user.userName} was accused of first degree murder and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
             game.playerVoted = user.userName;
             game.phase = 'day3';
-            // await editGame(game);
+            game.voted = [];
+            await editGame(game);
 
             emitGame2(room, game, messages);
             
@@ -275,6 +276,8 @@ const emitGame2 = async (room, game, gamemessages) => {
             await editGame(game);
             emitGame2(room, game, messages);
         }
+
+
     }
 
     // if (game.phase === 'day3calc') {
