@@ -140,10 +140,10 @@ const getSocketInRoom = async(room) => {
 //     }
 // };
 
-    const day2 = (room, game, messages) => {
-        io.to(room).emit('game-send',game);
-    }
-        
+const day2 = (room, game, messages) => {
+    io.to(room).emit('game-send',game);
+}
+    
 
 
 const emitGame2 = async (room, game, gamemessages) => {
@@ -182,7 +182,7 @@ const emitGame2 = async (room, game, gamemessages) => {
         // game.endRound = Date.now() + 30000;
         game.players = doctor.players;
         game.phase = 'day1';
-        // await editGame(game);
+        await editGame(game);
         // console.log('night messages', messages)
         emitGame2(room, game, messages);
     }
@@ -209,7 +209,7 @@ const emitGame2 = async (room, game, gamemessages) => {
 
     if (game.phase === 'day3calc') {
 
-        console.log('voted aray to be put to death', game.voted)
+        // console.log('voted aray to be put to death', game.voted)
         let {players, deaths} = await votesVsUsers(game.guiltyVoted, game.players);
         if (players) {
             game.guiltyVoted.forEach(vote => {
@@ -292,7 +292,6 @@ const emitGame2 = async (room, game, gamemessages) => {
 
         game.phase = 'day2';
         // await editGame(game);
-
         setTimeout(() => {
             day2(room, game);
         }, 30000);
@@ -322,7 +321,7 @@ const emitGame2 = async (room, game, gamemessages) => {
             }
         }
         // let newEndRound = game.endRound
-        game.endRound = Date.now() + 30000;
+        // game.endRound = Date.now() + 30000;
         game.voted = [];
         // game.phase = 'day3calc'
         await editGame(game);
@@ -384,6 +383,7 @@ const emitGame2 = async (room, game, gamemessages) => {
         }
     }
 }
+
 
 
 
