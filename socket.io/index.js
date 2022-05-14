@@ -238,9 +238,9 @@ const emitGame2 = async (room, gamemessages) => {
         game.phase = 'nightcalc'
         await editGame(game);
 
-        console.log('-----------------------------------',game.endRound - Date.now())
-        setTimeout(() => {
-            emitGame2(room);
+        
+        setTimeout( async() => {
+            await emitGame2(room);
         }, game.endRound - Date.now());
     }
 
@@ -288,8 +288,8 @@ const emitGame2 = async (room, gamemessages) => {
               }
 
             await editGame(game);
-            setTimeout(() => {
-                emitGame2(room, gameOver.Winningplayers);
+            setTimeout(async () => {
+                await emitGame2(room, gameOver.Winningplayers);
             }, game.endRound - Date.now());
         }
 
@@ -308,8 +308,8 @@ const emitGame2 = async (room, gamemessages) => {
         game.phase = 'day2calc'
         await editGame(game);
 
-        setTimeout(() => {
-            emitGame2(room);
+        setTimeout(async () => {
+            await emitGame2(room);
         }, game.endRound - Date.now());
     }
 
@@ -329,8 +329,8 @@ const emitGame2 = async (room, gamemessages) => {
         game.voted = [];
         game.phase = 'day3calc'
         await editGame(game);
-        setTimeout(() => {
-            emitGame2(room);
+        setTimeout(async () => {
+            await emitGame2(room);
         }, newEndRound - Date.now());
     }
 
