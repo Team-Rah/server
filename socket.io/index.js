@@ -392,6 +392,7 @@ io.on('connection', socket => {
             console.log('assign user', socket.user)
             assignRoom(socket, room);
             const users = await getSocketInRoom(room);
+            console.log('room user', users)
             io.to(room).emit(`receive-${room}`, users);
         }
         catch (err) {
