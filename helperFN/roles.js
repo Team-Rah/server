@@ -93,7 +93,7 @@ module.exports = {
         });
       });
 
-      return {players, deaths: userThatDies};
+      return {players, deaths: userThatDies, saved: victimsSaved};
     }
 
     //grabs who the doctors chose to save
@@ -109,11 +109,11 @@ module.exports = {
     userThatDies.forEach((victim, i) => {
       healedCandidate.forEach(heal => {
         if (victim.player.user_id === heal) {
-          victimsSaved.push(victim);
           victim.status = true;
+          victimsSaved.push(victim);
         } else {
-          victimsNotSaved.push(victim);
           victim.status = false;
+          victimsNotSaved.push(victim);
         }
       });
     });
@@ -135,7 +135,7 @@ module.exports = {
       });
     });
 
-    return {players, deaths: userThatDies};
+    return {players, deaths: victimsNotSaved, saved: victimsSaved};
   },
 
   seerCheck: (voters, players) => {
