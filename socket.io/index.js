@@ -78,8 +78,9 @@ const calculateDay2 = async(room) => {
         const messages = [];
 
         const votes = await tallyVotes(game.voted);
-
+        console.log('accuse voted calc', votes)
         const user = await getSingleUserById(votes.userName);
+        console.log('accuse find from db', user)
 
         messages.push({message: `${user.userName} was accused of first degree murder and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
 
