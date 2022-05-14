@@ -215,9 +215,12 @@ const emitGame2 = async (room, messages) => {
 
         await editGame(game);
 
+        // setTimeout(() => {
+        //     calculateDay2(room);
+        // }, game.endRound - Date.now() + 1000);
         setTimeout(() => {
             calculateDay2(room);
-        }, game.endRound - Date.now() + 1000);
+        }, 20000);
 
     }
 
