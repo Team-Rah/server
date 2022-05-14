@@ -389,6 +389,8 @@ io.on('connection', socket => {
     socket.on('start-game', async (user, room) => {
         try {
             const game = await getSingleGame(room);
+            console.log('game owner',game.owner )
+            console.log('game owner2',user.user_id )
             if (game.owner === user.user_id) {
                 const getUsers = await getSocketInRoom(room);
 

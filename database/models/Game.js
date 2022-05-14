@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const GameSchema = new mongoose.Schema({
     owner: {
-        type: Schema.Types.ObjectId,
+        type: String,
         ref: "User",
       },
       ownerName: {
