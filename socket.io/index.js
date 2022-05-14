@@ -143,7 +143,7 @@ const getSocketInRoom = async(room) => {
 const emitGame2 = async (room, gamemessages) => {
     const game = await getSingleGame(room);
     let messages = [];
-    if (game.phase === 'nightCalc') {
+    if (game.phase === 'nightcalc') {
         const wolf = await wolfKills(game.voted, game.players);
         if (wolf.deaths.length !== 0) {
             wolf.deaths.forEach(death => {
