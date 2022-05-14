@@ -138,13 +138,15 @@ const emitGame2 = async (room, game, gamemessages) => {
             game.winner = gameOver.winner;
             game.phase = 'end';
             setTimeout(() => {emitGame2(room, game, gameOver.Winningplayers)}, 30000);
+        } else {
+            game.phase = 'day2';
+            // await editGame(game);
+            setTimeout(() => {
+                day2(room, game);
+            }, 15000);
         }
 
-        game.phase = 'day2';
-        await editGame(game);
-        setTimeout(() => {
-            day2(room, game);
-        }, 15000);
+
     }
 
     if (game.phase === 'day3') {
