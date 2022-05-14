@@ -239,7 +239,7 @@ const emitGame2 = async (room, gamemessages) => {
         await editGame(game);
         setTimeout(() => {
             emitGame2(room);
-        }, game.endRound - Date.now() + 1000);
+        }, game.endRound - Date.now());
     }
 
     if (game.phase === 'day1') {
@@ -288,7 +288,7 @@ const emitGame2 = async (room, gamemessages) => {
             await editGame(game);
             setTimeout(() => {
                 emitGame2(room, gameOver.Winningplayers);
-            }, game.endRound - Date.now() + 1000);
+            }, game.endRound - Date.now());
         }
 
         game.phase = 'day2';
@@ -296,7 +296,7 @@ const emitGame2 = async (room, gamemessages) => {
 
         setTimeout(() => {
             emitGame2(room);
-        }, game.endRound - Date.now() + 1000);
+        }, game.endRound - Date.now());
     }
 
     if (game.phase === 'day2') {
@@ -308,7 +308,7 @@ const emitGame2 = async (room, gamemessages) => {
 
         setTimeout(() => {
             emitGame2(room);
-        }, game.endRound - Date.now() + 1000);
+        }, game.endRound - Date.now());
     }
 
     if (game.phase === 'day3') {
@@ -329,7 +329,7 @@ const emitGame2 = async (room, gamemessages) => {
         await editGame(game);
         setTimeout(() => {
             emitGame2(room);
-        }, newEndRound - Date.now() + 1000);
+        }, newEndRound - Date.now());
     }
 
     if (game.phase === 'day4') {
@@ -538,6 +538,7 @@ io.on('connection', socket => {
     });
 
     socket.on('start-game', async (user, room) => {
+        console.log('start game ')
         try {
             const game = await getSingleGame(room);
             console.log('game owner',game.owner )
@@ -571,6 +572,7 @@ io.on('connection', socket => {
     })
 
     socket.on('start-test', async (user, room, timer) => {
+        
         const game = {
             owner: '1',
             gameName:'test game',

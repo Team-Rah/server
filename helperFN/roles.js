@@ -92,7 +92,7 @@ module.exports = {
         });
       });
 
-      return {players, deaths: victimsSaved};
+      return {players, deaths: userThatDies};
     }
 
     //grabs who the doctors chose to save
