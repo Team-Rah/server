@@ -190,7 +190,7 @@ const day3calc = (room, game) => {
         let messages = [];
         console.log('day3calc game.voted', game.voted)
         console.log('dayc3calc game.players', game.players)
-        let {players, deaths} = votesVsUsers(game.voted, game.players);
+        let {players, deaths} = votesVsUsers(foundGame.voted, foundGame.players);
         if (players) {
             console.log('day3calc death', deaths)
             foundGame.voted.forEach(vote => {
