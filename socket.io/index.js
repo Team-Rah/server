@@ -84,7 +84,7 @@ const calculateDay2 = async(room) => {
 
         messages.push({message: `${user.userName} was accused of first degree murder and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
 
-        game.playerVoted.userName = user.userName;
+        game.playerVoted = user.userName;
 
         game.endRound = addTimeFromNow(1);
 
