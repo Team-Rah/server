@@ -85,15 +85,15 @@ const calculateDay2 = async(room) => {
             game.playerVoted = user.userName;
             game.phase = 'day3';
             // game.endRound = addTimeFromNow(1);
-            game.endRound = Date.now() + 30000;
-            game.voted = [];
+            // game.endRound = Date.now() + 30000;
+            // game.voted = [];
             await editGame(game);
             emitGame2(room, messages);
             
         }else {
             // game.endRound = addTimeFromNow(1);
-            game.endRound = Date.now() + 30000;
-            game.voted = [];
+            // game.endRound = Date.now() + 30000;
+            // game.voted = [];
             game.phase = 'day4';
             messages.push({message: 'No One was Accused this day!! You are lucky', userName: "announcement", user_id: "announcement", role: "gameMaster"});
             await editGame(game);
@@ -227,12 +227,15 @@ const emitGame2 = async (room, messages) => {
                 io.emit(`receive-message-${room}`, gameMaster, messages[i].message);
             }, 2000 * i);
         }
-
+        let newEndRound = game.endRound
+        game.endRound = Date.now() + 30000;
+        console.log('vote array should be full', game.voted)
+        game.voted = [];
+        console.log('vote array should be empty', game.voted)
         await editGame(game);
-
         setTimeout(() => {
             calculateDay3(room);
-        }, game.endRound - Date.now() + 1000);
+        }, newEndRound - Date.now() + 1000);
     }
 
     if (game.phase === 'day4') {
