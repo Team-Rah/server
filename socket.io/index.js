@@ -187,7 +187,6 @@ const day3calc = (room, game) => {
     // console.log('day3 calc room',room)
     // console.log('day3calc game', game)
     Game.findById(room).then(foundGame => {
-        console.log('day3 calc ', foundGame)
         let messages = [];
         let {players, deaths} = votesVsUsers(game.voted, game.players);
         if (players) {
@@ -198,16 +197,19 @@ const day3calc = (room, game) => {
 
             game.players = players;
         }
-        if (deaths) {
-            messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-        }
+        // if (deaths) {
+        //     messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+        // }
         messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
     
         foundGame.voted = [];
         foundGame.phase = 'day4';
         // game.endRound = addTimeFromNow(1);
         // game.endRound = Date.now() + 30000;
-        foundGame.save(game).then(game => emitGame2(room, game, messages))
+        foundGame.save(game).then(game => {
+            console.log('saved game ',game)
+            emitGame2(room, game, messages)
+        })
         // emitGame2(room, game, messages)
     })
 
