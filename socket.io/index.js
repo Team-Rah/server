@@ -285,19 +285,20 @@ const emitGame2 = async (room, game, gamemessages) => {
         }
 
         game.phase = 'day2';
-        await editGame(game);
+        // await editGame(game);
 
         setTimeout(() => {
-            emitGame2(room, game);
-        }, 30000);
+            console.log('im time out')
+            // emitGame2(room, game);
+        }, 10000);
     }
 
     if (game.phase === 'day2') {
         io.to(room).emit('game-send',game);
 
-        game.endRound = addTimeFromNow(1);
+        // game.endRound = addTimeFromNow(1);
         // game.phase = 'day2calc'
-        await editGame(game);
+        // await editGame(game);
 
         // setTimeout(async () => {
         //     await emitGame2(room);
