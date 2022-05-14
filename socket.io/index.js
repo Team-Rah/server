@@ -27,10 +27,10 @@ const calculateNight = async(room) => {
     try {
         const messages = [];
 
-        const game = getSingleGame(room);
+        const game = await getSingleGame(room);
 
-        const wolf = wolfKills(game.voted, game.players);
-
+        const wolf = await wolfKills(game.voted, game.players);
+        console.log(wolf)
         if (wolf.deaths.length !== 0) {
             wolf.deaths.forEach(death => {
                 let {player, role, status} = death;
@@ -441,7 +441,8 @@ io.on('connection', socket => {
                 console.log('player',players)
                 game.players = players;
                 game.phase = 'night';
-                game.endRound = addTimeFromNow(2);
+                // game.endRound = addTimeFromNow(1);
+                game.endRound = Date.now() + 30000;
                 await editGame(game);
                 emitGame2(room);
             }
