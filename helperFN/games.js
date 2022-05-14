@@ -3,7 +3,7 @@ const at = 'helperFN/games';
 module.exports = {
   assignRoles: async (array) => {
     try {
-      const roles = ['wolf', 'doctor', 'seer', 'villager'];
+      const roles = ['Anubis', 'doctor', 'seer', 'villager'];
       const numRoles = roles.length - 1;
       const numPlayers = array.length;
       let iterations = Math.floor(numPlayers * (4/7));
@@ -81,22 +81,30 @@ module.exports = {
     }
   if (wolves === 0) {
     let result = [];
+    let losers = [];
     for (let x = 0; x < array.length; x++) {
-      if ((array[x].status) && (array[x].role !== 'wolf')) {
+      if ((array[x].role !== 'wolf')) {
         result.push(array[x]);
       }
+      if ((array[x].role === 'wolf')) {
+        losers.push(array[x]);
+      }
     }
-    return {gameOver:true, winner: 'villagers', players: result}
+    return {gameOver:true, winner: 'villagers', Winningplayers: result, losingPlayers: losers}
   }
 
   if (villagers === 0) {
     let result = [];
+    let losers = [];
     for (let x = 0; x < array.length; x++) {
       if ((array[x].status) && (array[x].role === 'wolf')) {
         result.push(array[x]);
       }
+      if ((array[x].role !== 'wolf')) {
+        losers.push(array[x]);
+      }
     }
-    return {gameOver:true, winner: 'wolves', players: result}
+    return {gameOver:true, winner: 'wolves', Winningplayers: result, losingPlayers: losers}
   }
 
   return {gameOver:false, winner: null}
@@ -110,7 +118,7 @@ module.exports = {
     }
     throw error(404,'User does not exist', at);
   },
-  
+
   votesVsUsers : (votesArray, userArray) => {
     const numVotes = votesArray.length;
     let count = 0;
