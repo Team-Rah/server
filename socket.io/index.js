@@ -197,22 +197,21 @@ const emitGame2 = async (room, game, gamemessages) => {
                 }, 1000 * i);
             }
         }
-
         game.voted = [];
-
         let gameOver = await checkIfGamesOver(game.players);
         if (gameOver.gameOver) {
             game.winner = gameOver.winner;
             game.phase = 'end';
             setTimeout(() => {
-                emitGame2(room, game, gameOver.Winningplayers);
+                gameEnd(room, game, gameOver.Winningplayers);
+            },15000);
+        } else {
+            game.phase = 'night';
+            await editGame(game);
+            setTimeout(() => {
+                night(room, game)
             },15000);
         }
-        game.phase = 'night';
-        await editGame(game);
-        setTimeout(() => {
-            night(room, game)
-        },15000);
     }
 
     // if (game.phase === 'end') {
