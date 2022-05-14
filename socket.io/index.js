@@ -176,7 +176,7 @@ const emitGame2 = async (room, game, gamemessages) => {
         // game.endRound = Date.now() + 30000;
         game.players = doctor.players;
         game.phase = 'day1';
-        await editGame(game);
+        // await editGame(game);
         // console.log('night messages', messages)
         emitGame2(room, game, messages);
     }
@@ -418,7 +418,9 @@ io.on('connection', socket => {
                     game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
                 }
             }
-            console.log(game.voted.length)
+            console.log('voteNumber', voteNumber)
+            console.log('game.voted.length',game.voted.length)
+            console.log(voteNumber - 1 === game.voted.length)
             if (voteNumber - 1 === game.voted.length) {
                 console.log('hit vote limit')
                 if (game.phase === 'night') {
