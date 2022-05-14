@@ -47,6 +47,12 @@ const nightcal = async(room, game) => {
         if (doctor.deaths.length > 0) {
             doctor.deaths.forEach(death => {
                 let {player, role, status} = death;
+                messages.push({message: `${player.userName} bleed out and died.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
+            });
+        }
+        if (doctor.saved.length > 0) {
+            doctor.saved.forEach(death => {
+                let {player, role, status} = death;
                 messages.push({message: `${player.userName} was saved by a stranger with tremendous healing abilities during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
             });
         }
