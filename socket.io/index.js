@@ -162,7 +162,7 @@ const emitGame2 = async (room, gamemessages) => {
             });
         }
 
-        const seer = seerCheck(game.voted, doctor.players);
+        // const seer = seerCheck(game.voted, doctor.players);
 
         // if (seer.length !== 0) {
         //     seer.forEach(user => {
@@ -373,7 +373,7 @@ const emitGame2 = async (room, gamemessages) => {
         game.phase = 'night';
         await editGame(game);
         setTimeout(() => {
-            calculateNight(room)
+            emitGame2(room)
         },endRound - Date.now() + 1000);
     }
 
