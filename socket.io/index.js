@@ -616,7 +616,7 @@ io.on('connection', socket => {
                 game.phase = 'night';
                 game.started = true;
                 await editGame(game);
-                night(room, game);
+                emitGame2(room, game);
             }
         }
         catch(err) {
