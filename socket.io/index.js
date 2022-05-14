@@ -143,7 +143,9 @@ const getSocketInRoom = async(room) => {
 const day2 = (room, game, messages) => {
     io.to(room).emit('game-send',game);
 }
-    
+const night = (room, game, messages) => {
+    io.to(room).emit('game-send', game);
+}
 
 
 const emitGame2 = async (room, game, gamemessages) => {
@@ -234,15 +236,15 @@ const emitGame2 = async (room, game, gamemessages) => {
         emitGame2(room, game, messages);
     }
 
-    if (game.phase === 'night') {
-        io.to(room).emit('game-send', game);
-        // game.phase = 'nightcalc'
-        // await editGame(game);
+    // if (game.phase === 'night') {
+    //     io.to(room).emit('game-send', game);
+    //     // game.phase = 'nightcalc'
+    //     // await editGame(game);
 
-        // setTimeout( async() => {
-        //     await emitGame2(room);
-        // }, game.endRound - Date.now());
-    }
+    //     // setTimeout( async() => {
+    //     //     await emitGame2(room);
+    //     // }, game.endRound - Date.now());
+    // }
 
     if (game.phase === 'day1') {
         io.to(room).emit('game-send', game);
@@ -368,9 +370,10 @@ const emitGame2 = async (room, game, gamemessages) => {
             },30000);
         }
         game.phase = 'night';
+        await editGame(game);
         // await editGame(game);
         setTimeout(() => {
-            emitGame2(room, game)
+            night(room, game)
         },30000);
     }
 
@@ -432,7 +435,7 @@ io.on('connection', socket => {
             // if (voteNumber.length - 1 === game.voted.length) {
                 console.log('hit vote limit')
                 if (game.phase === 'night') {
-                    if (wolfVoteNumber.length -1 === game.voted.length) {
+                    if (wolfVoteNumber.length === game.voted.length) {
                         game.phase = 'nightcalc'
                         await editGame(game);
                         emitGame2(room, game)
@@ -441,7 +444,8 @@ io.on('connection', socket => {
                 }
 
                 if (game.phase === 'day2') {
-                    if (aliveVote.length === game.voted.length) {
+                    // if (aliveVote.length === game.voted.length) {
+                        if (aliveVote.length === game.voted.length) {
                         console.log('hit day 2 vote phase')
                         game.phase = 'day2calc'
                         await editGame(game);
