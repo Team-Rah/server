@@ -80,7 +80,7 @@ const day3calc = (room, game) => {
         foundGame.players = players;
         }
         if (deaths.length !== 0) {
-            messages.push({message: `${foundGame.voted.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            messages.push({message: `${foundGame.voted[0].voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
         }else {
             messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
         }
@@ -200,7 +200,7 @@ const emitGame2 = async (room, game, gamemessages) => {
             for (let i = 0; i < gamemessages.length; i ++) {
                 setTimeout(() => {``
                     io.emit(`receive-message-${room}`, gameMaster, gamemessages[i].message);
-                }, 1000 * i);
+                }, i === 0 ? 1000 : i * 5000);
             }
         }
         game.voted = [];
@@ -209,7 +209,7 @@ const emitGame2 = async (room, game, gamemessages) => {
             game.winner = gameOver.winner;
             game.phase = 'end';
             setTimeout(() => {
-                gameEnd(room, game, gameOver.Winningplayers);
+                endGame(room, game, gameOver.Winningplayers);
             },15000);
         } else {
             game.phase = 'night';
@@ -258,7 +258,7 @@ io.on('connection', socket => {
             const game = await getSingleGame(room);
             console.log('game phase in vote', game.phase)
             const voteNumber = game.players.filter(obj => obj.status && obj.role !== 'villager')
-            const wolfVoteNumber = game.players.filter(obj => (obj.status && obj.role === 'wolf') || (obj.status && obj.role === 'doctor'))
+            const wolfVoteNumber = game.players.filter(obj => (obj.status && obj.role === 'wolf') || (obj.status && obj.role === 'doctor') || (obj.status && obj.role === 'seer'))
             const aliveVote = game.players.filter(obj => obj.status )
             const player = await getPlayer(game.players, user);
             const target = await getPlayer(game.players, {user_id:candidate.player.user_id, userName: candidate.player.userName});
