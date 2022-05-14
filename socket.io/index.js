@@ -185,26 +185,27 @@ const nightcal = async(room, game) => {
 
 const day3calc = (room, game) => {
     Game.findById(room).then(foundGame => {
-        let messages = [];
-        let {players, deaths} = votesVsUsers(game.guiltyVoted, game.players);
-        if (players) {
-            foundGame.guiltyVoted.forEach(vote => {
-                messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-            });
-            if (deaths) {
-                messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-            }
-            game.players = players;
-        }
-        messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+        console.log('day3 calc ', foundGame)
+        // let messages = [];
+        // let {players, deaths} = votesVsUsers(game.guiltyVoted, game.players);
+        // if (players) {
+        //     foundGame.guiltyVoted.forEach(vote => {
+        //         messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+        //     });
+        //     if (deaths) {
+        //         messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+        //     }
+        //     game.players = players;
+        // }
+        // messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
     
-        foundGame.voted = [];
-        foundGame.guiltyVoted = []
-        foundGame.phase = 'day4';
-        // game.endRound = addTimeFromNow(1);
-        // game.endRound = Date.now() + 30000;
-        editGame(game).then(game => emitGame2(room, game, messages))
-        // emitGame2(room, game, messages)
+        // foundGame.voted = [];
+        // foundGame.guiltyVoted = []
+        // foundGame.phase = 'day4';
+        // // game.endRound = addTimeFromNow(1);
+        // // game.endRound = Date.now() + 30000;
+        // editGame(game).then(game => emitGame2(room, game, messages))
+        // // emitGame2(room, game, messages)
     })
 
 }
@@ -487,11 +488,11 @@ io.on('connection', socket => {
             const player = await getPlayer(game.players, user);
             const target = await getPlayer(game.players, {user_id:candidate.player.user_id, userName: candidate.player.userName});
             if (player.status && target.status) {
-                if (game.phase === 'day3') {
-                    game.guiltyVoted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
-                } else {
+                // if (game.phase === 'day3') {
+                //     game.guiltyVoted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
+                // } else {
                     game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
-                }
+                // }
             }
             console.log('voteNumber', voteNumber.length)
             console.log('game.voted.length',game.voted.length)
