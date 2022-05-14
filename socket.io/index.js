@@ -58,7 +58,8 @@ const calculateNight = async(room) => {
         }
 
         game.voted = [];
-        game.endRound = addTimeFromNow(1);
+        // game.endRound = addTimeFromNow(1);
+        game.endRound = Date.now() + 30000;
         game.players = doctor.players;
         game.phase = 'day1';
         await editGame(game);
@@ -83,13 +84,15 @@ const calculateDay2 = async(room) => {
             messages.push({message: `${user.userName} was accused of first degree murder and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
             game.playerVoted = user.userName;
             game.phase = 'day3';
-            game.endRound = addTimeFromNow(1);
+            // game.endRound = addTimeFromNow(1);
+            game.endRound = Date.now() + 30000;
             game.voted = [];
             await editGame(game);
             emitGame2(room, messages);
             
         }else {
-            game.endRound = addTimeFromNow(1);
+            // game.endRound = addTimeFromNow(1);
+            game.endRound = Date.now() + 30000;
             game.voted = [];
             game.phase = 'day4';
             messages.push({message: 'No One was Accused this day!! You are lucky', userName: "announcement", user_id: "announcement", role: "gameMaster"});
@@ -127,7 +130,8 @@ const calculateDay3 = async(room) => {
 
         game.phase = 'day4';
 
-        game.endRound = addTimeFromNow(1);
+        // game.endRound = addTimeFromNow(1);
+        game.endRound = Date.now() + 30000;
 
         await editGame(game);
 
@@ -146,9 +150,6 @@ const emitGame2 = async (room, messages) => {
         setTimeout(() => {
             calculateNight(room);
         }, game.endRound - Date.now() + 1000);
-        // setTimeout(() => {
-        //     calculateNight(room);
-        // }, 20000);
     }
 
     if (game.phase === 'day1') {
@@ -195,9 +196,6 @@ const emitGame2 = async (room, messages) => {
             setTimeout(() => {
                 emitGame2(room, gameOver.Winningplayers);
             }, game.endRound - Date.now() + 1000);
-            // setTimeout(() => {
-            //     emitGame2(room, gameOver.Winningplayers);
-            // }, 20000);
         }
 
         game.phase = 'day2';
@@ -206,9 +204,6 @@ const emitGame2 = async (room, messages) => {
         setTimeout(() => {
             emitGame2(room);
         }, game.endRound - Date.now() + 1000);
-        // setTimeout(() => {
-        //     emitGame2(room);
-        // }, 20000);
     }
 
     if (game.phase === 'day2') {
@@ -221,10 +216,6 @@ const emitGame2 = async (room, messages) => {
         setTimeout(() => {
             calculateDay2(room);
         }, game.endRound - Date.now() + 1000);
-        // setTimeout(() => {
-        //     calculateDay2(room);
-        // }, 20000);
-
     }
 
     if (game.phase === 'day3') {
@@ -241,11 +232,7 @@ const emitGame2 = async (room, messages) => {
 
         setTimeout(() => {
             calculateDay3(room);
-        }, game.endRound + 1000);
-        // setTimeout(() => {
-        //     calculateDay3(room);
-        // }, 20000);
-
+        }, game.endRound - Date.now() + 1000);
     }
 
     if (game.phase === 'day4') {
@@ -257,7 +244,8 @@ const emitGame2 = async (room, messages) => {
         }
         let endRound = game.endRound;
         game.voted = [];
-        game.endRound = addTimeFromNow(2);
+        // game.endRound = addTimeFromNow(2);
+        game.endRound = Date.now() + 30000;
         const gameOver = await checkIfGamesOver(game.players);
 
         if (gameOver.gameOver) {
