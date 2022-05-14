@@ -89,6 +89,7 @@ const calculateDay2 = async(room) => {
             emitGame2(room, messages);
             
         }else {
+            game.endRound = addTimeFromNow(1);
             game.voted = [];
             game.phase = 'day4';
             messages.push({message: 'No One was Accused this day!! You are lucky', userName: "announcement", user_id: "announcement", role: "gameMaster"});
@@ -432,6 +433,7 @@ io.on('connection', socket => {
             const player = await getPlayer(game.players, user);
             const target = await getPlayer(game.players, {user_id:candidate.player.user_id, userName: candidate.player.userName});
             if (game.endRound > Date.now() && player.status && target.status) {
+                console.log('hit on saved database')
                 game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
                 await editGame(game);
             }
