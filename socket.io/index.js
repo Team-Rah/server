@@ -349,19 +349,19 @@ const emitGame2 = async (room, game, gamemessages) => {
         if (gameOver.gameOver) {
             game.winner = gameOver.winner;
             game.phase = 'end';
-            for (let i = 0; i < gameOver.Winningplayers.length; i++){
-                let findUser = await User.findById(gameOver.Winningplayers[i].user_id);
-                findUser.score += 30;
-                await findUser.save();
-              }
-              for (let x = 0; x < gameOver.losingPlayers.length; x++) {
-                  let findUser = await User.findById(gameOver.losingPlayers[x].user_id);
-                  if (findUser.score >= 25) {
-                      findUser.score -= 25;
-                      await findUser.save();
-                  }
+            // for (let i = 0; i < gameOver.Winningplayers.length; i++){
+            //     let findUser = await User.findById(gameOver.Winningplayers[i].user_id);
+            //     findUser.score += 30;
+            //     await findUser.save();
+            //   }
+            //   for (let x = 0; x < gameOver.losingPlayers.length; x++) {
+            //       let findUser = await User.findById(gameOver.losingPlayers[x].user_id);
+            //       if (findUser.score >= 25) {
+            //           findUser.score -= 25;
+            //           await findUser.save();
+            //       }
 
-              }
+            //   }
 
             // await editGame(game);
             setTimeout(function(){emitGame2(room, game, gameOver.Winningplayers)}, 30000);
@@ -430,30 +430,30 @@ const emitGame2 = async (room, game, gamemessages) => {
         if (gameOver.gameOver) {
             game.winner = gameOver.winner;
             game.phase = 'end';
-            for (let i = 0; i < gameOver.Winningplayers.length; i++){
-              let findUser = await User.findById(gameOver.Winningplayers[i].user_id);
-              findUser.score += 30;
-              await findUser.save();
-            }
-            for (let x = 0; x < gameOver.losingPlayers.length; x++) {
-                let findUser = await User.findById(gameOver.losingPlayers[x].user_id);
-                if (findUser.score >= 25) {
-                    findUser.score -= 25;
-                    await findUser.save();
-                }
+            // for (let i = 0; i < gameOver.Winningplayers.length; i++){
+            //   let findUser = await User.findById(gameOver.Winningplayers[i].user_id);
+            //   findUser.score += 30;
+            //   await findUser.save();
+            // }
+            // for (let x = 0; x < gameOver.losingPlayers.length; x++) {
+            //     let findUser = await User.findById(gameOver.losingPlayers[x].user_id);
+            //     if (findUser.score >= 25) {
+            //         findUser.score -= 25;
+            //         await findUser.save();
+            //     }
 
-            }
+            // }
             // await editGame(game);
             setTimeout(() => {
                 emitGame2(room, game, gameOver.Winningplayers);
-            },30000);
+            },10000);
         }
         game.phase = 'night';
         await editGame(game);
         // await editGame(game);
         setTimeout(() => {
             night(room, game)
-        },30000);
+        },10000);
     }
 
     if (game.phase === 'end') {
