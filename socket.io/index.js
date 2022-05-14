@@ -217,13 +217,13 @@ const emitGame2 = async (room, game, gamemessages) => {
         messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
 
         game.voted = [];
-
+        game.guiltyVoted = []
         game.phase = 'day4';
 
         // game.endRound = addTimeFromNow(1);
-        game.endRound = Date.now() + 30000;
+        // game.endRound = Date.now() + 30000;
 
-        // await editGame(game);
+        await editGame(game);
 
         emitGame2(room, game, messages);
     }
@@ -283,7 +283,7 @@ const emitGame2 = async (room, game, gamemessages) => {
             await editGame(game);
             setTimeout(() => {
             emitGame2(room, game, gameOver.Winningplayers);
-            }, game.endRound - Date.now());
+            }, 30000);
         }
 
         game.phase = 'day2';
@@ -338,9 +338,9 @@ const emitGame2 = async (room, game, gamemessages) => {
         }
 
         game.voted = [];
-        game.guiltyVoted = []
+        // game.guiltyVoted = []
         // game.endRound = addTimeFromNow(2);
-        game.endRound = Date.now() + 30000;
+        // game.endRound = Date.now() + 30000;
         let gameOver = await checkIfGamesOver(game.players);
 
         if (gameOver.gameOver) {
@@ -362,7 +362,7 @@ const emitGame2 = async (room, game, gamemessages) => {
             // await editGame(game);
             setTimeout(() => {
                 emitGame2(room, game, gameOver.Winningplayers);
-            },endRound - Date.now());
+            },30000);
         }
         game.phase = 'night';
         // await editGame(game);
