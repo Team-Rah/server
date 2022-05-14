@@ -528,6 +528,8 @@ io.on('connection', socket => {
                     }
                 }
                 if (game.phase === 'day3') {
+                    console.log('hit day 3 vote')
+                    console.log(game.voted)
                         await editGame(game);
                     }
                 
