@@ -424,8 +424,9 @@ io.on('connection', socket => {
             console.log('voteNumber', voteNumber)
             console.log('game.voted.length',game.voted.length)
             console.log(voteNumber - 1 === game.voted.length)
-            if (voteNumber.length - 1 === game.voted.length) {
+            if (voteNumber.length - 1 >= game.voted.length) {
                 console.log('hit vote limit')
+                console.lof('phase vote', game.phase)
                 if (game.phase === 'night') {
                     game.phase = 'nightcalc'
                     await editGame(game);
