@@ -107,7 +107,7 @@ const calculateDay3 = async(room) => {
         const game = await getSingleGame(room);
 
         const messages = [];
-
+        console.log('voted aray to be put to death', game.voted)
         const {players, deaths} = await votesVsUsers(game.voted, game.players);
 
         game.voted.forEach(vote => {
@@ -462,6 +462,7 @@ io.on('connection', socket => {
                 console.log('player',players)
                 game.players = players;
                 game.phase = 'night';
+                game.started = true;
                 // game.endRound = addTimeFromNow(1);
                 game.endRound = 30000;
                 await editGame(game);
