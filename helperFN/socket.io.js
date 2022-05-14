@@ -12,7 +12,8 @@ module.exports = {
         return users;
     },
     assignUserName: (socket , user) => {
-        socket.user= user;
+        socket.user = user;
+        
     },
     assignRoom: (socket, room) => {
         socket.join(room);

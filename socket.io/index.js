@@ -386,6 +386,7 @@ const emitGame = (socket, room , data, timer ) => {
 io.on('connection', socket => {
     console.log(socket.id, 'has connected')
     socket.on('join-room', async(user,room) => {
+        console.log('from socket.emit',user)
         try {
             console.log('on connect user', user)
             assignUserName(socket, user);
