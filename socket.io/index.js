@@ -39,7 +39,7 @@ const nightcal = async(room, game) => {
                 messages.push({message: `${player.userName} was gravely injured during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
             });
         }
-
+        console.log(game.voted)
         const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
         if (doctor.deaths.length !== 0) {
             doctor.deaths.forEach(death => {
@@ -47,8 +47,6 @@ const nightcal = async(room, game) => {
                 messages.push({message: `${player.userName} was saved by a stranger with tremendous healing abilities during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
             });
         }
-
-
         game.voted = [];
 
         game.players = doctor.players;
@@ -89,7 +87,7 @@ const endGame = (room, game, messages) => {
     io.to(room).emit('game-send', game)
     for (let i = 0; i < messages.length; i++) {
         setTimeout(() => {
-            io.emit(`receive-message-${room}`, gameMaster, `congratulations ${messages[i].userName} you have won`);
+            io.emit(`receive-message-${room}`, gameMaster, `congratulations ${messages[i].player.userName} you have won`);
         }, i * 2000)
     }
 
