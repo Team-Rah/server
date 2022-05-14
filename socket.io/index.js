@@ -39,7 +39,7 @@ const nightcal = async(room, game) => {
                 messages.push({message: `${player.userName} was gravely injured during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
             });
         }
-        console.log(game.voted)
+        console.log('night calc vote',game.voted)
         const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
         if (doctor.deaths.length !== 0) {
             doctor.deaths.forEach(death => {
