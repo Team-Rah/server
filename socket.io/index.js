@@ -42,6 +42,8 @@ const nightcal = async(room, game) => {
         
         const doctor = doctorCheck(game.voted, wolf.players, wolf.deaths);
         console.log('night calc vote',doctor)
+        console.log("doctor.deaths.length",doctor.deaths.length)
+        console.log("doctor.deaths.length 333333",doctor.deaths.length > 0)
         if (doctor.deaths.length > 0) {
             doctor.deaths.forEach(death => {
                 let {player, role, status} = death;
