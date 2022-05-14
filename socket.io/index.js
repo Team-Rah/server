@@ -197,9 +197,9 @@ const day3calc = (room, game) => {
 
         foundGame.players = players;
         }
-        // if (deaths) {
-        //     messages.push({message: `${vote.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-        // }
+        if (deaths.length !== 0) {
+            messages.push({message: `${foundGame.voted.voterUserName} was mummified by majority rule.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+        }
         messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
     
         foundGame.voted = [];
@@ -210,7 +210,7 @@ const day3calc = (room, game) => {
         //     console.log('saved game ',game)
         //     emitGame2(room, game, messages)
         // })
-        emitGame2(room, game, messages)
+        emitGame2(room, foundGame , messages)
     })
 
 }
