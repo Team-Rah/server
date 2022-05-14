@@ -431,7 +431,7 @@ io.on('connection', socket => {
                         }
                     });
                 });
-                console.log('users' users)
+                console.log('users', users)
                 const players = await assignRoles(users);
                 console.log('player',players)
                 // game.players = players;
