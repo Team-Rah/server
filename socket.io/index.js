@@ -208,7 +208,6 @@ const emitGame2 = async (room, game, gamemessages) => {
     }
 
     if (game.phase === 'day3calc') {
-
         // console.log('voted aray to be put to death', game.voted)
         let {players, deaths} = await votesVsUsers(game.guiltyVoted, game.players);
         if (players) {
@@ -310,7 +309,7 @@ const emitGame2 = async (room, game, gamemessages) => {
     // }
 
     if (game.phase === 'day3') {
-
+        console.log('hit day 3 emitgame')
         io.to(room).emit('game-send', game);
 
         if (gamemessages) {
@@ -434,6 +433,7 @@ io.on('connection', socket => {
                 }
 
                 if (game.phase === 'day2') {
+                    console.log('hit day 2 vote phase')
                     game.phase = 'day2calc'
                     await editGame(game);
                     emitGame2(room, game)
