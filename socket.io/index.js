@@ -289,7 +289,7 @@ const emitGame2 = async (room, game, gamemessages) => {
 
         setTimeout(() => {
             emitGame2(room, game);
-        }, game.endRound - Date.now());
+        }, 30000);
     }
 
     if (game.phase === 'day2') {
