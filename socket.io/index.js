@@ -260,7 +260,9 @@ io.on('connection', socket => {
             }
             // console.log('voteNumber', voteNumber.length)
             // console.log('game.voted.length',game.voted.length)
-
+                console.log('-------------------------------------------------------')
+                console.log('user',user,'candidate',candidate)
+                console.log('-------------------------------------------------------')
                 if (game.phase === 'night') {
                     if (wolfVoteNumber.length === game.voted.length) {
                         await editGame(game);
