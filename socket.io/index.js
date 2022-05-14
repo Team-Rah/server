@@ -497,7 +497,7 @@ io.on('connection', socket => {
                 // }
             }
             console.log('voteNumber', voteNumber.length)
-            console.log('game.voted.length',game.voted.length))
+            console.log('game.voted.length',game.voted.length)
             // if (voteNumber.length - 1 === game.voted.length) {
                 console.log('hit vote limit')
                 if (game.phase === 'night') {
