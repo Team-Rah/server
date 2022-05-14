@@ -281,7 +281,7 @@ const emitGame2 = async (room, game, gamemessages) => {
               }
 
             // await editGame(game);
-            setTimeout(emitGame2(room, game, gameOver.Winningplayers), 30000);
+            setTimeout(function(){emitGame2(room, game, gameOver.Winningplayers)}, 30000);
         }
 
         game.phase = 'day2';
