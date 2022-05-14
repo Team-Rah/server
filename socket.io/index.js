@@ -190,10 +190,10 @@ const day3calc = (room, game) => {
         let messages = [];
         let {players, deaths} = votesVsUsers(game.voted, game.players);
         if (players) {
-            console.log(game)
-            // foundGame.voted.forEach(vote => {
-            //     messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-            // });
+            console.log('day3calc death', death)
+            foundGame.voted.forEach(vote => {
+                messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            });
 
         foundGame.players = players;
         }
@@ -210,7 +210,7 @@ const day3calc = (room, game) => {
         //     console.log('saved game ',game)
         //     emitGame2(room, game, messages)
         // })
-        // emitGame2(room, game, messages)
+        emitGame2(room, game, messages)
     })
 
 }
@@ -363,7 +363,7 @@ const emitGame2 = async (room, game, gamemessages) => {
         await editGame(game);
         setTimeout(() => {
             day2(room, game);
-        }, 30000);
+        }, 10000);
     }
 
     // if (game.phase === 'day2') {
