@@ -242,23 +242,25 @@ const emitGame2 = async (room, gamemessages) => {
 
     if (game.phase === 'day1') {
         io.to(room).emit('game-send', game);
-        for (let i = 0; i < gamemessages.length; i ++) {
-            if (gamemessages[i].role === 'seer') {
-                let sockets = await io.in(room).fetchSockets();
-                let socket;
-                for (let i = 0; i < sockets.length; i ++) {
-                    if (sockets[i].userName === gamemessages[i].userName) {
-                      socket = sockets[i]
-                      break;
+        if (gamemessages) {
+            for (let i = 0; i < gamemessages.length; i ++) {
+                if (gamemessages[i].role === 'seer') {
+                    let sockets = await io.in(room).fetchSockets();
+                    let socket;
+                    for (let i = 0; i < sockets.length; i ++) {
+                        if (sockets[i].userName === gamemessages[i].userName) {
+                          socket = sockets[i]
+                          break;
+                        }
                     }
+                    setTimeout(() => {
+                        io.to(socket.id).emit(`receive-message-${room}`, gameMaster, gamemessages[i].message)
+                    })
+                } else {
+                    setTimeout(() => {
+                        io.emit(`receive-message-${room}`, gameMaster, gamemessages[i].message);
+                    }, 2000 * i);
                 }
-                setTimeout(() => {
-                    io.to(socket.id).emit(`receive-message-${room}`, gameMaster, gamemessages[i].message)
-                })
-            } else {
-                setTimeout(() => {
-                    io.emit(`receive-message-${room}`, gameMaster, gamemessages[i].message);
-                }, 2000 * i);
             }
         }
 
@@ -310,10 +312,12 @@ const emitGame2 = async (room, gamemessages) => {
 
         io.to(room).emit('game-send', game);
 
-        for (let i = 0; i < gamemessages.length; i ++) {
-            setTimeout(() => {
-                io.emit(`receive-message-${room}`, gameMaster, gamemessages[i].message);
-            }, 2000 * i);
+        if (gamemessages) {
+            for (let i = 0; i < gamemessages.length; i ++) {
+                setTimeout(() => {
+                    io.emit(`receive-message-${room}`, gameMaster, gamemessages[i].message);
+                }, 2000 * i);
+            }
         }
         let newEndRound = game.endRound
         game.endRound = Date.now() + 30000;
@@ -327,11 +331,14 @@ const emitGame2 = async (room, gamemessages) => {
 
     if (game.phase === 'day4') {
         io.to(room).emit('game-send', game)
-        for (let i = 0; i < gamemessages.length; i ++) {
-            setTimeout(() => {
-                io.emit(`receive-message-${room}`, gameMaster, gamemessages[i].message);
-            }, 1000 * i);
+        if (gamemessages) {
+            for (let i = 0; i < gamemessages.length; i ++) {
+                setTimeout(() => {
+                    io.emit(`receive-message-${room}`, gameMaster, gamemessages[i].message);
+                }, 1000 * i);
+            }
         }
+
         let endRound = game.endRound;
         game.voted = [];
         game.guiltyVoted = []
