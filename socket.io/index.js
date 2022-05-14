@@ -530,7 +530,7 @@ io.on('connection', socket => {
                 if (game.phase === 'day3') {
                         await editGame(game);
                     }
-                }
+                
               if (aliveVote !== game.voted.length || wolfVoteNumber !== game.voted.length) {
                 await editGame(game);
               }
