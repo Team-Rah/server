@@ -109,7 +109,8 @@ PUT /users/login/
 ```
 | Parameter | Type     | Description               |
 | --------- | -------- | ------------------------- |
-|  Header    | Authorization | **Required**  token |
+|  Header    | Authorization | **Required**token|
+
 ```
 + Response 200 (application/json)
 ```json
