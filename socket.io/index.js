@@ -6,7 +6,7 @@ const io = require('socket.io')(process.env.PORT2, {
 
 const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/socket.io')
 const {getSingleGame, getAllGames, editGame} = require('../database/controller/games');
-const {getPlayer, assignRoles, tallyVotes,checkIfGamesOver} = require('../helperFN/games');
+const {getPlayer, assignRoles, tallyVotes, checkIfGamesOver, votesVsUsers} = require('../helperFN/games');
 const {getSingleUserById, addToPlayerScore} = require('../database/controller/users');
 const {wolfKills , doctorCheck, seerCheck} = require('../helperFN/roles');
 const {addTimeFromNow} = require('../helperFN/addTime');
@@ -59,7 +59,7 @@ const calculateNight = async(room) => {
 
         game.voted = [];
         // game.endRound = addTimeFromNow(1);
-        game.endRound = Date.now() + 30000;
+        game.endRound =  30000;
         game.players = doctor.players;
         game.phase = 'day1';
         await editGame(game);
@@ -87,7 +87,7 @@ const calculateDay2 = async(room) => {
         game.playerVoted = user.userName;
 
         // game.endRound = addTimeFromNow(1);
-        game.endRound = Date.now() + 25000
+        game.endRound = 25000
 
         game.voted = [];
 
@@ -127,7 +127,7 @@ const calculateDay3 = async(room) => {
         game.phase = 'day4';
 
         // game.endRound = addTimeFromNow(1);
-        game.endRound = Date.now() + 25000
+        game.endRound = 25000
 
         await editGame(game);
 
@@ -449,7 +449,7 @@ io.on('connection', socket => {
                 game.players = players;
                 game.phase = 'night';
                 // game.endRound = addTimeFromNow(1);
-                game.endRound = Date.now() + 30000;
+                game.endRound = 30000;
                 await editGame(game);
                 emitGame2(room);
             }
