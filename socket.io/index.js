@@ -6,7 +6,7 @@ const io = require('socket.io')(process.env.PORT2, {
 
 const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/socket.io')
 const {getSingleGame, getAllGames, editGame} = require('../database/controller/games');
-const {getPlayer, assignRoles, tallyVotes} = require('../helperFN/games');
+const {getPlayer, assignRoles, tallyVotes,checkIfGamesOver} = require('../helperFN/games');
 const {getSingleUserById, addToPlayerScore} = require('../database/controller/users');
 const {wolfKills , doctorCheck, seerCheck} = require('../helperFN/roles');
 const {addTimeFromNow} = require('../helperFN/addTime');
@@ -410,7 +410,7 @@ io.on('connection', socket => {
         try {
             const game = await getSingleGame(room);
             const player = await getPlayer(game.players, user);
-            const target = await getPlayer(game.players, candidate);
+            const target = await getPlayer(game.players, {user_id:candidate.player.user_id, userName: candidate.player.userName});
             if (game.endRound > Date.now() && player.status && target.status) {
                 game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.user_id, candidateUserName:candidate.userName});
                 await editGame(game);
