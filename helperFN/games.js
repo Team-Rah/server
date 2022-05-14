@@ -43,6 +43,10 @@ module.exports = {
     throw error(404,'User does not exist', at);
   },
   tallyVotes: (array) => {
+    if (array.length === 0) {
+      return null;
+    }
+
     let result = {};
     let mostVotes = 0;
     let mostVotesUser = '';
@@ -81,22 +85,30 @@ module.exports = {
     }
   if (wolves === 0) {
     let result = [];
+    let losers = [];
     for (let x = 0; x < array.length; x++) {
-      if ((array[x].status) && (array[x].role !== 'wolf')) {
+      if ((array[x].role !== 'wolf')) {
         result.push(array[x]);
       }
+      if ((array[x].role === 'wolf')) {
+        losers.push(array[x]);
+      }
     }
-    return {gameOver:true, winner: 'villagers', players: result}
+    return {gameOver:true, winner: 'villagers', Winningplayers: result, losingPlayers: losers}
   }
 
   if (villagers === 0) {
     let result = [];
+    let losers = [];
     for (let x = 0; x < array.length; x++) {
       if ((array[x].status) && (array[x].role === 'wolf')) {
         result.push(array[x]);
       }
+      if ((array[x].role !== 'wolf')) {
+        losers.push(array[x]);
+      }
     }
-    return {gameOver:true, winner: 'wolves', players: result}
+    return {gameOver:true, winner: 'wolves', Winningplayers: result, losingPlayers: losers}
   }
 
   return {gameOver:false, winner: null}
@@ -110,13 +122,16 @@ module.exports = {
     }
     throw error(404,'User does not exist', at);
   },
-  
+
   votesVsUsers : (votesArray, userArray) => {
+    if (votesArray.length === 0) {
+      return {players: null, deaths:null}
+    }
     const numVotes = votesArray.length;
     let count = 0;
     let VotedForIndex;
     for (var i = 0; i < userArray.length; i++) {
-      if (votesArray[0].candidate === userArray[i].userName) {
+      if (votesArray[0].candidate === userArray[i].player.user_id) {
         VotedForIndex = i;
       }
       if (userArray[i].status === true) {
@@ -142,7 +157,7 @@ module.exports = {
 // default to no if no input
 // status is true--
 // go through how many have voted
-//
+//  
 //
 //
 
