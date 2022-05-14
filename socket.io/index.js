@@ -414,7 +414,7 @@ io.on('connection', socket => {
             const player = await getPlayer(game.players, user);
             const target = await getPlayer(game.players, {user_id:candidate.player.user_id, userName: candidate.player.userName});
             if (game.endRound > Date.now() && player.status && target.status) {
-                game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.user_id, candidateUserName:candidate.userName});
+                game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
                 await editGame(game);
             }
         }
