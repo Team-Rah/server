@@ -188,6 +188,8 @@ const day3calc = (room, game) => {
     // console.log('day3calc game', game)
     Game.findById(room).then(foundGame => {
         let messages = [];
+        console.log('day3calc game.voted', game.voted)
+        console.log('dayc3calc game.players', game.players)
         let {players, deaths} = votesVsUsers(game.voted, game.players);
         if (players) {
             console.log('day3calc death', deaths)
