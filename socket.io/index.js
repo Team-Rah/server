@@ -196,7 +196,7 @@ const emitGame2 = async (room, game, gamemessages) => {
         }else {
             game.phase = 'day4';
             messages.push({message: 'No One was Accused this day!! You are lucky', userName: "announcement", user_id: "announcement", role: "gameMaster"});
-            await editGame(game);
+            // await editGame(game);
             emitGame2(room, game, messages);
         }
     }
@@ -280,10 +280,8 @@ const emitGame2 = async (room, game, gamemessages) => {
 
               }
 
-            await editGame(game);
-            setTimeout(() => {
-            emitGame2(room, game, gameOver.Winningplayers);
-            }, 30000);
+            // await editGame(game);
+            setTimeout(() => emitGame2(room, game, gameOver.Winningplayers), 30000);
         }
 
         game.phase = 'day2';
