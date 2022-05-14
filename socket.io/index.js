@@ -8,7 +8,7 @@ const {getUsersFromSocket, assignUserName, assignRoom} = require('../helperFN/so
 const {getSingleGame, getAllGames, editGame} = require('../database/controller/games');
 const {getPlayer, assignRoles, tallyVotes} = require('../helperFN/games');
 const {getSingleUserById, addToPlayerScore} = require('../database/controller/users');
-const {wolfKills , doctorCheck} = require('../helperFN/roles');
+const {wolfKills , doctorCheck, seerCheck} = require('../helperFN/roles');
 const {addTimeFromNow} = require('../helperFN/addTime');
 const User = require('../database/models/User.js')
 const gameMaster = {
@@ -405,7 +405,8 @@ io.on('connection', socket => {
     });
 
     socket.on('player-vote', async(user, candidate, room) => {
-        console.log('vote got hit')
+        console.log('vote got hit', user, candidate, room)
+        
         try {
             const game = await getSingleGame(room);
             const player = await getPlayer(game.players, user);
