@@ -521,8 +521,8 @@ io.on('connection', socket => {
                 }
 
                 if (game.phase === 'day2') {
-                    // if (aliveVote.length === game.voted.length) {
-                        if ( 1 === game.voted.length) {
+                    if (aliveVote.length === game.voted.length) {
+                        // if ( 1 === game.voted.length) {
                         console.log('hit day 2 vote phase')
                         game.phase = 'day2calc'
                         await editGame(game);
@@ -566,51 +566,51 @@ io.on('connection', socket => {
                         }
                     });
                 });
-                // const players = await assignRoles(users);
-                const players = [
-                    {
-                        player: {
-                            userName: 'david',
-                            user_id: '627f09ccc6a3d29f3692e7d4'
-                        },
-                        role: 'wolf'
-                    },
-                    {
-                        player: {
-                            userName: 'david2',
-                            user_id: '627f0b1bc6a3d29f3692e7f5'
-                        },
-                        role: 'doctor'
-                    },
-                    {
-                        player: {
-                            userName: 'david3',
-                            user_id: '627f0ba3c6a3d29f3692e815'
-                        },
-                        role: 'seer'
-                    },
-                    {
-                        player: {
-                            userName: 'ab1212',
-                            user_id: '627f01a391b79ed151e03f97'
-                        },
-                        role: 'villager'
-                    },
-                    {
-                        player: {
-                            userName: 'cihad',
-                            user_id: '627f07bfc6a3d29f3692e7bd'
-                        },
-                        role: 'villager'
-                    },
-                    {
-                        player: {
-                            userName: 'joshson',
-                            user_id: '627f0924c6a3d29f3692e7ca'
-                        },
-                        role: 'villager'
-                    },
-                ]
+                const players = await assignRoles(users);
+                // const players = [
+                //     {
+                //         player: {
+                //             userName: 'david',
+                //             user_id: '627f09ccc6a3d29f3692e7d4'
+                //         },
+                //         role: 'wolf'
+                //     },
+                //     {
+                //         player: {
+                //             userName: 'david2',
+                //             user_id: '627f0b1bc6a3d29f3692e7f5'
+                //         },
+                //         role: 'doctor'
+                //     },
+                //     {
+                //         player: {
+                //             userName: 'david3',
+                //             user_id: '627f0ba3c6a3d29f3692e815'
+                //         },
+                //         role: 'seer'
+                //     },
+                //     {
+                //         player: {
+                //             userName: 'ab1212',
+                //             user_id: '627f01a391b79ed151e03f97'
+                //         },
+                //         role: 'villager'
+                //     },
+                //     {
+                //         player: {
+                //             userName: 'cihad',
+                //             user_id: '627f07bfc6a3d29f3692e7bd'
+                //         },
+                //         role: 'villager'
+                //     },
+                //     {
+                //         player: {
+                //             userName: 'joshson',
+                //             user_id: '627f0924c6a3d29f3692e7ca'
+                //         },
+                //         role: 'villager'
+                //     },
+                // ]
                 game.players = players;
                 game.phase = 'night';
                 game.started = true;
