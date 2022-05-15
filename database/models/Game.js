@@ -80,6 +80,14 @@ const GameSchema = new mongoose.Schema({
         type: String,
         default: 'none'
     },
+    maxRounds: {
+        type: Number,
+        default: 50
+    },
+    currentRound: {
+        type: Number,
+        default: 1
+    },
     started: {
         type: Boolean,
         default: false
