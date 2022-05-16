@@ -110,7 +110,7 @@ const calculateNight = async(room, io) => {
         //     });
         // }
 
-        // console.log('doctor players', doctor.players)
+   
         game.voted = [];
         game.endRound = messageTimer;
         game.players = doctor.players;
@@ -125,7 +125,6 @@ const calculateNight = async(room, io) => {
 
 const calculateDay2 = async(room, io) => {
     const game = await getSingleGame(room);
-    // console.log('game votes from day 2', game.voted)
 
     try {
 
@@ -139,8 +138,6 @@ const calculateDay2 = async(room, io) => {
         game.endRound = messageTimer;
         if (votes) {
             getPlayer
-            // const user = await getSingleUserById(votes.userName);
-
             const user = getPlayer(game.players, {user_id: votes.userName});
 
             messages.push({message: `${user.player.userName} was accused of being a Seth worshipper and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
@@ -171,8 +168,6 @@ const calculateDay3 = async(room, io) => {
         const messages = [];
         const botVotes = createBotsVote(game.players, game.phase, game.playerVoted);
         game.voted = [...game.voted, ...botVotes];
-        
-
         const {players, deaths} = await votesVsUsers(game.voted, game.players);
 
             game.voted.forEach(vote => {
@@ -185,7 +180,6 @@ const calculateDay3 = async(room, io) => {
             messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
         }
         messages.push({message: `Day ${game.currentRound} is coming to an end`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-
         game.voted = [];
         game.phase = 'day4';
         game.endRound = messageTimer;
@@ -200,10 +194,8 @@ const calculateDay3 = async(room, io) => {
 const runGame = async (room, messages, io) => {
 
     const game = await getSingleGame(room);
-    // console.log('current round', game.currentRound, 'for game', game._id)
 
     if (game.phase === 'end') {
-        // console.log('hitting endgame')
 
         io.to(room).emit('game-send', game)
         if (messages.winningPlayers) {
@@ -248,10 +240,6 @@ const runGame = async (room, messages, io) => {
   
     }
     else if (game.phase === 'night') {
-        // console.log('hitting night phase')
-        // console.log('next phase starts in', game.endRound)
-        // console.log(game.endRound + 1000)
-
         io.to(room).emit('game-send', game);
 
         setTimeout(() => {
@@ -264,9 +252,6 @@ const runGame = async (room, messages, io) => {
     }
 
     else if (game.phase === 'day1') {
-
-        // console.log('hitting day1 phase')
-        // console.log('next phase starts in', game.endRound)
 
         io.to(room).emit('game-send', game);
         for (let i = 0; i < messages.length; i ++) {
@@ -295,8 +280,6 @@ const runGame = async (room, messages, io) => {
     }
 
     else if (game.phase === 'day2') {
-        // console.log('hitting day2 phase')
-        // console.log('next phase starts in', game.endRound)
         io.to(room).emit('game-send',game);
 
         setTimeout(() => {
@@ -306,11 +289,7 @@ const runGame = async (room, messages, io) => {
     }
 
     else if (game.phase === 'day3') {
-        // console.log('hitting day3 phase')
-        // console.log('next phase starts in', game.endRound)
-
         io.to(room).emit('game-send', game);
-
         for (let i = 0; i < messages.length; i ++) {
             setTimeout(() => {
                 io.emit(`receive-message-${room}`, gameMaster, messages[i].message);
@@ -325,14 +304,9 @@ const runGame = async (room, messages, io) => {
 
     else if (game.phase === 'day4') {
         game.currentRound ++;
-
-        // console.log('hitting day 4')
-        // console.log('next phase starts in', game.endRound)
-        
         io.to(room).emit('game-send', game)
 
         for (let i = 0; i < messages.length; i ++) {
-            // console.log('message interval', messageInterval(messages.length, game.endRound, i))
             setTimeout(() => {
                 io.emit(`receive-message-${room}`, gameMaster, messages[i].message);
             }, messageInterval(messages.length, game.endRound, i));
@@ -343,8 +317,6 @@ const runGame = async (room, messages, io) => {
         game.voted = [];
         game.endRound = messageTimer;
         const gameOver = await checkIfGamesOver(game.players);
-        // console.log('day 4 players array', game.players)
-        // console.log(gameOver)
 
         if (gameOver.gameOver) {
             setTimeout(async () => {

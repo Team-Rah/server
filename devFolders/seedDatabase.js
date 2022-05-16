@@ -13,16 +13,11 @@ const seedDatabase = async(num) => {
     try {
         const users = []
         for (let i = 0; i < num ; i++) {
-            // users.push({
-            //     insertOne: {
-            //         document:createUser()
-            //     }
-            // });
+
             const newUser = await User(createUser());
             await newUser.save();
         }
-        // await User.bulkWrite(users);
-        // console.log(`SEEDED ${num} USERS TO DATABASE`)
+        console.log(`SEEDED ${num} USERS TO DATABASE`)
         mongoose.connection.close();
     }
     catch(err) {

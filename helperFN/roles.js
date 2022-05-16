@@ -33,10 +33,7 @@ module.exports = {
       })
 
       return {players, deaths};
-    } else {
-      console.log('Invalid wolf voting');
     }
-
   },
 
   wolfCheck: (voters, players) => {
@@ -80,11 +77,10 @@ module.exports = {
         currentDoctor.push(player);
       }
     });
-console.log('doctors', currentDoctor);
+
     //see if currentDoctor array is greater than 0
     if (currentDoctor.length === 0) {
 
-      console.log('before status change', players);
 
       players.forEach(player => {
         userThatDies.forEach(dead => {
@@ -95,7 +91,6 @@ console.log('doctors', currentDoctor);
         });
       });
 
-      console.log('after status change', players);
 
       return {players, deaths: userThatDies, saved: victimsSaved};
     }
@@ -200,101 +195,5 @@ console.log('doctors', currentDoctor);
 
 };
 
-let sampleVotersSaved = [
-        {
-          voter: 'cihad',
-          candidate: 'josh'
-        },
-        {
-          voter: 'tony',
-          candidate: 'josh'
-        },
-        {
-          voter: 'david',
-          candidate: 'tony'
-        },
-      ];
 
-      let samplePlayersSaved = [
-        {
-          player: {user_id:'tony', userName: 'tony'},
-          status: true,
-          role: 'doctor',
-        },
-        {
-          player: {user_id: 'cihad', userName: 'cihad'},
-          status: true,
-          role: 'wolf',
-        },
-        {
-          player: {user_id: 'david', userName:'david'},
-          status: true,
-          role: 'wolf',
-        },
-        {
-          player: {user_id: 'josh', userName:'josh'},
-          status: true,
-          role: 'villager',
-        },
-      ];
-
-      let sampleVotersUnsaved = [
-        {
-          voter: 'cihad',
-          candidate: 'josh'
-        },
-        {
-          voter: 'tony',
-          candidate: 'random'
-        },
-        {
-          voter: 'david',
-          candidate: 'tony'
-        }
-      ];
-
-      let samplePlayersUnsaved = [
-        {
-          player: {user_id:'tony', userName: 'tony'},
-          status: true,
-          role: 'doctor',
-        },
-        {
-          player: {user_id: 'cihad', userName: 'cihad'},
-          status: true,
-          role: 'wolf',
-        },
-        {
-          player: {user_id: 'david', userName:'david'},
-          status: true,
-          role: 'wolf',
-        },
-        {
-          player: {user_id: 'josh', userName:'josh'},
-          status: true,
-          role: 'villager',
-        },
-        {
-          player: {user_id: 'random', userName:'random'},
-          status: true,
-          role: 'villager',
-        },
-      ];
-
-      let wolfAttack = [
-          {
-            player: {user_id:'tony', userName: 'tony'},
-            status: true,
-            role: 'doctor',
-          },
-          {
-            player: {user_id:'josh', userName: 'josh'},
-            status: true,
-            role: 'villager',
-          },
-      ];
-
-let test = module.exports.doctorCheck(sampleVotersSaved, samplePlayersSaved, wolfAttack);
-
-console.log(test);
 
