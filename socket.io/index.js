@@ -34,7 +34,7 @@ io.on('connection', socket => {
     });
 
     socket.on('player-vote', async(user, candidate, room) => {
-        console.lo('votes', candidate);
+        console.log('votes', candidate);
         try {
             const game = await getSingleGame(room);
             const player = await getPlayer(game.players, user);
