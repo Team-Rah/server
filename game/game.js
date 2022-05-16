@@ -14,7 +14,7 @@ const createBotsVote = async (players, phase, trial) => {
     if (phase === 'night') {
         bots = players.filter(player => player.status && player.bot && player.role !== 'villager');
     } else {
-      bots = players.filter(player => player.status && player.bot && player.role);
+      bots = players.filter(player => player.status);
     }
 
     bots.forEach(bot => {
@@ -135,7 +135,7 @@ const calculateDay2 = async(room, io) => {
         const messages = [];
 
         const botVotes = await createBotsVote(game.players, game.phase);
-
+        console.log('day2 playervotes modifyed', botVotes)
         game.voted = [...game.voted, ...botVotes];
 
         const votes = await tallyVotes(game.voted);
@@ -172,17 +172,17 @@ const calculateDay3 = async(room, io) => {
 
     try {
         const messages = [];
-
+        console.log('phase 3 players',game.playerVoted)
         const botVotes = await createBotsVote(game.players, game.phase, game.playerVoted);
         console.log('phase 3 votes unmodify',game.voted)
         game.voted = [...game.voted, ...botVotes];
         console.log('phase 3 votes', game.voted)
-        console.log('phase 3 players',game.playerVoted)
+        console.log('phase 3 players voted',game.playerVoted)
 
         const {players, deaths} = await votesVsUsers(game.voted, game.players);
 
             game.voted.forEach(vote => {
-                messages.push({message: `${vote.voterUserName} voted to mummify ${vote.candidateUserName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+                messages.push({message: `${vote.voterUserName} voted to mummify ${game.playerVoted.userName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
             });
         if (deaths.length) {
             game.players = players;
