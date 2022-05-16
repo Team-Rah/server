@@ -5,7 +5,49 @@ const {getSingleUserById} = require('../database/controller/users');
 const {wolfKills , doctorCheck, seerCheck} = require('../helperFN/roles');
 const User = require('../database/models/User.js')
 
+const createBotsVote = async (players, phase, trial) => {
+    const botsVote = [];
+    let bots;
+    let alivePlayer = players.filter(player => player.status);
+    
+    if (phase === 'night') {
+        bots = players.filter(player => player.status && player.bot && player.role !== 'villager');
+    } else {
+      bots = players.filter(player => player.status && player.bot && player.role);
+    }
 
+    bots.forEach(bot => {
+        const {userName, user_id} = bot.player
+        let randomNum = Math.floor(Math.random() * alivePlayer.length);
+        if (phase !== 'day3') {
+            let targetPlayer = alivePlayer[randomNum];
+            console.log('first', targetPlayer)
+            console.log('first self', bot)
+            while (targetPlayer.player.user_id === bot.player.user_id) {
+                targetPlayer = alivePlayer[Math.floor(Math.random() * alivePlayer.length)];
+                console.log('while', targetPlayer)
+            }
+            botsVote.push({
+                voter: user_id,
+                voterUserName: userName,
+                candidate: targetPlayer.player.user_id,
+                candidateUserName: targetPlayer.player.userName
+            });
+        } else {
+            randomNum = Math.floor(Math.random() * 2);
+            if (randomNum === 0) {
+                botsVote.push({
+                    voter: user_id,
+                    voterUserName: userName,
+                    candidate: trial.user_id,
+                    candidateUserName: trial.userName
+                });
+            }
+        }
+
+    })
+    return botsVote;
+}
 
 const gameMaster = {
     user_id : 'announcement',
@@ -19,18 +61,20 @@ const messageInterval = (messageLength, timer, index) => {
     return messageInterval + 1000;
 }
 
-const messageTimer = 30000
-const phaseTimer =  30000
+const messageTimer = 10000
+const phaseTimer =  10000
 
 const calculateNight = async(room, io) => {
     const game = await getSingleGame(room);
 
     try {
         const messages = [];
-        
-        const wolf = wolfKills(game.voted, game.players);
 
-        
+        const botVotes = await createBotsVote(game.players, game.phase);
+
+        game.voted = [...game.voted, ...botVotes];
+
+        const wolf = wolfKills(game.voted, game.players);
 
         if (wolf.deaths.length !== 0) {
             messages.push({message: `A new day begins but there was many commotion during the night.`, userName: 'announcement', user_id: 'announcement', role: 'gameMaster'});
@@ -89,12 +133,21 @@ const calculateDay2 = async(room, io) => {
 
         const messages = [];
 
+        const botVotes = await createBotsVote(game.players, game.phase);
+
+        game.voted = [...game.voted, ...botVotes];
+
         const votes = await tallyVotes(game.voted);
+        console.log('most voted', votes)
         game.endRound = messageTimer;
         if (votes) {
-            const user = await getSingleUserById(votes.userName);
-            messages.push({message: `${user.userName} was accused of being a Seth worshipper and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
-            game.playerVoted = user.userName;
+            getPlayer
+            // const user = await getSingleUserById(votes.userName);
+            console.log('votes return', votes)
+            const user = getPlayer(game.players, {user_id: votes.userName});
+            console.log('day2 calc for user find',user)
+            messages.push({message: `${user.player.userName} was accused of being a Seth worshipper and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            game.playerVoted = user.player;
             game.phase = 'day3';
             game.voted = [];
             await editGame(game);
@@ -119,6 +172,11 @@ const calculateDay3 = async(room, io) => {
 
     try {
         const messages = [];
+
+        const botVotes = await createBotsVote(game.players, game.phase, game.playerVoted);
+
+        game.voted = [...game.voted, ...botVotes];
+
         const {players, deaths} = await votesVsUsers(game.voted, game.players);
 
             game.voted.forEach(vote => {
@@ -126,7 +184,7 @@ const calculateDay3 = async(room, io) => {
             });
         if (deaths.length) {
             game.players = players;
-            messages.push({message: `${game.playerVoted} was mummified by majority rule, ${game.playerVoted} was a ${deaths[0].role}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
+            messages.push({message: `${game.playerVoted.userName} was mummified by majority rule, ${game.playerVoted.userName} was a ${deaths[0].role}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
         }else {
             messages.push({message: `No one was mummified by lack of majority.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
         }

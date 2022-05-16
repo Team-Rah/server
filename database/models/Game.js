@@ -73,7 +73,8 @@ const GameSchema = new mongoose.Schema({
             },
             status: {type: Boolean, default: true},
             role: {type: String, default: 'villager'},
-            abilityCount: {type: Number}
+            abilityCount: {type: Number},
+            bot: {type: Boolean, default: false}
         }
     ],
     winner: {

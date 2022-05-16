@@ -55,18 +55,33 @@ io.on('connection', socket => {
         try {
             const game = await getSingleGame(room);
             if (game.owner === user.user_id && !game.started) {
-                
                 const getUsers = await getSocketInRoom(room);
                 let users = [];
+                let bots = 0;
                 getUsers.forEach(user => {
                     users.push({player: {
                         userName: user.userName,
                         user_id: user.user_id,
-                        }
+                        },
+                        bot: false
                     });
                 });
                 if (users.length > 1) {
                     console.log('starting game')
+                    if (users.length < 7) {
+                        for (let i = users.length; i < 7; i++) {
+                            users.push(
+                                    {
+                                        player: {
+                                            userName: `bot${i}`,
+                                            user_id: `bot${i}`
+                                        },
+                                        bot:true
+                                    },
+                                )
+                                bots ++
+                        }
+                    }
                     const players = await assignRoles(users);
                 // const players = [
                 //     {
@@ -112,15 +127,16 @@ io.on('connection', socket => {
                 //         role: 'villager'
                 //     },
                 // ]
+
                     game.players = players;
                     game.phase = 'night';
                     game.started = true;
                     game.endRound = phaseTimer;
                     await editGame(game);
-                    io.emit(`receive-message-${room}`, gameMaster, 'THE GAME WIL BEGIN IN 5 SECOND');
+                    io.emit(`receive-message-${room}`, gameMaster, `THE GAME WIL BEGIN IN 10 SECOND ${bots > 0 ? `WITH ${bots} BOTS` : ''}`);
                     setTimeout(() => {
                         runGame(room, [], io);
-                    }, 5000);
+                    }, 10000);
                 } else {
                     io.emit(`receive-message-${room}`, gameMaster, 'NEED A MINIMUM OF 2 PLAYERS TO START ');
                 }
