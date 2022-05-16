@@ -139,7 +139,6 @@ const calculateDay2 = async(room, io) => {
         game.voted = [...game.voted, ...botVotes];
 
         const votes = await tallyVotes(game.voted);
-        console.log('most voted', votes)
         game.endRound = messageTimer;
         if (votes) {
             getPlayer
@@ -177,8 +176,8 @@ const calculateDay3 = async(room, io) => {
         const botVotes = await createBotsVote(game.players, game.phase, game.playerVoted);
         console.log('phase 3 votes unmodify',game.voted)
         game.voted = [...game.voted, ...botVotes];
-        console.log('phase 3 votes',game.voted)
-        console.log('phase 3 players',game.players)
+        console.log('phase 3 votes', game.voted)
+        console.log('phase 3 players',game.playerVoted)
 
         const {players, deaths} = await votesVsUsers(game.voted, game.players);
 
@@ -217,27 +216,29 @@ const runGame = async (room, messages, io) => {
             const {winningPlayers, losingPlayers} = messages
             for (let i = 0; i < winningPlayers.length; i++) {
                 // updated winning player score might refactor out later
-                let user = await User.findById(winningPlayers[i].player.user_id);
-                user.score += 30;
-                await user.save();
-                //
-                setTimeout(() => {
-                    io.emit(`receive-message-${room}`, gameMaster, `congratulations ${winningPlayers[i].player.userName} you have won`);
-                }, messageInterval(winningPlayers.length, game.endRound, i))
+                if (!winningPlayers[i].bot) {
+                    let user = await User.findById(winningPlayers[i].player.user_id);
+                    user.score += 30;
+                    await user.save();
+                    setTimeout(() => {
+                        io.emit(`receive-message-${room}`, gameMaster, `congratulations ${winningPlayers[i].player.userName} you have won`);
+                    }, messageInterval(winningPlayers.length, game.endRound, i))
+                }
             }
             for (let i = 0; i < losingPlayers.length; i++) {
                 // updated losing player score might refactor out later
-                let user = await User.findById(losingPlayers[i].player.user_id);
-                if (user.score > 25) {
-                    user.score -= 25;
-                    await user.save();
+                if (!losingPlayers[i].bot) {
+                    let user = await User.findById(losingPlayers[i].player.user_id);
+                    if (user.score > 25) {
+                        user.score -= 25;
+                        await user.save();
+                    }
                 }
-                //
-            }
-            setTimeout(() => {
-                io.emit(`receive-message-${room}`, gameMaster, `Thank you for playing`);
-            }, messageInterval(winningPlayers.length, game.endRound, winningPlayers.length + 1))
+                setTimeout(() => {
+                    io.emit(`receive-message-${room}`, gameMaster, `Thank you for playing`);
+                }, messageInterval(winningPlayers.length, game.endRound, winningPlayers.length + 1))
 
+            }
 
         } else {
             io.emit(`receive-message-${room}`, gameMaster, `You have reached the round limit for this game, Thank you for playing`);
