@@ -78,6 +78,7 @@ POST /users/
 put /users/togglefriend/
 
 ```
+
 | Parameter | Type     | Description               |
 | --------- | -------- | ------------------------- |
 |  Header    | Authorization | **Required**  token |
@@ -104,9 +105,13 @@ put /users/togglefriend/
   }
   ]
 }
+```
 
 ```
 PUT /users/login/
+```
+
+
 
 | Parameter | Type     | Description               |
 | --------- | -------- | ------------------------- |
@@ -141,6 +146,8 @@ PUT /users/login/
   }
 }
 ```
+
+
 ```
 GET /games/single/
 ```

@@ -17,7 +17,6 @@ const getSocketInRoom = async(room) => {
 
 
 io.on('connection', socket => {
-    console.log(socket.id, 'has connected')
     socket.on('join-room', async(user,room) => {
         try {
             assignUserName(socket, user);
@@ -34,12 +33,10 @@ io.on('connection', socket => {
     });
 
     socket.on('player-vote', async(user, candidate, room) => {
-        console.log('votes', candidate);
         try {
             const game = await getSingleGame(room);
             const player = await getPlayer(game.players, user);
             const target = await getPlayer(game.players, {user_id:candidate.player.user_id, userName: candidate.player.userName});
-            console.log('vote received')
             if (player.status && target.status) {
                 game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
                 await editGame(game);
@@ -51,7 +48,6 @@ io.on('connection', socket => {
     });
 
     socket.on('start-game', async (user, room) => {
-        console.log('start game button triggered')
         try {
             const game = await getSingleGame(room);
             if (game.owner === user.user_id && !game.started) {
@@ -67,7 +63,6 @@ io.on('connection', socket => {
                     });
                 });
                 if (users.length > 0) {
-                    console.log('starting game')
                     if (users.length < 7) {
                         for (let i = users.length; i < 7; i++) {
                             users.push(
@@ -98,7 +93,6 @@ io.on('connection', socket => {
             }
         }
         catch(err) {
-            console.log(err)
             socket.emit('error', err);
         }
     })
