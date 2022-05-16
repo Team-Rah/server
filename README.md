@@ -1,4 +1,4 @@
-# Back-end for WRAITH OF ANUBIS
+# Back-end for WRATH OF ANUBIS
 
 
 ## INSTRUCTIONS:
