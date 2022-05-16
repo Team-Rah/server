@@ -1,3 +1,4 @@
+const { type } = require("express/lib/response");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -25,7 +26,8 @@ const GameSchema = new mongoose.Schema({
         type: Number,
     },
     playerVoted: {
-        type: String
+        userName: {type: String},
+        user_id: {type: String},
     },
     voted: [
         {
@@ -73,12 +75,21 @@ const GameSchema = new mongoose.Schema({
             },
             status: {type: Boolean, default: true},
             role: {type: String, default: 'villager'},
-            abilityCount: {type: Number}
+            abilityCount: {type: Number},
+            bot: {type: Boolean, default: false}
         }
     ],
     winner: {
         type: String,
         default: 'none'
+    },
+    maxRounds: {
+        type: Number,
+        default: 50
+    },
+    currentRound: {
+        type: Number,
+        default: 1
     },
     started: {
         type: Boolean,

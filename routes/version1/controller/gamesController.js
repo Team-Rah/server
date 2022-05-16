@@ -34,6 +34,7 @@ module.exports = {
     },
     getSingleGame: async(req, res, next) => {
         try {
+            console.log(req.query)
             const {id} = req.query; //updated from req.body
             const game = await getSingleGame(id);
             if (!id) {
