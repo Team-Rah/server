@@ -80,7 +80,7 @@ module.exports = {
         currentDoctor.push(player);
       }
     });
-
+console.log('doctors', currentDoctor);
     //see if currentDoctor array is greater than 0
     if (currentDoctor.length === 0) {
 
@@ -138,6 +138,19 @@ module.exports = {
         }
       });
     });
+
+    if (healedCandidate.length === 0) {
+      players.forEach(player => {
+        userThatDies.forEach(death => {
+          if (death.player.user_id === player.player.user_id) {
+            death.status = false;
+            player.status = false;
+          }
+        })
+      })
+
+      return {players, deaths: userThatDies, saved: victimsSaved};
+    }
 
     return {players, deaths: victimsNotSaved, saved: victimsSaved};
   },
@@ -282,4 +295,6 @@ let sampleVotersSaved = [
       ];
 
 let test = module.exports.doctorCheck(sampleVotersSaved, samplePlayersSaved, wolfAttack);
+
+console.log(test);
 
