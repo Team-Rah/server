@@ -39,7 +39,6 @@ io.on('connection', socket => {
             const game = await getSingleGame(room);
             const player = await getPlayer(game.players, user);
             const target = await getPlayer(game.players, {user_id:candidate.player.user_id, userName: candidate.player.userName});
-            
             console.log('vote received')
             if (player.status && target.status) {
                 game.voted.push({voter:user.user_id, voterUserName: user.userName, candidate:candidate.player.user_id, candidateUserName:candidate.player.userName});
@@ -67,7 +66,7 @@ io.on('connection', socket => {
                         bot: false
                     });
                 });
-                if (users.length > 1) {
+                if (users.length > 0) {
                     console.log('starting game')
                     if (users.length < 7) {
                         for (let i = users.length; i < 7; i++) {
@@ -84,51 +83,6 @@ io.on('connection', socket => {
                         }
                     }
                     const players = await assignRoles(users);
-                // const players = [
-                //     {
-                //         player: {
-                //             userName: 'david',
-                //             user_id: '628081cfe63751300f397853'
-                //         },
-                //         role: 'seer'
-                //     },
-                //     {
-                //         player: {
-                //             userName: 'david2',
-                //             user_id: '62808230e63751300f397870'
-                //         },
-                //         role: 'doctor'
-                //     },
-                //     {
-                //         player: {
-                //             userName: 'marlee',
-                //             user_id: '627943e704269d70e06d1563'
-                //         },
-                //         role: 'wolf'
-                //     },
-                //     {
-                //         player: {
-                //             userName: 'candelario',
-                //             user_id: '627943e704269d70e06d1565'
-                //         },
-                //         role: 'villager'
-                //     },
-                //     {
-                //         player: {
-                //             userName: 'ralph',
-                //             user_id: '627943e704269d70e06d1567'
-                //         },
-                //         role: 'villager'
-                //     },
-                //     {
-                //         player: {
-                //             userName: 'dasdfsdfvedsrr',
-                //             user_id: '62801bb10812d290b8b3637c'
-                //         },
-                //         role: 'villager'
-                //     },
-                // ]
-
                     game.players = players;
                     game.phase = 'night';
                     game.started = true;

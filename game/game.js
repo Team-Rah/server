@@ -132,7 +132,7 @@ const calculateDay2 = async(room, io) => {
         const messages = [];
 
         const botVotes = await createBotsVote(game.players, game.phase);
-        console.log('day2 playervotes modifyed', botVotes)
+
         game.voted = [...game.voted, ...botVotes];
 
         const votes = await tallyVotes(game.voted);
@@ -140,9 +140,9 @@ const calculateDay2 = async(room, io) => {
         if (votes) {
             getPlayer
             // const user = await getSingleUserById(votes.userName);
-            console.log('votes return', votes)
+
             const user = getPlayer(game.players, {user_id: votes.userName});
-            console.log('day2 calc for user find',user)
+
             messages.push({message: `${user.player.userName} was accused of being a Seth worshipper and is being put on trial.`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
             game.playerVoted = user.player;
             game.phase = 'day3';
@@ -169,13 +169,8 @@ const calculateDay3 = async(room, io) => {
 
     try {
         const messages = [];
-        console.log('round number', game.currentRound)
-        console.log('phase 3 players voted',game.playerVoted)
         const botVotes = createBotsVote(game.players, game.phase, game.playerVoted);
-        console.log('bots votes', botVotes)
-        console.log('phase 3 votes unmodify',game.voted)
         game.voted = [...game.voted, ...botVotes];
-        console.log('phase 3 votes modifyed', game.voted)
         
 
         const {players, deaths} = await votesVsUsers(game.voted, game.players);

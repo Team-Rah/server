@@ -36,7 +36,6 @@ GET /users/
           "_id": "627943e704269d70e06d1556",
           "userName": "dwight",
           "email": "anjali6@hotmail.com",
-          "password": "$2a$10$t0rmGQ5tW99RJui3ga7Ku.JC1Pm65GHYJyrXcaLMDqQCCGSt/l1nK",
           "score": 0,
           "friends": [
             "627943e704269d70e06d155a"
@@ -66,7 +65,6 @@ POST /users/
   "user": {
     "userName": "JohnDoe",
     "email": "johndoe@gmails.com",
-    "password": "$2a$10$ZEsTthi5ITP4cJ0Xyk7k4u619hkFMpEeLHuT1SiYZ8.uqOiIAct8q",
     "score": 0,
     "friends": [],
     "validated": false,
@@ -95,7 +93,6 @@ put /users/togglefriend/
       "_id": "62801bb10812d290b8b3637c",
       "userName": "johndoe",
       "email": "johndoed@gmails.com",
-    "password": "$2a$10$ZEsTthi5ITP4cJ0Xyk7k4u619hkFMpEeLHuT1SiYZ8.uqOiIAct8q",
     "score": 0,
     "friends": [
     "62801bb10812d290bdffdec"
@@ -125,14 +122,12 @@ PUT /users/login/
     "_id": "627943e704269d70e06d1556",
     "userName": "johndoe",
     "email": "johndoe@hotmail.com",
-    "password": "$2a$10$t0rmGQ5tW99RJui3ga7Ku.JC1Pm65GHYJyrXcaLMDqQCCGSt/l1nK",
     "score": 0,
     "friends": [
       {
         "_id": "627943e704269d70e06d155a",
         "userName": "brant",
         "email": "pansy_kuphal82@hotmail.com",
-        "password": "$2a$10$grIqncqygoo2Q2AYobBbK.oY1HXm8iXQvS9lO.lk1ZAF8WW7if7Be",
         "score": 0,
         "friends": [],
         "validated": false,
