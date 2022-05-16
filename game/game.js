@@ -34,11 +34,13 @@ const createBotsVote = (players, phase, trial) => {
             randomNum = Math.floor(Math.random() * 2);
             if (randomNum === 0) {
                 console.log('trial inside bot creation',trial)
+                const trialUser_id = trial.user_id;
+                const trialUserName = trial.userName;
                 botsVote.push({
                     voter: user_id,
                     voterUserName: userName,
-                    candidate: trial.user_id,
-                    candidateUserName: trial.userName
+                    candidate: trialUser_id,
+                    candidateUserName: trialUserName
                 });
             }
         }
