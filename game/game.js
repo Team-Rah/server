@@ -35,16 +35,12 @@ const createBotsVote = (players, phase, trial) => {
                 console.log('DOING DAY 3 BOT CALCULATION')
             randomNum = Math.floor(Math.random() * 2);
             if (randomNum === 0) {
-                console.log('trial inside bot creation',trial)
-                const trialUser_id = trial.user_id;
-                const trialUserName = trial.userName;
-                console.log('renamed id', trialUser_id)
-                console.log('renamed name', trialUserName)
+                console.log('trial inside bot creation',trial.userName)
                 const obj = {
                     voter: user_id,
                     voterUserName: userName,
-                    candidate: trialUser_id,
-                    candidateUserName: trialUserName
+                    candidate: trial,
+                    candidateUserName: trial
                 }
                 console.log('obj created', obj)
                 botsVote.push(obj);
