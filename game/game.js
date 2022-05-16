@@ -176,6 +176,8 @@ const calculateDay3 = async(room, io) => {
         const botVotes = await createBotsVote(game.players, game.phase, game.playerVoted);
 
         game.voted = [...game.voted, ...botVotes];
+        console.log('phase 3 votes',game.voted)
+        console.log('phase 3 players',game.players)
 
         const {players, deaths} = await votesVsUsers(game.voted, game.players);
 
