@@ -6,6 +6,7 @@ const {wolfKills , doctorCheck, seerCheck} = require('../helperFN/roles');
 const User = require('../database/models/User.js')
 
 const createBotsVote = async (players, phase, trial) => {
+    console.log('trial obj', trial)
     const botsVote = [];
     let bots;
     let alivePlayer = players.filter(player => player.status);
@@ -33,7 +34,7 @@ const createBotsVote = async (players, phase, trial) => {
                 candidate: targetPlayer.player.user_id,
                 candidateUserName: targetPlayer.player.userName
             });
-        } else {
+            } else {
             randomNum = Math.floor(Math.random() * 2);
             if (randomNum === 0) {
                 botsVote.push({
@@ -174,7 +175,7 @@ const calculateDay3 = async(room, io) => {
         const messages = [];
 
         const botVotes = await createBotsVote(game.players, game.phase, game.playerVoted);
-
+        console.log('phase 3 votes unmodify',game.voted)
         game.voted = [...game.voted, ...botVotes];
         console.log('phase 3 votes',game.voted)
         console.log('phase 3 players',game.players)
