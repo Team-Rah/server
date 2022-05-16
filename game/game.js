@@ -5,8 +5,9 @@ const {getSingleUserById} = require('../database/controller/users');
 const {wolfKills , doctorCheck, seerCheck} = require('../helperFN/roles');
 const User = require('../database/models/User.js')
 
-const createBotsVote = async (players, phase, trial) => {
+const createBotsVote = (players, phase, trial) => {
     console.log('trial obj', trial)
+    console.log('bot creation ', players)
     const botsVote = [];
     let bots;
     let alivePlayer = players.filter(player => player.status);
@@ -22,11 +23,8 @@ const createBotsVote = async (players, phase, trial) => {
         let randomNum = Math.floor(Math.random() * alivePlayer.length);
         if (phase !== 'day3') {
             let targetPlayer = alivePlayer[randomNum];
-            console.log('first', targetPlayer)
-            console.log('first self', bot)
             while (targetPlayer.player.user_id === bot.player.user_id) {
                 targetPlayer = alivePlayer[Math.floor(Math.random() * alivePlayer.length)];
-                console.log('while', targetPlayer)
             }
             botsVote.push({
                 voter: user_id,
@@ -62,8 +60,8 @@ const messageInterval = (messageLength, timer, index) => {
     return messageInterval + 1000;
 }
 
-const messageTimer = 10000
-const phaseTimer =  10000
+const messageTimer = 15000
+const phaseTimer =  15000
 
 const calculateNight = async(room, io) => {
     const game = await getSingleGame(room);
@@ -172,11 +170,11 @@ const calculateDay3 = async(room, io) => {
 
     try {
         const messages = [];
-        console.log('phase 3 players',game.playerVoted)
-        const botVotes = await createBotsVote(game.players, game.phase, game.playerVoted);
+        const botVotes = createBotsVote(game.players, game.phase, game.playerVoted);
+        console.log('bots votes', botVotes)
         console.log('phase 3 votes unmodify',game.voted)
         game.voted = [...game.voted, ...botVotes];
-        console.log('phase 3 votes', game.voted)
+        console.log('phase 3 votes modifyed', game.voted)
         console.log('phase 3 players voted',game.playerVoted)
 
         const {players, deaths} = await votesVsUsers(game.voted, game.players);
