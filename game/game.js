@@ -20,6 +20,7 @@ const createBotsVote = (players, phase, trial) => {
         const {userName, user_id} = bot.player
         let randomNum = Math.floor(Math.random() * alivePlayer.length);
         if (phase !== 'day3') {
+            console.log('DOING OTHER DAYS BOT CALCULATION')
             let targetPlayer = alivePlayer[randomNum];
             while (targetPlayer.player.user_id === bot.player.user_id) {
                 targetPlayer = alivePlayer[Math.floor(Math.random() * alivePlayer.length)];
@@ -31,17 +32,22 @@ const createBotsVote = (players, phase, trial) => {
                 candidateUserName: targetPlayer.player.userName
             });
             } else {
+                console.log('DOING DAY 3 BOT CALCULATION')
             randomNum = Math.floor(Math.random() * 2);
             if (randomNum === 0) {
                 console.log('trial inside bot creation',trial)
                 const trialUser_id = trial.user_id;
                 const trialUserName = trial.userName;
-                botsVote.push({
+                console.log('renamed id', trialUser_id)
+                console.log('renamed name', trialUserName)
+                const obj = {
                     voter: user_id,
                     voterUserName: userName,
                     candidate: trialUser_id,
                     candidateUserName: trialUserName
-                });
+                }
+                console.log('obj created', obj)
+                botsVote.push(obj);
             }
         }
 
