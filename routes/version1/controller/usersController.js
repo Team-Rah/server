@@ -51,7 +51,7 @@ module.exports = {
     login: async(req, res, next) => {
         const { email, password } = await req.body;
         try {
-          let user = await getSingleUser(email);
+          let user = await getSingleUser(email, true);
           await comparePassword(password, user.password);
 
           let jwtToken = await createJwtToken(user);
