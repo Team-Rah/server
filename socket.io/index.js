@@ -48,10 +48,9 @@ io.on('connection', socket => {
     });
 
     socket.on('start-game', async (user, room) => {
-        console.log('hit')
         try {
             const game = await getSingleGame(room);
-            if (game.owner === user.user_id && !game.started) {
+            if (game.owner === user.user_id && game.started !== 'ended' && game.started !== 'starting') {
                 const getUsers = await getSocketInRoom(room);
                 let users = [];
                 let bots = 0;
@@ -84,7 +83,6 @@ io.on('connection', socket => {
                     game.started = 'started';
                     game.endRound = phaseTimer;
                     await editGame(game);
-                    console.log('hit end of start game fn')
                     io.emit(`receive-message-${room}`, gameMaster, `THE GAME WIL BEGIN IN 10 SECOND ${bots > 0 ? `WITH ${bots} BOTS` : ''}`);
                     setTimeout(() => {
                         runGame(room, [], io);
