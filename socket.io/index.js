@@ -80,7 +80,7 @@ io.on('connection', socket => {
                     const players = await assignRoles(users);
                     game.players = players;
                     game.phase = 'night';
-                    game.started = true;
+                    game.started = 'started';
                     game.endRound = phaseTimer;
                     await editGame(game);
                     io.emit(`receive-message-${room}`, gameMaster, `THE GAME WIL BEGIN IN 10 SECOND ${bots > 0 ? `WITH ${bots} BOTS` : ''}`);
@@ -101,7 +101,7 @@ io.on('connection', socket => {
 
     socket.on('get-games', async() => {
         try {
-            const games = await getAllGames({started: false});
+            const games = await getAllGames({ started: { $ne: 'ended' } });
             io.emit('receive-games', games);
         }
         catch(cihadsWork) {

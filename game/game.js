@@ -229,7 +229,8 @@ const runGame = async (room, messages, io) => {
         } else {
             io.emit(`receive-message-${room}`, gameMaster, `You have reached the round limit for this game, Thank you for playing`);
         }
-
+        game.started = 'ended';
+        await editGame(game);
 
     }
     else if (game.currentRound > game.maxRounds) {
