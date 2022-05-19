@@ -123,7 +123,7 @@ module.exports = {
     throw error(404,'User does not exist', at);
   },
 
-  votesVsUsers : (votesArray, userArray) => {
+  votesVsUsers : (votesArray, userArray, onTrial) => {
     if (votesArray.length === 0) {
       return {players: [], deaths:[]}
     }
@@ -157,7 +157,7 @@ module.exports = {
 // default to no if no input
 // status is true--
 // go through how many have voted
-//  
+//
 //
 //
 

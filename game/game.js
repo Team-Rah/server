@@ -9,7 +9,7 @@ const createBotsVote = (players, phase, trial) => {
     const botsVote = [];
     let bots;
     let alivePlayer = players.filter(player => player.status);
-    
+
     if (phase === 'night') {
         bots = players.filter(player => player.status && player.bot && player.role !== 'villager');
     } else {
@@ -30,6 +30,7 @@ const createBotsVote = (players, phase, trial) => {
                 candidate: targetPlayer.player.user_id,
                 candidateUserName: targetPlayer.player.userName
             });
+            //console.log(botsVote)
             } else {
             randomNum = Math.floor(Math.random() * 2);
             if (randomNum === 0) {
@@ -110,7 +111,7 @@ const calculateNight = async(room, io) => {
         //     });
         // }
 
-   
+
         game.voted = [];
         game.endRound = messageTimer;
         game.players = doctor.players;
@@ -168,9 +169,14 @@ const calculateDay3 = async(room, io) => {
         const messages = [];
         const botVotes = createBotsVote(game.players, game.phase, game.playerVoted);
         game.voted = [...game.voted, ...botVotes];
-        const {players, deaths} = await votesVsUsers(game.voted, game.players);
+        const {players, deaths} = await votesVsUsers(game.voted, game.players, game.playerVoted);
 
             game.voted.forEach(vote => {
+                game.players1[vote.voterUserName].voteHistory[game.currentRound] = {
+                    round: game.currentRound,
+                    onTrial: game.playerVoted.userName
+                }
+                //hist[hist.length - 1].voted = true
                 messages.push({message: `${vote.voterUserName} voted to mummify ${game.playerVoted.userName}`, userName: "announcement", user_id: "announcement", role: "gameMaster"});
             });
         if (deaths.length) {
@@ -238,9 +244,10 @@ const runGame = async (room, messages, io) => {
         game.phase = 'end';
         await editGame(game);
         runGame(room, {}, io);
-  
+
     }
     else if (game.phase === 'night') {
+        // console.log('emit nihgt')
         io.to(room).emit('game-send', game);
 
         setTimeout(() => {
@@ -290,6 +297,7 @@ const runGame = async (room, messages, io) => {
     }
 
     else if (game.phase === 'day3') {
+        // console.log('day3 emit')
         io.to(room).emit('game-send', game);
         for (let i = 0; i < messages.length; i ++) {
             setTimeout(() => {

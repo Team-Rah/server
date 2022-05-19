@@ -66,7 +66,7 @@ const GameSchema = new mongoose.Schema({
         }
     ],
 
-
+    players1: {},
     players: [
         {
             player: {

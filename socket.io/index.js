@@ -17,6 +17,7 @@ const getSocketInRoom = async(room) => {
 
 
 io.on('connection', socket => {
+    console.log(socket.id, 'connection')
     socket.on('join-room', async(user,room) => {
         try {
             assignUserName(socket, user);
@@ -50,11 +51,18 @@ io.on('connection', socket => {
     socket.on('start-game', async (user, room) => {
         try {
             const game = await getSingleGame(room);
+            game.players1 = {}
             if (game.owner === user.user_id && game.started !== 'ended' && game.started !== 'started') {
                 const getUsers = await getSocketInRoom(room);
                 let users = [];
                 let bots = 0;
                 getUsers.forEach(user => {
+                    game.players1[user.userName] = {player: {
+                        userName: user.userName,
+                        user_id: user.user_id,
+                        },
+                        bot: false
+                    }
                     users.push({player: {
                         userName: user.userName,
                         user_id: user.user_id,
@@ -63,8 +71,15 @@ io.on('connection', socket => {
                     });
                 });
                 if (users.length > 0) {
-                    if (users.length < 7) {
-                        for (let i = users.length; i < 7; i++) {
+                    if (users.length < game.playerAllowed) {
+                        for (let i = users.length; i < game.playerAllowed; i++) {
+                            game.players1[`bot${i}`] = {
+                                player: {
+                                    userName: `bot${i}`,
+                                    user_id: `bot${i}`
+                                },
+                                bot:true
+                            }
                             users.push(
                                     {
                                         player: {
@@ -77,12 +92,17 @@ io.on('connection', socket => {
                                 bots ++
                         }
                     }
-                    
+
                     const players = await assignRoles(users);
                     game.players = players;
                     game.phase = 'night';
                     game.started = 'started';
                     game.endRound = phaseTimer;
+                    game.players.forEach((player) => {
+                        game.players1[player.player.userName].status = player.status
+                        game.players1[player.player.userName].role = player.role
+                        game.players1[player.player.userName].voteHistory = {0: null}
+                    })
                     await editGame(game);
                     io.emit(`receive-message-${room}`, gameMaster, `THE GAME WIL BEGIN IN 10 SECOND ${bots > 0 ? `WITH ${bots} BOTS` : ''}`);
                     setTimeout(() => {
@@ -99,7 +119,7 @@ io.on('connection', socket => {
         }
     })
 
-    
+
 
     socket.on('get-games', async() => {
         try {
