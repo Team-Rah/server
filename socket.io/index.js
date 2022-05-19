@@ -84,6 +84,7 @@ io.on('connection', socket => {
                     game.started = 'started';
                     game.endRound = phaseTimer;
                     await editGame(game);
+                    console.log('hit end of start game fn')
                     io.emit(`receive-message-${room}`, gameMaster, `THE GAME WIL BEGIN IN 10 SECOND ${bots > 0 ? `WITH ${bots} BOTS` : ''}`);
                     setTimeout(() => {
                         runGame(room, [], io);
