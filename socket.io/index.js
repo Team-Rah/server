@@ -95,6 +95,7 @@ io.on('connection', socket => {
         }
         catch(err) {
             socket.emit('error', err);
+            console.log(err)
         }
     })
 
