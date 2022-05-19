@@ -48,6 +48,7 @@ io.on('connection', socket => {
     });
 
     socket.on('start-game', async (user, room) => {
+        console.log('hit')
         try {
             const game = await getSingleGame(room);
             if (game.owner === user.user_id && !game.started) {
