@@ -51,8 +51,8 @@ io.on('connection', socket => {
         console.log('hit')
         try {
             const game = await getSingleGame(room);
-            if (game.owner === user.user_id && game.started !== 'ended' && game.started !== 'starting') {
-                console.log('hit')
+            if (game.owner === user.user_id && game.started !== 'ended' && game.started !== 'started') {
+                console.log('hit2')
                 const getUsers = await getSocketInRoom(room);
                 let users = [];
                 let bots = 0;
