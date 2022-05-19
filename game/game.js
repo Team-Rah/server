@@ -233,8 +233,8 @@ const runGame = async (room, messages, io) => {
         await editGame(game);
 
     }
-    else if (game.currentRound > game.maxRounds) {
-        // else if (game.currentRound > 5) {
+    // else if (game.currentRound > game.maxRounds) {
+        else if (game.currentRound > 2) {
         game.phase = 'end';
         await editGame(game);
         runGame(room, {}, io);
