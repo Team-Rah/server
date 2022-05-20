@@ -7,8 +7,8 @@ module.exports = {
     let wolfPlayer = [];
     let wolfCandidate = [];
     let deaths = [];
-
-    if(module.exports.wolfCheck(voters, players)) {
+    //console.log(voters, players)
+    //if(module.exports.wolfCheck(voters, players)) {
 
       players.forEach(findWolf => {
         if (findWolf.role === 'wolf') {
@@ -33,7 +33,7 @@ module.exports = {
       })
 
       return {players, deaths};
-    }
+    //}
   },
 
   wolfCheck: (voters, players) => {
