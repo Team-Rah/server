@@ -122,8 +122,10 @@ io.on('connection', socket => {
 
 
     socket.on('get-games', async() => {
+        //console.log('get-games')
         try {
             const games = await getAllGames({ started: { $ne: 'ended' } });
+            //console.log(games)
             io.emit('receive-games', games);
         }
         catch(cihadsWork) {

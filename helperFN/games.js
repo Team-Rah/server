@@ -123,7 +123,7 @@ module.exports = {
     throw error(404,'User does not exist', at);
   },
 
-  votesVsUsers : (votesArray, userArray, onTrial) => {
+  votesVsUsers : (votesArray, userArray) => {
     if (votesArray.length === 0) {
       return {players: [], deaths:[]}
     }

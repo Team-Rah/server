@@ -169,7 +169,7 @@ const calculateDay3 = async(room, io) => {
         const messages = [];
         const botVotes = createBotsVote(game.players, game.phase, game.playerVoted);
         game.voted = [...game.voted, ...botVotes];
-        const {players, deaths} = await votesVsUsers(game.voted, game.players, game.playerVoted);
+        const {players, deaths} = await votesVsUsers(game.voted, game.players);
 
             game.voted.forEach(vote => {
                 game.players1[vote.voterUserName].voteHistory[game.currentRound] = {
