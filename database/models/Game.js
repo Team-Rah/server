@@ -93,7 +93,7 @@ const GameSchema = new mongoose.Schema({
     },
     started: {
         type: String,
-        default: 'starting'
+        default: 'open'
     },
     createdAt: {
         type: Number,
